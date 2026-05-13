@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   Package,
@@ -35,63 +36,48 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AddProductModal } from "@/components/inventory/add-product-modal";
+import { getProducts } from "@/lib/actions/inventory";
 
-const inventoryData = [
-  {
-    code: "#PRD-0001",
-    name: "Gold Hoop Earrings",
-    category: "Earrings",
-    subCat: "Gold",
-    buying: "৳ 380",
-    wholesale: "৳ 520",
-    retail: "৳ 650",
-    qty: 48,
-    value: "৳ 31,200",
-    color: "text-blue-400",
-    badgeBg: "bg-blue-600/20 text-blue-400",
-  },
-  {
-    code: "#PRD-0002",
-    name: "Silver Chain Necklace",
-    category: "Necklaces",
-    subCat: "Silver",
-    buying: "৳ 250",
-    wholesale: "৳ 380",
-    retail: "৳ 480",
-    qty: 12,
-    value: "৳ 5,760",
-    color: "text-purple-400",
-    badgeBg: "bg-purple-600/20 text-purple-400",
-  },
-  {
-    code: "#PRD-0003",
-    name: "Stone Ring Set",
-    category: "Rings",
-    subCat: "Stone",
-    buying: "৳ 180",
-    wholesale: "৳ 280",
-    retail: "৳ 350",
-    qty: 65,
-    value: "৳ 22,750",
-    color: "text-yellow-400",
-    badgeBg: "bg-yellow-500/20 text-yellow-400",
-  },
-  {
-    code: "#PRD-0004",
-    name: "Pearl Bracelet",
-    category: "Bracelets",
-    subCat: "Pearl",
-    buying: "৳ 320",
-    wholesale: "৳ 480",
-    retail: "৳ 580",
-    qty: 5,
-    value: "৳ 2,900",
-    color: "text-green-400",
-    badgeBg: "bg-green-600/20 text-green-400",
-  },
-];
+interface Product {
+  id: string;
+  code: string;
+  name: string;
+  category: string;
+  subCategory: string;
+  buyingPrice: number;
+  wholesalePrice: number;
+  retailPrice: number;
+  stock: number;
+  image?: string | null;
+}
+
+const getBadgeStyle = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'earrings': return "bg-blue-600/20 text-blue-400";
+    case 'necklaces': return "bg-purple-600/20 text-purple-400";
+    case 'rings': return "bg-yellow-500/20 text-yellow-400";
+    case 'bracelets': return "bg-green-600/20 text-green-400";
+    default: return "bg-slate-600/20 text-slate-400";
+  }
+};
 
 export default function InventoryPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    const data = await getProducts();
+    // @ts-ignore - Handle Prisma date objects if needed, but here we just need the fields
+    setProducts(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#050816] text-white">
       <div className="flex">
@@ -104,7 +90,14 @@ export default function InventoryPage() {
               <p className="text-[9px] tracking-[2px] text-slate-400 uppercase">Jewelry Management</p>
             </div>
           </div>
-          {/* ... Navigation items would go here ... */}
+          <div className="py-6 px-4 space-y-2">
+            <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white hover:bg-white/5">
+              <LayoutDashboard className="h-4 w-4" /> Dashboard
+            </Button>
+            <Button variant="ghost" className="w-full justify-start gap-3 bg-blue-600/10 text-blue-400 hover:bg-blue-600/20">
+              <Package className="h-4 w-4" /> Inventory
+            </Button>
+          </div>
         </aside>
 
         {/* MAIN CONTENT */}
@@ -114,7 +107,7 @@ export default function InventoryPage() {
             <h1 className="text-3xl font-serif">Inventory</h1>
             <div className="flex items-center gap-4">
               <div className="rounded-xl border border-[#1a2340] bg-[#0b132b] px-4 py-2 text-sm text-slate-300">
-                Tue, May 12, 05:00 AM
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </div>
               <Avatar className="h-10 w-10 border border-blue-500">
                 <AvatarFallback className="bg-blue-600">L</AvatarFallback>
@@ -153,17 +146,19 @@ export default function InventoryPage() {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" className="h-12 px-5 rounded-xl border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 gap-2">
-                <RefreshCw className="h-4 w-4" /> Update Stock
+              <Button 
+                variant="outline" 
+                onClick={fetchProducts}
+                className="h-12 px-5 rounded-xl border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Update Stock
               </Button>
 
-              <Button className="h-12 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2">
-                <Plus className="h-5 w-5" /> Add Product
-              </Button>
+              <AddProductModal onSuccess={fetchProducts} />
             </div>
 
             {/* INVENTORY TABLE */}
-            <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b] overflow-hidden">
+            <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b] overflow-hidden shadow-2xl">
               <Table>
                 <TableHeader className="bg-white/5">
                   <TableRow className="border-[#1a2340] hover:bg-transparent">
@@ -180,32 +175,47 @@ export default function InventoryPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {inventoryData.map((item) => (
-                    <TableRow key={item.code} className="border-[#1a2340] hover:bg-white/5 transition-colors">
-                      <TableCell className="font-medium text-blue-400 py-5">{item.code}</TableCell>
-                      <TableCell className="font-semibold text-slate-200">{item.name}</TableCell>
-                      <TableCell>
-                        <Badge className={`rounded-full px-3 py-1 font-normal ${item.badgeBg}`}>
-                          {item.category}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-slate-400">{item.subCat}</TableCell>
-                      <TableCell className="text-slate-300">{item.buying}</TableCell>
-                      <TableCell className="text-slate-300">{item.wholesale}</TableCell>
-                      <TableCell className="text-slate-300">{item.retail}</TableCell>
-                      <TableCell>
-                        <span className={`font-bold ${item.qty < 10 ? 'text-red-500' : 'text-green-500'}`}>
-                          {item.qty}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-slate-300">{item.value}</TableCell>
-                      <TableCell className="text-center">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10">
-                          <Edit2 className="h-3.5 w-3.5" />
-                        </Button>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={10} className="text-center py-20 text-slate-500">
+                        <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
+                        Loading products...
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : products.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={10} className="text-center py-20 text-slate-500">
+                        No products found. Add your first product to get started!
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    products.map((item) => (
+                      <TableRow key={item.id} className="border-[#1a2340] hover:bg-white/5 transition-colors">
+                        <TableCell className="font-medium text-blue-400 py-5">{item.code}</TableCell>
+                        <TableCell className="font-semibold text-slate-200">{item.name}</TableCell>
+                        <TableCell>
+                          <Badge className={`rounded-full px-3 py-1 font-normal ${getBadgeStyle(item.category)}`}>
+                            {item.category}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-slate-400">{item.subCategory}</TableCell>
+                        <TableCell className="text-slate-300">৳ {item.buyingPrice.toLocaleString()}</TableCell>
+                        <TableCell className="text-slate-300">৳ {item.wholesalePrice.toLocaleString()}</TableCell>
+                        <TableCell className="text-slate-300">৳ {item.retailPrice.toLocaleString()}</TableCell>
+                        <TableCell>
+                          <span className={`font-bold ${item.stock < 10 ? 'text-red-500' : 'text-green-500'}`}>
+                            {item.stock}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-slate-300">৳ {(item.stock * item.retailPrice).toLocaleString()}</TableCell>
+                        <TableCell className="text-center">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10">
+                            <Edit2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>
@@ -214,4 +224,4 @@ export default function InventoryPage() {
       </div>
     </main>
   );
-}
+}

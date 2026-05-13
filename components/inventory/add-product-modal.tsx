@@ -1,0 +1,211 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Plus, Check } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { addProduct, getNextProductCode } from "@/lib/actions/inventory";
+
+const productSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  category: z.string().min(1, "Category is required"),
+  subCategory: z.string().min(1, "Sub-category is required"),
+  buyingPrice: z.number().min(0, "Price cannot be negative"),
+  wholesalePrice: z.number().min(0, "Price cannot be negative"),
+  retailPrice: z.number().min(0, "Price cannot be negative"),
+  stock: z.number().int().min(0, "Stock cannot be negative"),
+});
+
+type ProductFormValues = z.infer<typeof productSchema>;
+
+export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nextCode, setNextCode] = useState("#PRD-XXXX");
+
+  useEffect(() => {
+    if (open) {
+      getNextProductCode().then(setNextCode);
+    }
+  }, [open]);
+
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "",
+      category: "",
+      subCategory: "",
+      buyingPrice: 0,
+      wholesalePrice: 0,
+      retailPrice: 0,
+      stock: 0,
+    },
+  });
+
+  const onSubmit = async (data: ProductFormValues) => {
+    setIsSubmitting(true);
+    try {
+      const result = await addProduct(data);
+      if (result.success) {
+        setOpen(false);
+        form.reset();
+        onSuccess();
+      } else {
+        alert(result.error);
+      }
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="h-12 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2">
+          <Plus className="h-5 w-5" /> Add Product
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl">
+        <DialogHeader className="px-6 py-4 border-b border-[#1a2340] flex flex-row items-center justify-between">
+          <DialogTitle className="text-xl font-semibold">Add New Product</DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
+          {/* Product Code (Auto) */}
+          <div className="bg-[#1a2340]/50 p-4 rounded-xl border border-[#1a2340] flex items-center justify-between">
+            <span className="text-slate-400 text-sm">Product Code (Auto)</span>
+            <span className="text-blue-400 font-mono font-bold">{nextCode}</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-slate-400">Product Name</Label>
+              <Input
+                {...form.register("name")}
+                placeholder="e.g. Gold Hoop Earrings"
+                className="bg-[#050816] border-[#1a2340] text-white rounded-xl focus:ring-blue-500"
+              />
+              {form.formState.errors.name && (
+                <p className="text-red-500 text-xs">{form.formState.errors.name.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-slate-400">Category</Label>
+              <Select onValueChange={(v) => form.setValue("category", v)}>
+                <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl">
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
+                  <SelectItem value="Earrings">Earrings</SelectItem>
+                  <SelectItem value="Necklaces">Necklaces</SelectItem>
+                  <SelectItem value="Rings">Rings</SelectItem>
+                  <SelectItem value="Bracelets">Bracelets</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-slate-400">Sub-Category</Label>
+              <Select onValueChange={(v) => form.setValue("subCategory", v)}>
+                <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl">
+                  <SelectValue placeholder="Select Sub-Cat" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
+                  <SelectItem value="Gold">Gold</SelectItem>
+                  <SelectItem value="Silver">Silver</SelectItem>
+                  <SelectItem value="Stone">Stone</SelectItem>
+                  <SelectItem value="Pearl">Pearl</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-slate-400">Product Picture</Label>
+              <div className="relative">
+                 <Input 
+                  type="file" 
+                  className="bg-[#050816] border-[#1a2340] rounded-xl file:bg-white/10 file:text-white file:border-0 file:rounded-md file:px-2 file:py-1 file:mr-2" 
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label className="text-slate-400">Buying Price (৳)</Label>
+              <Input
+                type="number"
+                {...form.register("buyingPrice", { valueAsNumber: true })}
+                className="bg-[#050816] border-[#1a2340] text-white rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-400">Wholesale (৳)</Label>
+              <Input
+                type="number"
+                {...form.register("wholesalePrice", { valueAsNumber: true })}
+                className="bg-[#050816] border-[#1a2340] text-white rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-400">Retail (৳)</Label>
+              <Input
+                type="number"
+                {...form.register("retailPrice", { valueAsNumber: true })}
+                className="bg-[#050816] border-[#1a2340] text-white rounded-xl"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-slate-400">Initial Stock</Label>
+            <Input
+              type="number"
+              {...form.register("stock", { valueAsNumber: true })}
+              className="bg-[#050816] border-[#1a2340] text-white rounded-xl"
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#1a2340]">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setOpen(false)}
+              className="px-6 rounded-xl text-slate-400 hover:bg-white/5"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2"
+            >
+              {isSubmitting ? "Adding..." : <><Check className="h-4 w-4" /> Add Product</>}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
