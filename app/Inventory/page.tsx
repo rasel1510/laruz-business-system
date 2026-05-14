@@ -37,6 +37,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AddProductModal } from "@/components/inventory/add-product-modal";
+import { EditProductModal } from "@/components/inventory/edit-product-modal";
 import { getProducts } from "@/lib/actions/inventory";
 
 interface Product {
@@ -209,9 +210,7 @@ export default function InventoryPage() {
                         </TableCell>
                         <TableCell className="text-slate-300">৳ {(item.stock * item.retailPrice).toLocaleString()}</TableCell>
                         <TableCell className="text-center">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10">
-                            <Edit2 className="h-3.5 w-3.5" />
-                          </Button>
+                          <EditProductModal product={item} onSuccess={fetchProducts} />
                         </TableCell>
                       </TableRow>
                     ))

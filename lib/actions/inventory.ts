@@ -83,3 +83,36 @@ export async function getNextProductCode() {
     return "#PRD-0001";
   }
 }
+export async function updateProduct(id: string, data: Partial<z.infer<typeof productSchema>> & { stockAdjustment?: number }) {
+  try {
+    const { stockAdjustment, ...updateData } = data;
+    
+    const currentProduct = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!currentProduct) {
+      return { success: false, error: "Product not found" };
+    }
+
+    const finalStock = (updateData.stock ?? currentProduct.stock) + (stockAdjustment ?? 0);
+
+    if (finalStock < 0) {
+      return { success: false, error: "Stock cannot be negative" };
+    }
+
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        ...updateData,
+        stock: finalStock,
+      },
+    });
+
+    revalidatePath("/Inventory");
+    return { success: true, product };
+  } catch (error) {
+    console.error("Failed to update product:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
+}
