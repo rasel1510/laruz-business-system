@@ -80,43 +80,21 @@ export default function InventoryPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#050816] text-white">
-      <div className="flex">
-        {/* SIDEBAR (Consistent with Home) */}
-        <aside className="w-56 min-h-screen border-r border-[#1a2340] bg-[#040b1f] hidden lg:block">
-          <div className="flex items-center gap-4 px-6 py-8 border-b border-[#1a2340]">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center font-bold">La</div>
-            <div>
-              <h1 className="text-xl font-serif">LARUZ</h1>
-              <p className="text-[9px] tracking-[2px] text-slate-400 uppercase">Jewelry Management</p>
-            </div>
+    <section className="flex-1 overflow-y-auto">
+      {/* TOPBAR */}
+      <div className="flex items-center justify-between border-b border-[#1a2340] px-8 py-5">
+        <h1 className="text-3xl font-serif">Inventory</h1>
+        <div className="flex items-center gap-4">
+          <div className="rounded-xl border border-[#1a2340] bg-[#0b132b] px-4 py-2 text-sm text-slate-300">
+            {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
           </div>
-          <div className="py-6 px-4 space-y-2">
-            <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white hover:bg-white/5">
-              <LayoutDashboard className="h-4 w-4" /> Dashboard
-            </Button>
-            <Button variant="ghost" className="w-full justify-start gap-3 bg-blue-600/10 text-blue-400 hover:bg-blue-600/20">
-              <Package className="h-4 w-4" /> Inventory
-            </Button>
-          </div>
-        </aside>
+          <Avatar className="h-10 w-10 border border-blue-500">
+            <AvatarFallback className="bg-blue-600">L</AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
 
-        {/* MAIN CONTENT */}
-        <section className="flex-1">
-          {/* TOPBAR */}
-          <div className="flex items-center justify-between border-b border-[#1a2340] px-8 py-5">
-            <h1 className="text-3xl font-serif">Inventory</h1>
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-[#1a2340] bg-[#0b132b] px-4 py-2 text-sm text-slate-300">
-                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-              </div>
-              <Avatar className="h-10 w-10 border border-blue-500">
-                <AvatarFallback className="bg-blue-600">L</AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-
-          <div className="p-8">
+      <div className="p-8">
             {/* SEARCH AND FILTERS */}
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <div className="relative flex-1 min-w-[300px]">
@@ -219,8 +197,6 @@ export default function InventoryPage() {
               </Table>
             </div>
           </div>
-        </section>
-      </div>
-    </main>
+    </section>
   );
 }

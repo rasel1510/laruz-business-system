@@ -28,41 +28,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
-const sidebarItems = [
-  {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    active: true,
-    href: "/", // [ADD] Path to Dashboard
-  },
-  {
-    title: "Inventory",
-    icon: Package,
-    href: "/Inventory", // [ADD] Path to your Inventory page
-  },
-  {
-    title: "Orders",
-    icon: ShoppingCart,
-    href: "#",
-  },
-  {
-    title: "Lots",
-    icon: Boxes,
-    href: "#",
-  },
-];
-
-const financeItems = [
-  { title: "Customers", icon: Users, href: "#" },
-  { title: "Expenses", icon: Receipt, href: "#" },
-  { title: "Payments", icon: Wallet, href: "#" },
-  { title: "Investments", icon: TrendingUp, href: "#" },
-];
-
-const systemItems = [
-  { title: "Activity Logs", icon: ClipboardList, href: "#" },
-];
-
 const stats = [
   {
     title: "Delivered",
@@ -113,110 +78,21 @@ const activities = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#050816] text-white">
-      <div className="flex">
-        {/* SIDEBAR */}
-        <aside className="w-56 min-h-screen border-r border-[#1a2340] bg-[#040b1f] sticky top-0">
-          {/* LOGO */}
-          <div className="flex items-center gap-4 px-6 py-8 border-b border-[#1a2340]">
-            <div className="h-12 w-12 rounded-xl bg-linear-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-lg font-bold">
-              La
-            </div>
-            <div>
-              <h1 className="text-3xl font-serif tracking-wide">LARUZ</h1>
-              <p className="text-[11px] tracking-[3px] text-slate-400 uppercase">Jewelry Management</p>
-            </div>
+    <section className="flex-1 overflow-y-auto">
+      {/* TOPBAR */}
+      <div className="flex items-center justify-between border-b border-[#1a2340] px-8 py-5">
+        <h1 className="text-4xl font-semibold text-white">Dashboard</h1>
+        <div className="flex items-center gap-4">
+          <div className="rounded-xl border border-[#1a2340] bg-[#0b132b] px-5 py-3 text-sm text-slate-300">
+            Tue, May 12, 04:47 AM
           </div>
+          <Avatar className="h-12 w-12 border border-[#1a2340]">
+            <AvatarFallback className="bg-blue-600 text-white">L</AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
 
-          {/* NAVIGATION */}
-          <div className="px-4 py-6">
-            <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">Main</p>
-            <div className="space-y-2">
-              {sidebarItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link href={item.href} key={item.title}>
-                    <Button
-                      variant="ghost"
-                      className={`w-full justify-start gap-3 rounded-xl py-6 text-base ${
-                        item.active
-                          ? "bg-blue-600/20 text-blue-400 hover:bg-blue-600/20"
-                          : "text-slate-300 hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                      {item.title}
-                    </Button>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* FINANCE */}
-            <div className="mt-10">
-              <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">Finance</p>
-              <div className="space-y-2">
-                {financeItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link href={item.href} key={item.title}>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start gap-3 rounded-xl py-6 text-base text-slate-300 hover:bg-white/5 hover:text-white"
-                      >
-                        <Icon className="h-5 w-5" />
-                        {item.title}
-                      </Button>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* SYSTEM */}
-            <div className="mt-10">
-              <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">System</p>
-              <div className="space-y-2">
-                {systemItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link href={item.href} key={item.title}>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start gap-3 rounded-xl py-6 text-base text-slate-300 hover:bg-white/5 hover:text-white"
-                      >
-                        <Icon className="h-5 w-5" />
-                        {item.title}
-                      </Button>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 w-56 border-t border-[#1a2340] p-6 bg-[#040b1f]">
-            <p className="text-center text-sm text-slate-400">Trendy & Affordable Jewelry</p>
-            <p className="text-center text-sm text-slate-500">At Your Doorstep</p>
-          </div>
-        </aside>
-
-        {/* MAIN CONTENT */}
-        <section className="flex-1 overflow-y-auto">
-          {/* TOPBAR */}
-          <div className="flex items-center justify-between border-b border-[#1a2340] px-8 py-5">
-            <h1 className="text-4xl font-semibold">Dashboard</h1>
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-[#1a2340] bg-[#0b132b] px-5 py-3 text-sm text-slate-300">
-                Tue, May 12, 04:47 AM
-              </div>
-              <Avatar className="h-12 w-12 border border-[#1a2340]">
-                <AvatarFallback className="bg-blue-600 text-white">L</AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-
-          <div className="p-8">
+      <div className="p-8 text-white">
             {/* STATS */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
               {stats.map((stat) => {
@@ -326,8 +202,6 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
-        </section>
-      </div>
-    </main>
+    </section>
   );
 }
