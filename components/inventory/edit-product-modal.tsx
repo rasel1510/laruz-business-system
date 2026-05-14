@@ -15,8 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit2 } from "lucide-react";
+import { Edit2, Package } from "lucide-react";
 import { updateProduct } from "@/lib/actions/inventory";
+import Image from "next/image";
 
 const editProductSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -38,6 +39,7 @@ interface Product {
   wholesalePrice: number;
   retailPrice: number;
   stock: number;
+  image?: string | null;
 }
 
 export function EditProductModal({ product, onSuccess }: { product: Product, onSuccess: () => void }) {
@@ -97,10 +99,22 @@ export function EditProductModal({ product, onSuccess }: { product: Product, onS
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl">
-        <DialogHeader className="px-6 py-4 border-b border-[#1a2340]">
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-            Edit Product <span className="text-blue-400 text-sm font-mono">{product.code}</span>
-          </DialogTitle>
+        <DialogHeader className="px-6 py-4 border-b border-[#1a2340] flex flex-row items-center justify-between">
+          <div className="flex items-center gap-4">
+             <div className="relative h-12 w-12 rounded-xl overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
+                {product.image ? (
+                  <Image src={product.image} alt={product.name} fill className="object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-slate-500">
+                    <Package className="h-6 w-6" />
+                  </div>
+                )}
+             </div>
+             <div>
+                <DialogTitle className="text-xl font-semibold">Edit Product</DialogTitle>
+                <p className="text-blue-400 text-xs font-mono">{product.code}</p>
+             </div>
+          </div>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">

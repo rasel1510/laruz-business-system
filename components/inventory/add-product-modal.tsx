@@ -22,7 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UploadButton } from "@/lib/uploadthing";
 import { addProduct, getNextProductCode } from "@/lib/actions/inventory";
+import Image from "next/image";
+import { X } from "lucide-react";
 
 const productSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -32,6 +35,7 @@ const productSchema = z.object({
   wholesalePrice: z.number().min(0, "Price cannot be negative"),
   retailPrice: z.number().min(0, "Price cannot be negative"),
   stock: z.number().int().min(0, "Stock cannot be negative"),
+  image: z.string().optional(),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -57,8 +61,11 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
       wholesalePrice: 0,
       retailPrice: 0,
       stock: 0,
+      image: "",
     },
   });
+
+  const imageUrl = form.watch("image");
 
   const onSubmit = async (data: ProductFormValues) => {
     setIsSubmitting(true);
@@ -142,11 +149,33 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
 
             <div className="space-y-2">
               <Label className="text-slate-400">Product Picture</Label>
-              <div className="relative">
-                 <Input 
-                  type="file" 
-                  className="bg-[#050816] border-[#1a2340] rounded-xl file:bg-white/10 file:text-white file:border-0 file:rounded-md file:px-2 file:py-1 file:mr-2" 
-                />
+              <div className="flex items-center gap-4">
+                {imageUrl ? (
+                  <div className="relative h-12 w-12 rounded-lg overflow-hidden border border-[#1a2340]">
+                    <Image src={imageUrl} alt="Preview" fill className="object-cover" />
+                    <button 
+                      type="button"
+                      onClick={() => form.setValue("image", "")}
+                      className="absolute top-0 right-0 bg-red-500 text-white p-0.5 rounded-bl-md"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <UploadButton
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      form.setValue("image", res[0].ufsUrl);
+                    }}
+                    onUploadError={(error: Error) => {
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                    appearance={{
+                      button: "bg-blue-600/10 text-blue-400 border border-blue-600/20 text-xs h-10 px-4",
+                      allowedContent: "hidden"
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

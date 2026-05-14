@@ -38,7 +38,9 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AddProductModal } from "@/components/inventory/add-product-modal";
 import { EditProductModal } from "@/components/inventory/edit-product-modal";
+import { DeleteProductModal } from "@/components/inventory/delete-product-modal";
 import { getProducts } from "@/lib/actions/inventory";
+import Image from "next/image";
 
 interface Product {
   id: string;
@@ -171,7 +173,20 @@ export default function InventoryPage() {
                     products.map((item) => (
                       <TableRow key={item.id} className="border-[#1a2340] hover:bg-white/5 transition-colors">
                         <TableCell className="font-medium text-blue-400 py-5">{item.code}</TableCell>
-                        <TableCell className="font-semibold text-slate-200">{item.name}</TableCell>
+                        <TableCell className="font-semibold text-slate-200">
+                          <div className="flex items-center gap-3">
+                            <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
+                              {item.image ? (
+                                <Image src={item.image} alt={item.name} fill className="object-cover" />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center text-slate-500">
+                                  <Package className="h-5 w-5" />
+                                </div>
+                              )}
+                            </div>
+                            <span>{item.name}</span>
+                          </div>
+                        </TableCell>
                         <TableCell>
                           <Badge className={`rounded-full px-3 py-1 font-normal ${getBadgeStyle(item.category)}`}>
                             {item.category}
@@ -188,7 +203,10 @@ export default function InventoryPage() {
                         </TableCell>
                         <TableCell className="text-slate-300">৳ {(item.stock * item.retailPrice).toLocaleString()}</TableCell>
                         <TableCell className="text-center">
-                          <EditProductModal product={item} onSuccess={fetchProducts} />
+                          <div className="flex items-center justify-center gap-2">
+                            <EditProductModal product={item} onSuccess={fetchProducts} />
+                            <DeleteProductModal product={item} onSuccess={fetchProducts} />
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))

@@ -116,3 +116,16 @@ export async function updateProduct(id: string, data: Partial<z.infer<typeof pro
     return { success: false, error: "Internal Server Error" };
   }
 }
+export async function deleteProduct(id: string) {
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    revalidatePath("/Inventory");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete product:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
+}
