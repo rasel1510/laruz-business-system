@@ -8,6 +8,7 @@ import * as z from "zod";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -112,6 +113,9 @@ export function EditProductModal({ product, onSuccess }: { product: Product, onS
              </div>
              <div>
                 <DialogTitle className="text-xl font-semibold">Edit Product</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Update product details and stock adjustments for {product.name}.
+                </DialogDescription>
                 <p className="text-blue-400 text-xs font-mono">{product.code}</p>
              </div>
           </div>

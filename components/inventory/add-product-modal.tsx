@@ -8,6 +8,7 @@ import * as z from "zod";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -95,6 +96,9 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
       <DialogContent className="sm:max-w-[600px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl">
         <DialogHeader className="px-6 py-4 border-b border-[#1a2340] flex flex-row items-center justify-between">
           <DialogTitle className="text-xl font-semibold">Add New Product</DialogTitle>
+          <DialogDescription className="sr-only">
+            Enter details for the new product to add it to the inventory.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">

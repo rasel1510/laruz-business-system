@@ -39,6 +39,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AddProductModal } from "@/components/inventory/add-product-modal";
 import { EditProductModal } from "@/components/inventory/edit-product-modal";
 import { DeleteProductModal } from "@/components/inventory/delete-product-modal";
+import { ImagePreviewModal } from "@/components/inventory/image-preview-modal";
 import { getProducts } from "@/lib/actions/inventory";
 import Image from "next/image";
 
@@ -175,15 +176,19 @@ export default function InventoryPage() {
                         <TableCell className="font-medium text-blue-400 py-5">{item.code}</TableCell>
                         <TableCell className="font-semibold text-slate-200">
                           <div className="flex items-center gap-3">
-                            <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
-                              {item.image ? (
-                                <Image src={item.image} alt={item.name} fill className="object-cover" />
-                              ) : (
+                            {item.image ? (
+                              <ImagePreviewModal image={item.image} name={item.name}>
+                                <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
+                                  <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                </div>
+                              </ImagePreviewModal>
+                            ) : (
+                              <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
                                 <div className="flex h-full w-full items-center justify-center text-slate-500">
                                   <Package className="h-5 w-5" />
                                 </div>
-                              )}
-                            </div>
+                              </div>
+                            )}
                             <span>{item.name}</span>
                           </div>
                         </TableCell>
