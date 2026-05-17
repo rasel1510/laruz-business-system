@@ -139,7 +139,7 @@ export default function InventoryPage() {
               <AddProductModal onSuccess={fetchProducts} />
             </div>
 
-            {/* INVENTORY TABLE */}
+            {/* INVENTORY of  TABLE */}
             <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b] overflow-hidden shadow-2xl">
               <Table>
                 <TableHeader className="bg-white/5">
