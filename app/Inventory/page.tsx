@@ -98,7 +98,7 @@ export default function InventoryPage() {
       </div>
 
       <div className="p-8">
-            {/* SEARCH AND FILTERS */}
+            {/* SEARCH AND FI isLTERS */}
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <div className="relative flex-1 min-w-[300px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
@@ -222,4 +222,4 @@ export default function InventoryPage() {
           </div>
     </section>
   );
-}
+}
