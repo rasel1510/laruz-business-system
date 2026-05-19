@@ -146,6 +146,9 @@ export function Sidebar() {
             await authClient.signOut({
               fetchOptions: {
                 onSuccess: () => {
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("logged_out", "true");
+                  }
                   window.location.href = "/login";
                 }
               }

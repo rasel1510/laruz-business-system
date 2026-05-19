@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +39,13 @@ export default function AuthPage() {
   const [successMsg, setSuccessMsg] = useState("");
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+
+  // Clear logged_out flag when login page loads
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("logged_out");
+    }
+  }, []);
 
   // Form handlers
   const loginForm = useForm({
