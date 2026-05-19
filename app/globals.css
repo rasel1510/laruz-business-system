@@ -126,5 +126,48 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* Mobile optimizations */
+@layer base {
+  body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Safe area padding for notched devices (iPhone etc.) */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Smooth scrolling for all scrollable containers */
+  [class*="overflow-y-auto"],
+  [class*="overflow-x-auto"] {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better touch targets on mobile */
+  @media (max-width: 640px) {
+    button,
+    [role="button"],
+    a {
+      min-height: 36px;
+    }
+
+    /* Prevent zoom on input focus in iOS */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="search"],
+    select,
+    textarea {
+      font-size: 16px;
+    }
   }
 }
