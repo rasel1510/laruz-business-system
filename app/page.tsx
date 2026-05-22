@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link"; // [ADD] Import Link for navigation
+import Link from "next/link";
 import {
   LayoutDashboard,
   Package,
@@ -13,6 +11,7 @@ import {
   ClipboardList,
   Clock3,
   X,
+  CheckCircle2,
 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,200 +27,387 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
-const stats = [
-  {
-    title: "Delivered",
-    value: "24",
-    subtitle: "Orders completed",
-    progress: 72,
-    color: "bg-green-500",
-    icon: null,
-  },
-  {
-    title: "Pending",
-    value: "8",
-    subtitle: "Awaiting delivery",
-    progress: 28,
-    color: "bg-yellow-500",
-    icon: Clock3,
-  },
-  {
-    title: "Cancelled",
-    value: "3",
-    subtitle: "This month",
-    progress: 14,
-    color: "bg-red-500",
-    icon: X,
-  },
-  {
-    title: "On Hold",
-    value: "2",
-    subtitle: "Processing",
-    progress: 10,
-    color: "bg-blue-500",
-    icon: null,
-  },
-];
+import prisma from "@/lib/db";
 
-const recentOrders = [
-  { id: "#ORD-0037", customer: "Nadia Rahman", status: "Pending", amount: "৳ 2,400" },
-  { id: "#ORD-0036", customer: "Sara Islam", status: "Delivered", amount: "৳ 1,800" },
-  { id: "#ORD-0035", customer: "Rina Akter", status: "Hold", amount: "৳ 3,200" },
-];
+// Force dynamic so it always fetches fresh data on load
+export const dynamic = "force-dynamic";
 
-const activities = [
-  { time: "Today, 11:42 AM", text: "New order #ORD-0037 created for Nadia Rahman — ৳ 2,400" },
-  { time: "Today, 10:15 AM", text: "Payment received ৳ 8,500 via bKash" },
-  { time: "Yesterday, 6:30 PM", text: "Order #ORD-0036 marked as Delivered" },
-  { time: "Yesterday, 2:00 PM", text: "Inventory updated — 24 earrings added from Lot #LOT-005" },
-];
+export default async function Home() {
+  // Fetch real data
+  const [products, orders] = await Promise.all([
+    prisma.product.findMany(),
+    prisma.order.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { customer: true },
+    }),
+  ]);
 
-export default function Home() {
+  // Inventory stats
+  const totalItems = products.length;
+  const stockValue = products.reduce((acc, p) => acc + p.retailPrice * p.stock, 0);
+
+  // Top categories (simple count based on products)
+  const categoryCounts = products.reduce((acc, p) => {
+    const cat = p.category || "Uncategorized";
+    acc[cat] = (acc[cat] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const topCategories = Object.entries(categoryCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+
+  // Orders stats
+  let delivered = 0;
+  let pending = 0;
+  let cancelled = 0;
+  let onHold = 0;
+
+  orders.forEach((o) => {
+    const s = o.status.toLowerCase();
+    if (s === "delivered") delivered++;
+    else if (s === "pending") pending++;
+    else if (s === "cancelled") cancelled++;
+    else if (s === "hold") onHold++;
+  });
+
+  const stats = [
+    {
+      title: "Delivered",
+      value: delivered.toString(),
+      subtitle: "Orders completed",
+      color: "bg-green-500",
+      icon: CheckCircle2,
+    },
+    {
+      title: "Pending",
+      value: pending.toString(),
+      subtitle: "Awaiting delivery",
+      color: "bg-yellow-500",
+      icon: Clock3,
+    },
+    {
+      title: "Cancelled",
+      value: cancelled.toString(),
+      subtitle: "This month",
+      color: "bg-red-500",
+      icon: X,
+    },
+    {
+      title: "On Hold",
+      value: onHold.toString(),
+      subtitle: "Processing",
+      color: "bg-blue-500",
+      icon: null,
+    },
+  ];
+
+  const recentOrders = orders.slice(0, 5).map((o) => ({
+    id: o.orderNumber,
+    customer: o.customerName || o.customer?.name || "Walk-in",
+    status: o.status,
+    amount: `৳ ${o.totalAmount.toLocaleString()}`,
+  }));
+
+  // Activity feed from latest orders
+  const activities = orders.slice(0, 5).map((o) => {
+    const name = o.customerName || o.customer?.name || "Walk-in";
+    const dateStr = new Date(o.createdAt).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    return {
+      time: dateStr,
+      text: `Order ${o.orderNumber} placed by ${name} — ৳ ${o.totalAmount.toLocaleString()}`,
+    };
+  });
+
   return (
     <section className="flex-1 overflow-y-auto">
       {/* TOPBAR */}
-      <div className="flex items-center justify-between border-b border-[#1a2340] px-4 py-4 sm:px-6 md:px-8 md:py-5">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white pl-12 lg:pl-0">Dashboard</h1>
+      <div className="flex items-center justify-between border-b border-[#1a2340] px-4 py-3 sm:px-6 md:px-8 md:py-4">
+        <h1 className="text-xl sm:text-2xl font-semibold text-white pl-12 lg:pl-0">
+          Dashboard
+        </h1>
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden sm:block rounded-xl border border-[#1a2340] bg-[#0b132b] px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm text-slate-300">
-            Tue, May 12, 04:47 AM
+          <div className="hidden sm:block rounded-lg border border-[#1a2340] bg-[#0b132b] px-3 py-1.5 md:px-4 md:py-2 text-xs text-slate-300">
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
           </div>
-          <Avatar className="h-9 w-9 sm:h-12 sm:w-12 border border-[#1a2340]">
-            <AvatarFallback className="bg-blue-600 text-white text-sm sm:text-base">L</AvatarFallback>
+          <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border border-[#1a2340]">
+            <AvatarFallback className="bg-blue-600 text-white text-xs sm:text-sm">
+              L
+            </AvatarFallback>
           </Avatar>
         </div>
       </div>
 
-      <div className="p-4 sm:p-6 md:p-8 text-white">
-            {/* STATS */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <Card key={stat.title} className="border-[#1a2340] bg-[#0b132b] text-white rounded-2xl sm:rounded-3xl">
-                    <CardContent className="p-4 sm:p-6">
-                      <div className="mb-3 sm:mb-5 flex items-start justify-between">
-                        <div>
-                          <p className="text-sm sm:text-lg text-slate-400">{stat.title}</p>
-                          <h2 className="mt-2 sm:mt-4 text-3xl sm:text-5xl font-bold">{stat.value}</h2>
-                          <p className="mt-1 sm:mt-3 text-xs sm:text-sm text-slate-500">{stat.subtitle}</p>
-                        </div>
-                        {Icon && (
-                          <div className="rounded-full bg-white/5 p-2 sm:p-3">
-                            <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-slate-300" />
-                          </div>
-                        )}
+      <div className="p-4 sm:p-5 md:p-6 text-white max-w-7xl mx-auto">
+        {/* STATS */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <Card
+                key={stat.title}
+                className="border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl"
+              >
+                <CardContent className="p-4 sm:p-5">
+                  <div className="mb-2 sm:mb-3 flex items-start justify-between">
+                    <div>
+                      <p className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide uppercase">
+                        {stat.title}
+                      </p>
+                      <h2 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-bold">
+                        {stat.value}
+                      </h2>
+                      <p className="mt-1 text-[10px] sm:text-xs text-slate-500">
+                        {stat.subtitle}
+                      </p>
+                    </div>
+                    {Icon && (
+                      <div className="rounded-lg bg-white/5 p-2">
+                        <Icon className="h-4 w-4 text-slate-300" />
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* MIDDLE SECTION */}
-            <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-6 sm:gap-8 xl:grid-cols-2">
-              <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-2xl sm:rounded-3xl">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="mb-4 sm:mb-6 flex items-center justify-between gap-2">
-                    <h2 className="text-lg sm:text-2xl font-semibold tracking-wide text-slate-200">INVENTORY SUMMARY</h2>
-                    <Link href="/Inventory">
-                      <Button variant="outline" className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-xs sm:text-sm px-3 sm:px-4">
-                        View All
-                      </Button>
-                    </Link>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 sm:gap-5">
-                    <div className="rounded-xl sm:rounded-2xl bg-[#131d3a] p-4 sm:p-8">
-                      <p className="text-center text-xs sm:text-base text-slate-400">Stock Value</p>
-                      <h3 className="mt-2 sm:mt-5 text-center text-2xl sm:text-4xl md:text-5xl font-semibold text-yellow-400">৳ 84,500</h3>
-                    </div>
-                    <div className="rounded-xl sm:rounded-2xl bg-[#131d3a] p-4 sm:p-8">
-                      <p className="text-center text-xs sm:text-base text-slate-400">Total Items</p>
-                      <h3 className="mt-2 sm:mt-5 text-center text-2xl sm:text-4xl md:text-5xl font-semibold text-blue-400">342</h3>
-                    </div>
-                  </div>
-                  <div className="mt-5 sm:mt-8">
-                    <p className="mb-3 sm:mb-4 text-sm sm:text-lg text-slate-300">Top Categories</p>
-                    <div className="flex flex-wrap gap-2 sm:gap-3">
-                      <Badge className="rounded-full bg-blue-600/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-blue-400 hover:bg-blue-600/20">Necklaces (45)</Badge>
-                      <Badge className="rounded-full bg-yellow-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-yellow-400 hover:bg-yellow-500/20">Rings (78)</Badge>
-                      <Badge className="rounded-full bg-purple-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-purple-400 hover:bg-purple-500/20">Earrings (120)</Badge>
-                      <Badge className="rounded-full bg-green-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-green-400 hover:bg-green-500/20">Bracelets (99)</Badge>
-                    </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
+            );
+          })}
+        </div>
 
-              <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-2xl sm:rounded-3xl">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="mb-4 sm:mb-6 flex items-center justify-between gap-2">
-                    <h2 className="text-lg sm:text-2xl font-semibold tracking-wide text-slate-200">RECENT ORDERS</h2>
-                    <Button variant="outline" className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-xs sm:text-sm px-3 sm:px-4">View All</Button>
-                  </div>
-                  {/* Mobile card layout for orders */}
-                  <div className="sm:hidden space-y-3">
-                    {recentOrders.map((order) => (
-                      <div key={order.id} className="rounded-xl bg-[#131d3a] p-4 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-blue-400 text-sm">{order.id}</span>
-                          <Badge className={`rounded-full px-3 py-0.5 text-xs ${order.status === "Pending" ? "bg-yellow-500/20 text-yellow-400" : order.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"}`}>
-                            {order.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-300 text-sm">{order.customer}</span>
-                          <span className="text-slate-200 font-medium text-sm">{order.amount}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Desktop table layout */}
-                  <div className="hidden sm:block">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="border-[#1a2340] hover:bg-transparent">
-                          <TableHead className="text-slate-400">ORDER</TableHead>
-                          <TableHead className="text-slate-400">CUSTOMER</TableHead>
-                          <TableHead className="text-slate-400">STATUS</TableHead>
-                          <TableHead className="text-right text-slate-400">AMOUNT</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {recentOrders.map((order) => (
-                          <TableRow key={order.id} className="border-[#1a2340] hover:bg-white/5">
-                            <TableCell className="font-semibold text-blue-400">{order.id}</TableCell>
-                            <TableCell className="text-slate-300">{order.customer}</TableCell>
-                            <TableCell>
-                              <Badge className={`rounded-full px-4 py-1 ${order.status === "Pending" ? "bg-yellow-500/20 text-yellow-400" : order.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"}`}>
-                                {order.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right text-slate-300">{order.amount}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* ACTIVITY FEED */}
-            <Card className="mt-6 sm:mt-8 border-[#1a2340] bg-[#0b132b] text-white rounded-2xl sm:rounded-3xl">
-              <CardContent className="p-4 sm:p-6">
-                <h2 className="mb-5 sm:mb-8 text-lg sm:text-2xl font-semibold tracking-wide text-slate-200">ACTIVITY FEED</h2>
-                <div className="relative ml-3 border-l border-[#24304f]">
-                  {activities.map((activity, index) => (
-                    <div key={index} className="relative mb-6 sm:mb-10 pl-6 sm:pl-10 last:mb-0">
-                      <div className="absolute -left-1.75 top-1 h-3 w-3 rounded-full bg-blue-500" />
-                      <p className="text-xs sm:text-sm text-slate-500">{activity.time}</p>
-                      <p className="mt-1 sm:mt-2 text-sm sm:text-xl text-slate-300">{activity.text}</p>
-                    </div>
-                  ))}
+        {/* MIDDLE SECTION */}
+        <div className="mt-4 sm:mt-6 grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
+          {/* INVENTORY SUMMARY CARD */}
+          <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl flex flex-col">
+            <CardContent className="p-4 sm:p-5 flex-1 flex flex-col">
+              <div className="mb-3 sm:mb-4 flex items-center justify-between gap-2">
+                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+                  INVENTORY SUMMARY
+                </h2>
+                <Link href="/Inventory">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
+                  >
+                    View All
+                  </Button>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="rounded-xl bg-[#131d3a] p-3 sm:p-5 border border-[#1a2340]">
+                  <p className="text-center text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    Stock Value
+                  </p>
+                  <h3 className="mt-1.5 sm:mt-2 text-center text-lg sm:text-2xl font-bold text-yellow-400">
+                    ৳ {stockValue.toLocaleString()}
+                  </h3>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <div className="rounded-xl bg-[#131d3a] p-3 sm:p-5 border border-[#1a2340]">
+                  <p className="text-center text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    Total Items
+                  </p>
+                  <h3 className="mt-1.5 sm:mt-2 text-center text-lg sm:text-2xl font-bold text-blue-400">
+                    {totalItems}
+                  </h3>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 sm:pt-5 sm:mt-auto border-t border-[#1a2340]">
+                <p className="mb-2.5 sm:mb-3 text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  Top Categories
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {topCategories.length > 0 ? (
+                    topCategories.map(([cat, count], idx) => {
+                      const colors = [
+                        "bg-blue-600/20 text-blue-400 border-blue-500/20 hover:bg-blue-600/30",
+                        "bg-yellow-500/20 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/30",
+                        "bg-purple-500/20 text-purple-400 border-purple-500/20 hover:bg-purple-500/30",
+                        "bg-green-500/20 text-green-400 border-green-500/20 hover:bg-green-500/30",
+                      ];
+                      const color = colors[idx % colors.length];
+                      return (
+                        <Badge
+                          key={cat}
+                          variant="outline"
+                          className={`rounded-md px-2 py-0.5 text-[10px] sm:text-xs font-medium ${color}`}
+                        >
+                          {cat} ({count})
+                        </Badge>
+                      );
+                    })
+                  ) : (
+                    <span className="text-xs text-slate-500">
+                      No categories found
+                    </span>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* RECENT ORDERS CARD */}
+          <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl flex flex-col">
+            <CardContent className="p-4 sm:p-5 flex-1 flex flex-col">
+              <div className="mb-3 sm:mb-4 flex items-center justify-between gap-2">
+                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+                  RECENT ORDERS
+                </h2>
+                <Link href="/orders">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
+                  >
+                    View All
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Mobile card layout for orders */}
+              <div className="sm:hidden space-y-2">
+                {recentOrders.length > 0 ? (
+                  recentOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="rounded-lg bg-[#131d3a] p-3 space-y-1.5 border border-[#1a2340]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-blue-400 text-xs">
+                          {order.id}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className={`rounded-full px-2 py-0 border-transparent text-[10px] ${
+                            order.status === "Pending"
+                              ? "bg-yellow-500/20 text-yellow-400"
+                              : order.status === "Delivered"
+                              ? "bg-green-500/20 text-green-400"
+                              : order.status === "Cancelled"
+                              ? "bg-red-500/20 text-red-400"
+                              : "bg-purple-500/20 text-purple-400"
+                          }`}
+                        >
+                          {order.status}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-300 text-[11px] truncate pr-2">
+                          {order.customer}
+                        </span>
+                        <span className="text-slate-200 font-medium text-xs whitespace-nowrap">
+                          {order.amount}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-slate-500 text-xs">
+                    No orders yet.
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop table layout */}
+              <div className="hidden sm:block flex-1 border border-[#1a2340] rounded-lg overflow-hidden bg-[#131d3a]">
+                {recentOrders.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-[#1a2340] hover:bg-transparent bg-[#0b132b]/50">
+                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">ORDER</TableHead>
+                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">
+                          CUSTOMER
+                        </TableHead>
+                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">STATUS</TableHead>
+                        <TableHead className="text-right text-slate-400 text-[11px] py-2 h-auto">
+                          AMOUNT
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {recentOrders.map((order) => (
+                        <TableRow
+                          key={order.id}
+                          className="border-[#1a2340] hover:bg-white/5"
+                        >
+                          <TableCell className="font-semibold text-blue-400 text-xs py-2.5">
+                            {order.id}
+                          </TableCell>
+                          <TableCell className="text-slate-300 text-xs py-2.5 max-w-[120px] truncate">
+                            {order.customer}
+                          </TableCell>
+                          <TableCell className="py-2.5">
+                            <Badge
+                              variant="outline"
+                              className={`rounded-full px-2 py-0 border-transparent text-[10px] ${
+                                order.status === "Pending"
+                                  ? "bg-yellow-500/20 text-yellow-400"
+                                  : order.status === "Delivered"
+                                  ? "bg-green-500/20 text-green-400"
+                                  : order.status === "Cancelled"
+                                  ? "bg-red-500/20 text-red-400"
+                                  : "bg-purple-500/20 text-purple-400"
+                              }`}
+                            >
+                              {order.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right text-slate-200 font-medium text-xs py-2.5">
+                            {order.amount}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="text-center py-8 text-slate-500 text-sm">
+                    No orders yet.
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* ACTIVITY FEED */}
+        <Card className="mt-4 sm:mt-6 border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl">
+          <CardContent className="p-4 sm:p-5">
+            <h2 className="mb-4 sm:mb-5 text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+              ACTIVITY FEED
+            </h2>
+            <div className="relative ml-2 sm:ml-3 border-l border-[#24304f]">
+              {activities.length > 0 ? (
+                activities.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="relative mb-5 sm:mb-6 pl-5 sm:pl-6 last:mb-0"
+                  >
+                    <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-blue-500 ring-4 ring-[#0b132b]" />
+                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
+                      {activity.time}
+                    </p>
+                    <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-slate-300">
+                      {activity.text}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="pl-5 sm:pl-6 text-slate-500 text-xs sm:text-sm">No recent activity.</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </section>
   );
 }
