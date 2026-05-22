@@ -40,6 +40,7 @@ import { AddProductModal } from "@/components/inventory/add-product-modal";
 import { EditProductModal } from "@/components/inventory/edit-product-modal";
 import { DeleteProductModal } from "@/components/inventory/delete-product-modal";
 import { ImagePreviewModal } from "@/components/inventory/image-preview-modal";
+import { UpdateStockModal } from "@/components/inventory/update-stock-modal";
 import { getProducts } from "@/lib/actions/inventory";
 import Image from "next/image";
 
@@ -133,11 +134,15 @@ export default function InventoryPage() {
 
               <Button 
                 variant="outline" 
+                size="icon"
                 onClick={fetchProducts}
-                className="h-11 sm:h-12 px-4 sm:px-5 rounded-xl border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 gap-2 text-xs sm:text-sm"
+                disabled={loading}
+                className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 shrink-0"
               >
-                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Update Stock
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
               </Button>
+
+              <UpdateStockModal products={products} onSuccess={fetchProducts} />
 
               <AddProductModal onSuccess={fetchProducts} />
             </div>

@@ -34,7 +34,7 @@ const sidebarItems = [
   {
     title: "Orders",
     icon: ShoppingCart,
-    href: "#",
+    href: "/orders",
   },
   {
     title: "Lots",
