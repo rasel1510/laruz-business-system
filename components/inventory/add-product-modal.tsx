@@ -102,7 +102,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto flex-1">
-          {/* Product Code (Auto) */}
+          {/* Product Code */}
           <div className="bg-[#1a2340]/50 p-3 sm:p-4 rounded-xl border border-[#1a2340] flex items-center justify-between">
             <span className="text-slate-400 text-xs sm:text-sm">Product Code (Auto)</span>
             <span className="text-blue-400 font-mono font-bold text-sm sm:text-base">{nextCode}</span>
