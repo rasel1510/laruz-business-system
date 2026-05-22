@@ -38,14 +38,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[#050816]">
-        <SessionGuard>
+        {/* Temporarily disabled SessionGuard to prevent blank screen / redirect loops */}
+        {/* <SessionGuard> */}
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 min-h-screen min-w-0">
               {children}
             </main>
           </div>
-        </SessionGuard>
+        {/* </SessionGuard> */}
       </body>
     </html>
   );

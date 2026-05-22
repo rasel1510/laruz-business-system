@@ -1,34 +1,48 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 export function SessionGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending, error } = authClient.useSession();
 
-  // If we are on the login page, we don't enforce session checks
+  useEffect(() => {
+    // If explicitly logged out, redirect
+    if (typeof window !== "undefined" && localStorage.getItem("logged_out") === "true") {
+      if (pathname !== "/login") {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    // If session check is done and no session exists, redirect
+    if (!isPending && !session && pathname !== "/login") {
+      window.location.href = "/login";
+    }
+  }, [isPending, session, pathname]);
+
+  // If we are on the login page, always render children so they can login
   if (pathname === "/login") {
     return <>{children}</>;
   }
 
-  // Fast check: if we explicitly logged out in this browser, redirect immediately
-  if (typeof window !== "undefined" && localStorage.getItem("logged_out") === "true") {
-    window.location.href = "/login";
-    return <div className="min-h-screen bg-[#050816]" />;
-  }
-
-  // Show a silent blank dark background while checking session (no spinner or text)
   if (isPending) {
-    return <div className="min-h-screen bg-[#050816]" />;
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#050816] text-slate-400">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent mb-4"></div>
+        <p>Loading session...</p>
+      </div>
+    );
   }
 
-  // If no session exists, redirect immediately to login
   if (!session) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/login";
-    }
-    return <div className="min-h-screen bg-[#050816]" />;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#050816] text-slate-400">
+        <p>Redirecting to login...</p>
+      </div>
+    );
   }
 
   return <>{children}</>;
