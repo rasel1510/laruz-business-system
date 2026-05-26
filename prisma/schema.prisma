@@ -141,6 +141,7 @@ model LotItem {
   productId   String
   product     Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
   quantity    Int
+  qtyType     String   @default("Piece")
   buyingPrice Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
