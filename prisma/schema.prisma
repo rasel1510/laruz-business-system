@@ -79,6 +79,7 @@ model Product {
   updatedAt      DateTime @updatedAt
 
   orderItems     OrderItem[]
+  lotItems       LotItem[]
 }
 
 model Customer {
@@ -120,3 +121,28 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Lot {
+  id            String    @id @default(cuid())
+  lotCode       String    @unique
+  date          DateTime  @default(now())
+  description   String?
+  totalValue    Float     @default(0)
+  totalQuantity Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  items         LotItem[]
+}
+
+model LotItem {
+  id          String   @id @default(cuid())
+  lotId       String
+  lot         Lot      @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  quantity    Int
+  buyingPrice Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

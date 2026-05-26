@@ -39,7 +39,7 @@ const sidebarItems = [
   {
     title: "Lots",
     icon: Boxes,
-    href: "#",
+    href: "/lots",
   },
 ];
 
