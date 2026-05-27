@@ -131,11 +131,11 @@ export function AddLotModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-11 sm:h-12 px-4 sm:px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2 text-xs sm:text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95">
+        <Button className="h-10 sm:h-11 px-4 sm:px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2 text-xs sm:text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95">
           <Plus className="h-4 w-4 sm:h-5 sm:w-5" /> New Lot
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-[800px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col shadow-2xl">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[600px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col shadow-2xl">
         <DialogHeader className="px-6 py-4 border-b border-[#1a2340] shrink-0">
           <DialogTitle className="text-xl sm:text-2xl font-serif">Purchase New Product Lot</DialogTitle>
           <DialogDescription className="text-slate-400 text-sm">
@@ -144,7 +144,7 @@ export function AddLotModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-          <div className="p-6 space-y-6 overflow-y-auto flex-1">
+          <div className="p-3 space-y-6 overflow-y-auto flex-1">
             {error && (
               <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm">
                 {error}
@@ -161,7 +161,7 @@ export function AddLotModal({
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="bg-[#050816] border-[#1a2340] text-white rounded-xl focus:ring-blue-500 h-11"
+                  className="bg-[#050816] border-[#1a2340] text-white rounded-xl focus:ring-blue-500 h-10"
                 />
               </div>
 
@@ -172,7 +172,7 @@ export function AddLotModal({
                   placeholder="e.g. Import from Turkey, Supplier Invoice #928"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="bg-[#050816] border-[#1a2340] text-white rounded-xl focus:ring-blue-500 h-11"
+                  className="bg-[#050816] border-[#1a2340] text-white rounded-xl focus:ring-blue-500 h-10"
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ export function AddLotModal({
                 {items.map((item, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-12 gap-3 items-end bg-[#101935]/40 p-3 sm:p-4 rounded-xl border border-[#1a2340] transition-colors hover:border-[#22305c]"
+                    className="grid grid-cols-12 gap-3 items-end bg-[#101935]/40 p-2 sm:p-3 rounded-xl border border-[#1a2340] transition-colors hover:border-[#22305c]"
                   >
                     {/* Product Selection */}
                     <div className="col-span-12 sm:col-span-5 space-y-1.5">
@@ -204,7 +204,7 @@ export function AddLotModal({
                       <select
                         value={item.productId}
                         onChange={(e) => handleItemChange(index, "productId", e.target.value)}
-                        className="w-full bg-[#050816] border border-[#1a2340] text-white rounded-xl h-11 px-3 text-sm focus:outline-none focus:border-blue-500 cursor-pointer"
+                        className="w-full bg-[#050816] border border-[#1a2340] text-white rounded-xl h-10 px-3 text-sm focus:outline-none focus:border-blue-500 cursor-pointer"
                       >
                         <option value="" disabled>Select Product</option>
                         {products.map((p) => (
@@ -223,7 +223,7 @@ export function AddLotModal({
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(index, "quantity", e.target.value)}
-                        className="bg-[#050816] border-[#1a2340] text-white rounded-xl text-sm h-11"
+                        className="bg-[#050816] border-[#1a2340] text-white rounded-xl text-sm h-10"
                       />
                     </div>
 
@@ -236,7 +236,7 @@ export function AddLotModal({
                         step="any"
                         value={item.buyingPrice}
                         onChange={(e) => handleItemChange(index, "buyingPrice", e.target.value)}
-                        className="bg-[#050816] border-[#1a2340] text-white rounded-xl text-sm h-11"
+                        className="bg-[#050816] border-[#1a2340] text-white rounded-xl text-sm h-10"
                       />
                     </div>
 
@@ -264,7 +264,7 @@ export function AddLotModal({
           </div>
 
           {/* Form Footer */}
-          <div className="px-6 py-4 border-t border-[#1a2340] bg-[#070d1e] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0">
+          <div className="px-6 py-3 border-t border-[#1a2340] bg-[#070d1e] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0">
             {/* Totals display */}
             <div className="flex items-center gap-6 justify-between sm:justify-start">
               <div>
@@ -286,14 +286,14 @@ export function AddLotModal({
                 type="button"
                 variant="ghost"
                 onClick={() => setOpen(false)}
-                className="px-6 rounded-xl text-slate-400 hover:bg-white/5 text-sm h-11"
+                className="px-6 rounded-xl text-slate-400 hover:bg-white/5 text-sm h-10"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-2 text-sm h-11 shadow-lg hover:shadow-blue-500/20"
+                className="px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-2 text-sm h-10 shadow-lg hover:shadow-blue-500/20"
               >
                 {isSubmitting ? (
                   <>

@@ -121,3 +121,5 @@ export async function addLot(data: z.infer<typeof lotSchema>) {
     return { success: false, error: "Internal Server Error" };
   }
 }
+
+
