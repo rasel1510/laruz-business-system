@@ -7,6 +7,7 @@ import { z } from "zod";
 const lotItemSchema = z.object({
   productId: z.string().min(1, "Product is required"),
   quantity: z.number().int().min(1, "Quantity must be at least 1"),
+  qtyType: z.string().default("Piece"),
   buyingPrice: z.number().min(0, "Buying price cannot be negative"),
 });
 
@@ -31,6 +32,27 @@ export async function getLots() {
   } catch (error) {
     console.error("Failed to fetch lots:", error);
     return [];
+  }
+}
+
+export async function getNextLotCode() {
+  try {
+    const lastLot = await prisma.lot.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+
+    let nextNumber = 1;
+    if (lastLot) {
+      const match = lastLot.lotCode.match(/LOT-(\d+)/);
+      if (match) {
+        nextNumber = parseInt(match[1]) + 1;
+      }
+    }
+
+    return `#LOT-${nextNumber.toString().padStart(3, "0")}`;
+  } catch (error) {
+    console.error("Failed to get next lot code:", error);
+    return "#LOT-001";
   }
 }
 
@@ -78,6 +100,7 @@ export async function addLot(data: z.infer<typeof lotSchema>) {
             lotId: newLot.id,
             productId: item.productId,
             quantity: item.quantity,
+            qtyType: item.qtyType,
             buyingPrice: item.buyingPrice,
           },
         });
@@ -121,5 +144,7 @@ export async function addLot(data: z.infer<typeof lotSchema>) {
     return { success: false, error: "Internal Server Error" };
   }
 }
+
+
 
 
