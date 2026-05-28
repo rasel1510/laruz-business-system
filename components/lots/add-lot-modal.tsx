@@ -40,10 +40,31 @@ export function AddLotModal({
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
   const [lotCode, setLotCode] = useState("#LOT-001");
-  const [date, setDate] = useState(() => {
+  
+  // Date in DD/MM/YYYY format
+  const [dateText, setDateText] = useState(() => {
     const today = new Date();
-    return today.toISOString().split("T")[0]; // YYYY-MM-DD
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`;
   });
+
+  const handleDateChange = (val: string) => {
+    // Remove all non-digits
+    const cleaned = val.replace(/\D/g, "");
+    
+    // Auto-format as DD/MM/YYYY
+    let formatted = cleaned;
+    if (cleaned.length > 2) {
+      formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
+    }
+    if (cleaned.length > 4) {
+      formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
+    }
+    
+    setDateText(formatted.slice(0, 10));
+  };
 
   const [items, setItems] = useState<LotItemInput[]>([
     { productId: "", quantity: 1, qtyType: "Piece", buyingPrice: 0 },
@@ -107,11 +128,31 @@ export function AddLotModal({
       return;
     }
 
+    // Validate and parse dateText (DD/MM/YYYY)
+    const dateParts = dateText.split("/");
+    let parsedDate: Date | undefined;
+    if (dateParts.length === 3) {
+      const day = parseInt(dateParts[0], 10);
+      const month = parseInt(dateParts[1], 10) - 1; // 0-indexed months
+      const year = parseInt(dateParts[2], 10);
+      if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+        const d = new Date(year, month, day);
+        if (d.getDate() === day && d.getMonth() === month && d.getFullYear() === year) {
+          parsedDate = d;
+        }
+      }
+    }
+
+    if (!parsedDate) {
+      setError("Please enter a valid date in DD/MM/YYYY format.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const result = await addLot({
         description: description || undefined,
-        date: date ? new Date(date) : undefined,
+        date: parsedDate,
         items: items,
       });
 
@@ -119,7 +160,13 @@ export function AddLotModal({
         setOpen(false);
         // Reset form
         setDescription("");
-        setDate(new Date().toISOString().split("T")[0]);
+        
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, "0");
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const year = today.getFullYear();
+        setDateText(`${day}/${month}/${year}`);
+        
         setItems([{ productId: "", quantity: 1, qtyType: "Piece", buyingPrice: 0 }]);
         onSuccess();
       } else {
@@ -178,11 +225,13 @@ export function AddLotModal({
                 <Label className="text-slate-500 text-xs sm:text-sm font-medium tracking-wide">Purchase Date</Label>
                 <div className="relative">
                   <Input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
+                    type="text"
+                    placeholder="DD/MM/YYYY"
+                    value={dateText}
+                    onChange={(e) => handleDateChange(e.target.value)}
                     className="bg-[#0f172a] border border-[#1e294b] text-white rounded-xl focus:ring-blue-500/50 focus:border-blue-500 h-11 w-full pl-3 pr-10 text-sm font-light placeholder-slate-600"
                   />
+                  <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
                 </div>
               </div>
 
@@ -286,7 +335,8 @@ export function AddLotModal({
                       <Input
                         type="number"
                         min="1"
-                        value={item.quantity}
+                        value={item.quantity === 0 ? "" : item.quantity}
+                        placeholder="0"
                         onChange={(e) => handleItemChange(index, "quantity", e.target.value)}
                         className="bg-[#090d16] border border-[#1e294b] text-white rounded-xl text-sm h-11 w-full px-3"
                       />
@@ -300,7 +350,8 @@ export function AddLotModal({
                           type="number"
                           min="0"
                           step="any"
-                          value={item.buyingPrice}
+                          value={item.buyingPrice === 0 ? "" : item.buyingPrice}
+                          placeholder="0"
                           onChange={(e) => handleItemChange(index, "buyingPrice", e.target.value)}
                           className="bg-[#090d16] border border-[#1e294b] text-white rounded-xl text-sm h-11 w-full px-3"
                         />
