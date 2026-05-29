@@ -175,3 +175,62 @@ export async function getNextOrderNumber(): Promise<string> {
     return "#ORD-A0001";
   }
 }
+
+export async function getCustomersWithOrders() {
+  try {
+    const orders = await prisma.order.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        customer: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    const customerMap: Record<string, {
+      name: string;
+      phone: string;
+      totalOrders: number;
+      totalSpent: number;
+      lastOrderDate: Date;
+      orders: any[];
+    }> = {};
+
+    for (const order of orders) {
+      const rawPhone = order.phone || order.customer?.phone || "";
+      const phone = rawPhone.replace(/\s+/g, "").trim() || "—";
+      const name = (order.customerName || order.customer?.name || "Walk-in").trim();
+
+      if (!customerMap[phone]) {
+        customerMap[phone] = {
+          name,
+          phone,
+          totalOrders: 0,
+          totalSpent: 0,
+          lastOrderDate: new Date(order.createdAt),
+          orders: [],
+        };
+      }
+
+      const customer = customerMap[phone];
+      customer.totalOrders += 1;
+      customer.totalSpent += order.totalAmount;
+      
+      const orderDate = new Date(order.createdAt);
+      if (orderDate > customer.lastOrderDate) {
+        customer.lastOrderDate = orderDate;
+      }
+      
+      customer.orders.push(order);
+    }
+
+    return Object.values(customerMap).sort((a, b) => a.name.localeCompare(b.name));
+  } catch (error) {
+    console.error("Failed to fetch customers with orders:", error);
+    return [];
+  }
+}
+

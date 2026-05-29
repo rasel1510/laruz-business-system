@@ -46,7 +46,7 @@ const sidebarItems = [
 
 const financeItems = [
   { title: "Invoice", icon: FileText, href: "/finance/invoice" },
-  { title: "Customers", icon: Users, href: "#" },
+  { title: "Customers", icon: Users, href: "/finance/customers" },
   { title: "Expenses", icon: Receipt, href: "#" },
   { title: "Payments", icon: Wallet, href: "#" },
   { title: "Investments", icon: TrendingUp, href: "#" },
