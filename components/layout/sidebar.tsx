@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   LogOut,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
@@ -44,6 +45,7 @@ const sidebarItems = [
 ];
 
 const financeItems = [
+  { title: "Invoice", icon: FileText, href: "/finance/invoice" },
   { title: "Customers", icon: Users, href: "#" },
   { title: "Expenses", icon: Receipt, href: "#" },
   { title: "Payments", icon: Wallet, href: "#" },
