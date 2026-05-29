@@ -197,7 +197,7 @@ function ProductSearch({ products, value, onChange }: { products: Product[]; val
 export default function CreateOrderPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [nextOrderNum, setNextOrderNum] = useState("#ORD-00001");
+  const [nextOrderNum, setNextOrderNum] = useState("#ORD-·····");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 

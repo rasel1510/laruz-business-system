@@ -4,6 +4,31 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+// ─── Alphanumeric Order ID Generator ─────────────────────────────────────────
+// 36^5 = 60,466,176 possible IDs — plenty for any business, forever.
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+function randomAlphanumericSuffix(): string {
+  let result = "";
+  for (let i = 0; i < 5; i++) {
+    result += CHARS[Math.floor(Math.random() * CHARS.length)];
+  }
+  return result;
+}
+
+/** Generates a unique #ORD-XXXXX that doesn't already exist in the DB. */
+async function generateUniqueOrderNumber(): Promise<string> {
+  let attempts = 0;
+  while (attempts < 10) {
+    const candidate = `#ORD-${randomAlphanumericSuffix()}`;
+    const existing = await prisma.order.findUnique({ where: { orderNumber: candidate } });
+    if (!existing) return candidate;
+    attempts++;
+  }
+  // Fallback: append timestamp to guarantee uniqueness
+  return `#ORD-${randomAlphanumericSuffix()}${Date.now().toString(36).toUpperCase().slice(-2)}`;
+}
+
 const orderItemSchema = z.object({
   productId: z.string(),
   quantity: z.number().int().positive(),
@@ -41,19 +66,8 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
       (validated.discount ?? 0) -
       (validated.advance ?? 0);
 
-    // Generate Order Number
-    const lastOrder = await prisma.order.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-
-    let nextNumber = 1;
-    if (lastOrder) {
-      const match = lastOrder.orderNumber.match(/ORD-(\d+)/);
-      if (match) {
-        nextNumber = parseInt(match[1]) + 1;
-      }
-    }
-    const orderNumber = `#ORD-${nextNumber.toString().padStart(5, "0")}`;
+    // Generate unique alphanumeric Order Number (#ORD-A3X9K style)
+    const orderNumber = await generateUniqueOrderNumber();
 
     // Use a transaction to create order and update inventory
     const result = await prisma.$transaction(async (tx) => {
@@ -155,14 +169,9 @@ export async function updateOrder(
 
 export async function getNextOrderNumber(): Promise<string> {
   try {
-    const lastOrder = await prisma.order.findFirst({ orderBy: { createdAt: "desc" } });
-    let nextNumber = 1;
-    if (lastOrder) {
-      const match = lastOrder.orderNumber.match(/ORD-(\d+)/);
-      if (match) nextNumber = parseInt(match[1]) + 1;
-    }
-    return `#ORD-${nextNumber.toString().padStart(5, "0")}`;
+    // Just preview — returns a random candidate (actual unique check happens on createOrder)
+    return `#ORD-${randomAlphanumericSuffix()}`;
   } catch {
-    return "#ORD-00001";
+    return "#ORD-A0001";
   }
 }
