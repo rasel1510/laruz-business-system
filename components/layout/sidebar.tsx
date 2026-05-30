@@ -48,7 +48,7 @@ const financeItems = [
   { title: "Invoice", icon: FileText, href: "/finance/invoice" },
   { title: "Customers", icon: Users, href: "/finance/customers" },
   { title: "Expenses", icon: Receipt, href: "/finance/expenses" },
-  { title: "Payments", icon: Wallet, href: "#" },
+  { title: "Payments", icon: Wallet, href: "/finance/payments" },
   { title: "Investments", icon: TrendingUp, href: "/finance/investments" },
 ];
 

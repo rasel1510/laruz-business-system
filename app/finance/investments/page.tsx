@@ -330,7 +330,7 @@ export default function InvestmentsPage() {
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 md:p-8 space-y-6">
+        <div className="p-4 sm:p-6 md:p-8 space-y-2">
           {/* STATS OVERVIEW */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <SummaryCard
@@ -351,7 +351,6 @@ export default function InvestmentsPage() {
               value={`৳ ${stats.totalPaid.toLocaleString()}`}
               color="bg-amber-600/80"
               icon={TrendingUp}
-
             />
             <SummaryCard
               label="Avg Profit Share"
@@ -385,7 +384,7 @@ export default function InvestmentsPage() {
                 }}
               >
                 <DialogTrigger asChild>
-                  <Button className="h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2 text-sm font-semibold transition-all">
+                  <Button className="h-10 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-2 text-sm font-semibold transition-all">
                     <Plus className="h-4 w-4" /> Add Investor
                   </Button>
                 </DialogTrigger>
