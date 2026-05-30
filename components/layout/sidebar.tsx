@@ -49,7 +49,7 @@ const financeItems = [
   { title: "Customers", icon: Users, href: "/finance/customers" },
   { title: "Expenses", icon: Receipt, href: "/finance/expenses" },
   { title: "Payments", icon: Wallet, href: "#" },
-  { title: "Investments", icon: TrendingUp, href: "#" },
+  { title: "Investments", icon: TrendingUp, href: "/finance/investments" },
 ];
 
 const systemItems = [
