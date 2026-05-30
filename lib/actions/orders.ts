@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { logActivity } from "@/lib/actions/logs";
 
 // ─── Alphanumeric Order ID Generator ─────────────────────────────────────────
 // 36^5 = 60,466,176 possible IDs — plenty for any business, forever.
@@ -114,6 +115,12 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
 
       return order;
     });
+
+    await logActivity(
+      "CREATE",
+      "ORDERS",
+      `Created order ${result.orderNumber} for "${validated.customerName}" (৳${totalAmount.toLocaleString()})`
+    );
 
     revalidatePath("/orders");
     revalidatePath("/Inventory");

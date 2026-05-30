@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { logActivity } from "@/lib/actions/logs";
 
 const paymentSchema = z.object({
   amount: z.number().positive("Amount must be greater than 0"),
@@ -25,6 +26,12 @@ export async function addPayment(data: z.infer<typeof paymentSchema>) {
         date: validated.date,
       },
     });
+
+    await logActivity(
+      "CREATE",
+      "PAYMENTS",
+      `Received payment of ৳${validated.amount.toLocaleString()} via ${validated.method} from ${validated.courier}`
+    );
 
     revalidatePath("/finance/payments");
     revalidatePath("/");
@@ -51,9 +58,15 @@ export async function getPayments() {
 
 export async function deletePayment(id: string) {
   try {
-    await prisma.payment.delete({
+    const deleted = await prisma.payment.delete({
       where: { id },
     });
+
+    await logActivity(
+      "DELETE",
+      "PAYMENTS",
+      `Deleted payment of ৳${deleted.amount.toLocaleString()} via ${deleted.method} from ${deleted.courier}`
+    );
 
     revalidatePath("/finance/payments");
     revalidatePath("/");

@@ -192,3 +192,13 @@ model Payment {
   updatedAt     DateTime @updatedAt
 }
 
+model ActivityLog {
+  id        String   @id @default(cuid())
+  action    String   // "CREATE", "UPDATE", "DELETE", etc.
+  category  String   // "ORDERS", "EXPENSES", "PAYMENTS", "INVESTMENTS", "INVENTORY"
+  details   String
+  user      String   @default("System")
+  timestamp DateTime @default(now())
+}
+
+

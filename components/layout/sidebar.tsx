@@ -53,7 +53,7 @@ const financeItems = [
 ];
 
 const systemItems = [
-  { title: "Activity Logs", icon: ClipboardList, href: "#" },
+  { title: "Activity Logs", icon: ClipboardList, href: "/activity-logs" },
 ];
 
 export function Sidebar() {

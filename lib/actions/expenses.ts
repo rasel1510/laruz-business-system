@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { logActivity } from "@/lib/actions/logs";
 
 const expenseSchema = z.object({
   itemName: z.string().min(2, "Item Name must be at least 2 characters"),
@@ -23,6 +24,12 @@ export async function addExpense(data: z.infer<typeof expenseSchema>) {
         date: validated.date,
       },
     });
+
+    await logActivity(
+      "CREATE",
+      "EXPENSES",
+      `Added expense: "${validated.itemName}" (Qty: ${validated.quantity}, Price: ৳${validated.price.toLocaleString()})`
+    );
 
     revalidatePath("/finance/expenses");
     revalidatePath("/");
@@ -49,9 +56,15 @@ export async function getExpenses() {
 
 export async function deleteExpense(id: string) {
   try {
-    await prisma.expense.delete({
+    const deleted = await prisma.expense.delete({
       where: { id },
     });
+
+    await logActivity(
+      "DELETE",
+      "EXPENSES",
+      `Deleted expense item: "${deleted.itemName}" (Qty: ${deleted.quantity}, Price: ৳${deleted.price.toLocaleString()})`
+    );
 
     revalidatePath("/finance/expenses");
     revalidatePath("/");
