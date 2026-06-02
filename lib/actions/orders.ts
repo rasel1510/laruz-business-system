@@ -82,7 +82,6 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
           throw new Error(`Insufficient stock for "${product.name}" (available: ${product.stock})`);
         }
       }
-
       // 2. Create the order
       const order = await tx.order.create({
         data: {
@@ -94,6 +93,11 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
           totalAmount,
           paymentMethod: validated.paymentMethod,
           status: "Pending",
+          advance: validated.advance ?? 0,
+          packaging: validated.packaging ?? 0,
+          deliveryCharge: validated.deliveryCharge ?? 0,
+          discount: validated.discount ?? 0,
+          resell: validated.resell ?? 0,
           items: {
             create: validated.items.map((item) => ({
               productId: item.productId,
@@ -104,7 +108,6 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
         },
         include: { items: true },
       });
-
       // 3. Deduct stock
       for (const item of validated.items) {
         await tx.product.update({

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Search, Plus, Edit2, FileText, Check, X, ChevronDown, RefreshCw } from "lucide-react";
+import { Search, Plus, Edit2, FileText, Check, X, ChevronDown, RefreshCw, Download } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,22 @@ interface Order {
   createdAt: string | Date;
   status: string;
   customer?: { name: string; phone?: string | null } | null;
+  items?: {
+    id: string;
+    productId: string;
+    product: {
+      name: string;
+      code: string;
+      retailPrice: number;
+    };
+    quantity: number;
+    price: number;
+  }[];
+  advance?: number;
+  packaging?: number;
+  deliveryCharge?: number;
+  discount?: number;
+  resell?: number;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -228,6 +244,239 @@ function EditOrderModal({
   );
 }
 
+// ─── Invoice Modal ───────────────────────────────────────────────────────────
+function InvoiceModal({
+  order,
+  onClose,
+}: {
+  order: Order;
+  onClose: () => void;
+}) {
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // Calculate items subtotal
+  const subtotal = order.items?.reduce((sum, item) => sum + (item.price * item.quantity), 0) ?? 0;
+  
+  // Format dates
+  const formattedDate = new Date(order.createdAt).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const customerName = order.customerName || order.customer?.name || "Walk-in";
+  const phone = order.phone || order.customer?.phone || "—";
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* CSS Print Styles */}
+      <style>{`
+        @media print {
+          /* Hide standard elements */
+          body, html, section, div, header, main, nav, button {
+            background: transparent !important;
+            box-shadow: none !important;
+          }
+          body * {
+            visibility: hidden !important;
+          }
+          /* Show ONLY print area */
+          #invoice-print-area, #invoice-print-area * {
+            visibility: visible !important;
+          }
+          #invoice-print-area {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 20px !important;
+            box-shadow: none !important;
+            border: none !important;
+            background: white !important;
+            color: black !important;
+          }
+          /* Ensure text and colors look crisp on white paper */
+          .print-bg-blue {
+            background-color: #1e88e5 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .print-text-white {
+            color: white !important;
+          }
+        }
+      `}</style>
+
+      {/* Modal box */}
+      <div className="w-full max-w-lg bg-[#111827] border border-[#1f2937] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#1f2937] shrink-0">
+          <h2 className="text-sm font-semibold text-white">Invoice — {order.orderNumber}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-slate-500 hover:text-white hover:border-slate-500 transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {/* Scrollable Printable Invoice Content */}
+        <div className="flex-1 overflow-y-auto p-6 bg-[#090d16] flex justify-center">
+          <div
+            id="invoice-print-area"
+            className="w-full max-w-md bg-white text-slate-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between border border-slate-200"
+            style={{ minHeight: "580px" }}
+          >
+            {/* Top Section */}
+            <div>
+              {/* Brand Header */}
+              <div className="flex justify-between items-start">
+                <div>
+                  <h1 className="text-2xl font-bold font-serif text-[#1e88e5]">La LARUZ</h1>
+                  <p className="text-[9px] text-slate-500 font-medium tracking-wide">Trendy And Affordable Jewelry At Your Doorstep</p>
+                </div>
+                <div className="text-right text-[10px] text-slate-500 space-y-0.5">
+                  <p>Phone: 01927718970</p>
+                  <p>Email: laruzbd@gmail.com</p>
+                </div>
+              </div>
+
+              {/* Blue divider */}
+              <div className="border-t-2 border-[#1e88e5] my-3"></div>
+
+              {/* Bill To & Date info */}
+              <div className="flex justify-between text-xs my-4">
+                <div>
+                  <p className="font-bold text-slate-400 text-[10px] uppercase tracking-wider mb-1">BILL TO:</p>
+                  <p className="font-bold text-slate-800 text-sm">{customerName}</p>
+                  <p className="text-slate-600 font-mono mt-0.5">{phone}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-slate-500">Date: <span className="font-medium text-slate-800">{formattedDate}</span></p>
+                  <p className="font-bold text-slate-800 mt-1">Invoice: <span className="font-mono">{order.orderNumber}</span></p>
+                </div>
+              </div>
+
+              {/* Items Table */}
+              <div className="my-4 overflow-hidden rounded-lg border border-slate-200">
+                <table className="w-full text-xs text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#1e88e5] text-white print-bg-blue print-text-white">
+                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px]">ITEM NAME</th>
+                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-right">PRICE</th>
+                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-center">QTY</th>
+                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-right">TOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-150">
+                    {order.items && order.items.length > 0 ? (
+                      order.items.map((item) => (
+                        <tr key={item.id} className="text-slate-700 bg-slate-50/50 hover:bg-slate-50">
+                          <td className="py-2 px-3 font-medium text-slate-800">{item.product?.name || "Product"}</td>
+                          <td className="py-2 px-3 text-right font-mono">৳ {item.price.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-center">{item.quantity}</td>
+                          <td className="py-2 px-3 text-right font-mono font-semibold text-slate-800">৳ {(item.price * item.quantity).toLocaleString()}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="py-3 text-center text-slate-400">No items in order</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Totals Breakdown */}
+              <div className="flex flex-col items-end text-xs space-y-1.5 px-1 py-2">
+                <div className="flex justify-between w-48 text-slate-600">
+                  <span>Subtotal</span>
+                  <span className="font-mono font-medium">৳ {subtotal.toLocaleString()}</span>
+                </div>
+                
+                {order.packaging !== undefined && order.packaging > 0 && (
+                  <div className="flex justify-between w-48 text-slate-600">
+                    <span>Packaging</span>
+                    <span className="font-mono">৳ {order.packaging.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {order.resell !== undefined && order.resell > 0 && (
+                  <div className="flex justify-between w-48 text-slate-600">
+                    <span>Resell</span>
+                    <span className="font-mono">৳ {order.resell.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {order.discount !== undefined && order.discount > 0 && (
+                  <div className="flex justify-between w-48 text-slate-600">
+                    <span>Discount</span>
+                    <span className="font-mono text-red-500">- ৳ {order.discount.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {order.advance !== undefined && order.advance > 0 && (
+                  <div className="flex justify-between w-48 text-slate-600">
+                    <span>Advanced</span>
+                    <span className="font-mono">৳ {order.advance.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {order.deliveryCharge !== undefined && order.deliveryCharge > 0 && (
+                  <div className="flex justify-between w-48 text-slate-600">
+                    <span>Delivery Charge</span>
+                    <span className="font-mono">৳ {order.deliveryCharge.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {/* Final Total line */}
+                <div className="border-t border-slate-200 my-1 w-48"></div>
+                <div className="flex justify-between w-48 font-bold text-sm text-[#1e88e5] pt-0.5">
+                  <span>TOTAL</span>
+                  <span className="font-mono">৳ {order.totalAmount.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Footer Section */}
+            <div className="text-center pt-6 border-t border-slate-100 mt-4">
+              <p className="font-bold text-slate-800 text-xs">Thank you for your order</p>
+              <p className="text-[9px] text-slate-500 mt-1">We&apos;re excited to serve you and hope to see you again!</p>
+              <p className="text-[8px] text-slate-400 font-mono tracking-wide mt-2">FB: LARUZ | IG: laruzbd | TikTok: @laruzbd</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-[#1f2937] bg-[#0d1117] shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-slate-400 hover:text-white hover:border-slate-500 transition-colors"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="h-8 px-4 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium flex items-center gap-1.5 transition-colors"
+          >
+            <Download className="h-3.5 w-3.5" /> Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Page ───────────────────────────────────────────────────────────────
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -235,6 +484,7 @@ export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
+  const [viewingInvoice, setViewingInvoice] = useState<Order | null>(null);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -400,6 +650,7 @@ export default function OrdersPage() {
                               </button>
                               {/* ── Receipt Button ── */}
                               <button
+                                onClick={() => setViewingInvoice(order)}
                                 className="h-7 w-7 rounded-md bg-[#1f2937] hover:bg-slate-700 border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-slate-200 transition-all"
                                 title="View receipt"
                               >
@@ -426,6 +677,14 @@ export default function OrdersPage() {
           onSaved={(patch) => {
             handleSaved(editingOrder.id, patch);
           }}
+        />
+      )}
+
+      {/* INVOICE MODAL */}
+      {viewingInvoice && (
+        <InvoiceModal
+          order={viewingInvoice}
+          onClose={() => setViewingInvoice(null)}
         />
       )}
     </>

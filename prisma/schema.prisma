@@ -108,6 +108,13 @@ model Order {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   items         OrderItem[]
+
+  // Financial fields
+  advance       Float       @default(0)
+  packaging     Float       @default(0)
+  deliveryCharge Float       @default(0)
+  discount      Float       @default(0)
+  resell        Float       @default(0)
 }
 
 model OrderItem {
