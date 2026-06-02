@@ -26,6 +26,8 @@ interface Order {
   createdAt: string | Date;
   status: string;
   customer?: { name: string; phone?: string | null } | null;
+  advance?: number;
+  deliveryCharge?: number;
 }
 
 // ─── Delivery charge per courier (BDT) ───────────────────────────────────────
@@ -302,9 +304,9 @@ export default function InvoicePage() {
                   filtered.map((order) => {
                     const name =
                       order.customerName || order.customer?.name || "Walk-in";
-                    const deliveryCharge = getDeliveryCharge(order.courier);
+                    const deliveryCharge = order.deliveryCharge ?? getDeliveryCharge(order.courier);
                     const cod = order.totalAmount;
-                    const platformFee = cod * 0.01;
+                    const advance = order.advance || 0;
                     const fes = calcFes(cod, deliveryCharge);
 
                     return (
@@ -353,6 +355,9 @@ export default function InvoicePage() {
                             {cod.toLocaleString("en-IN", {
                               maximumFractionDigits: 0,
                             })}
+                          </p>
+                          <p className="text-[10px] text-slate-500 mt-0.5">
+                             Adv: ৳{advance.toLocaleString()} · Del: ৳{deliveryCharge.toLocaleString()}
                           </p>
                           <p
                             className={`text-xs font-semibold font-mono mt-0.5 ${

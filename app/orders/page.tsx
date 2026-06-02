@@ -340,7 +340,7 @@ function InvoiceModal({
               {/* Brand Header */}
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-2xl font-bold font-serif text-[#1e88e5]">La LARUZ</h1>
+                  <h1 className="text-2xl font-bold font-serif text-[#1e88e5]">Laruz</h1>
                   <p className="text-[9px] text-slate-500 font-medium tracking-wide">Trendy And Affordable Jewelry At Your Doorstep</p>
                 </div>
                 <div className="text-right text-[10px] text-slate-500 space-y-0.5">
@@ -396,52 +396,52 @@ function InvoiceModal({
               </div>
 
               {/* Totals Breakdown */}
-              <div className="flex flex-col items-end text-xs space-y-1.5 px-1 py-2">
-                <div className="flex justify-between w-48 text-slate-600">
+              <div className="flex flex-col text-xs space-y-2 px-1 py-3 border-t border-slate-100 mt-4">
+                <div className="flex justify-between w-full text-slate-600">
                   <span>Subtotal</span>
                   <span className="font-mono font-medium">৳ {subtotal.toLocaleString()}</span>
                 </div>
                 
                 {order.packaging !== undefined && order.packaging > 0 && (
-                  <div className="flex justify-between w-48 text-slate-600">
+                  <div className="flex justify-between w-full text-slate-600">
                     <span>Packaging</span>
                     <span className="font-mono">৳ {order.packaging.toLocaleString()}</span>
                   </div>
                 )}
 
                 {order.resell !== undefined && order.resell > 0 && (
-                  <div className="flex justify-between w-48 text-slate-600">
+                  <div className="flex justify-between w-full text-slate-600">
                     <span>Resell</span>
                     <span className="font-mono">৳ {order.resell.toLocaleString()}</span>
                   </div>
                 )}
 
                 {order.discount !== undefined && order.discount > 0 && (
-                  <div className="flex justify-between w-48 text-slate-600">
+                  <div className="flex justify-between w-full text-slate-600">
                     <span>Discount</span>
                     <span className="font-mono text-red-500">- ৳ {order.discount.toLocaleString()}</span>
                   </div>
                 )}
 
                 {order.advance !== undefined && order.advance > 0 && (
-                  <div className="flex justify-between w-48 text-slate-600">
+                  <div className="flex justify-between w-full text-slate-600">
                     <span>Advanced</span>
                     <span className="font-mono">৳ {order.advance.toLocaleString()}</span>
                   </div>
                 )}
 
                 {order.deliveryCharge !== undefined && order.deliveryCharge > 0 && (
-                  <div className="flex justify-between w-48 text-slate-600">
+                  <div className="flex justify-between w-full text-slate-600">
                     <span>Delivery Charge</span>
                     <span className="font-mono">৳ {order.deliveryCharge.toLocaleString()}</span>
                   </div>
                 )}
 
                 {/* Final Total line */}
-                <div className="border-t border-slate-200 my-1 w-48"></div>
-                <div className="flex justify-between w-48 font-bold text-sm text-[#1e88e5] pt-0.5">
+                <div className="border-t border-slate-200 my-1.5 w-full"></div>
+                <div className="flex justify-between w-full font-bold text-sm text-[#1e88e5] pt-1">
                   <span>TOTAL</span>
-                  <span className="font-mono">৳ {order.totalAmount.toLocaleString()}</span>
+                  <span className="font-mono text-base">৳ {order.totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </div>
