@@ -132,7 +132,7 @@ export default async function Home() {
           Dashboard
         </h1>
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden sm:block rounded-lg border border-[#1a2340] bg-[#0b132b] px-3 py-1.5 md:px-4 md:py-2 text-xs text-slate-300">
+          <div className="hidden sm:block rounded-lg border border-[#1a2340] bg-[#0b132b] px-3 py-1.5 md:px-4 md:py-2 text-xs text-white">
             {new Date().toLocaleDateString("en-US", {
               weekday: "short",
               month: "short",
@@ -161,19 +161,19 @@ export default async function Home() {
                 <CardContent className="p-4 sm:p-5">
                   <div className="mb-2 sm:mb-3 flex items-start justify-between">
                     <div>
-                      <p className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide uppercase">
+                      <p className="text-xs sm:text-sm text-white font-medium tracking-wide uppercase">
                         {stat.title}
                       </p>
                       <h2 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-bold">
                         {stat.value}
                       </h2>
-                      <p className="mt-1 text-[10px] sm:text-xs text-slate-500">
+                      <p className="mt-1 text-[10px] sm:text-xs text-white">
                         {stat.subtitle}
                       </p>
                     </div>
                     {Icon && (
                       <div className="rounded-lg bg-white/5 p-2">
-                        <Icon className="h-4 w-4 text-slate-300" />
+                        <Icon className="h-4 w-4 text-white" />
                       </div>
                     )}
                   </div>
@@ -189,14 +189,14 @@ export default async function Home() {
           <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl flex flex-col">
             <CardContent className="p-4 sm:p-5 flex-1 flex flex-col">
               <div className="mb-3 sm:mb-4 flex items-center justify-between gap-2">
-                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-white">
                   INVENTORY SUMMARY
                 </h2>
                 <Link href="/Inventory">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
+                    className="border-[#1a2340] bg-transparent text-white hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
                   >
                     View All
                   </Button>
@@ -205,7 +205,7 @@ export default async function Home() {
               
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <div className="rounded-xl bg-[#131d3a] p-3 sm:p-5 border border-[#1a2340]">
-                  <p className="text-center text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <p className="text-center text-[11px] sm:text-xs font-medium text-white uppercase tracking-wider">
                     Stock Value
                   </p>
                   <h3 className="mt-1.5 sm:mt-2 text-center text-lg sm:text-2xl font-bold text-yellow-400">
@@ -213,7 +213,7 @@ export default async function Home() {
                   </h3>
                 </div>
                 <div className="rounded-xl bg-[#131d3a] p-3 sm:p-5 border border-[#1a2340]">
-                  <p className="text-center text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <p className="text-center text-[11px] sm:text-xs font-medium text-white uppercase tracking-wider">
                     Total Items
                   </p>
                   <h3 className="mt-1.5 sm:mt-2 text-center text-lg sm:text-2xl font-bold text-blue-400">
@@ -223,7 +223,7 @@ export default async function Home() {
               </div>
               
               <div className="mt-4 pt-4 sm:pt-5 sm:mt-auto border-t border-[#1a2340]">
-                <p className="mb-2.5 sm:mb-3 text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">
+                <p className="mb-2.5 sm:mb-3 text-[11px] sm:text-xs font-medium text-white uppercase tracking-wider">
                   Top Categories
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -247,7 +247,7 @@ export default async function Home() {
                       );
                     })
                   ) : (
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-white">
                       No categories found
                     </span>
                   )}
@@ -260,14 +260,14 @@ export default async function Home() {
           <Card className="border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl flex flex-col">
             <CardContent className="p-4 sm:p-5 flex-1 flex flex-col">
               <div className="mb-3 sm:mb-4 flex items-center justify-between gap-2">
-                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+                <h2 className="text-sm sm:text-base font-semibold tracking-wide text-white">
                   RECENT ORDERS
                 </h2>
                 <Link href="/orders">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
+                    className="border-[#1a2340] bg-transparent text-white hover:bg-white/5 text-[10px] sm:text-xs h-7 sm:h-8 px-3"
                   >
                     View All
                   </Button>
@@ -302,17 +302,17 @@ export default async function Home() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-300 text-[11px] truncate pr-2">
+                        <span className="text-white text-[11px] truncate pr-2">
                           {order.customer}
                         </span>
-                        <span className="text-slate-200 font-medium text-xs whitespace-nowrap">
+                        <span className="text-white font-medium text-xs whitespace-nowrap">
                           {order.amount}
                         </span>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-4 text-slate-500 text-xs">
+                  <div className="text-center py-4 text-white text-xs">
                     No orders yet.
                   </div>
                 )}
@@ -324,12 +324,12 @@ export default async function Home() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-[#1a2340] hover:bg-transparent bg-[#0b132b]/50">
-                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">ORDER</TableHead>
-                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">
+                        <TableHead className="text-white text-[11px] py-2 h-auto">ORDER</TableHead>
+                        <TableHead className="text-white text-[11px] py-2 h-auto">
                           CUSTOMER
                         </TableHead>
-                        <TableHead className="text-slate-400 text-[11px] py-2 h-auto">STATUS</TableHead>
-                        <TableHead className="text-right text-slate-400 text-[11px] py-2 h-auto">
+                        <TableHead className="text-white text-[11px] py-2 h-auto">STATUS</TableHead>
+                        <TableHead className="text-right text-white text-[11px] py-2 h-auto">
                           AMOUNT
                         </TableHead>
                       </TableRow>
@@ -343,7 +343,7 @@ export default async function Home() {
                           <TableCell className="font-semibold text-blue-400 text-xs py-2.5">
                             {order.id}
                           </TableCell>
-                          <TableCell className="text-slate-300 text-xs py-2.5 max-w-[120px] truncate">
+                          <TableCell className="text-white text-xs py-2.5 max-w-[120px] truncate">
                             {order.customer}
                           </TableCell>
                           <TableCell className="py-2.5">
@@ -362,7 +362,7 @@ export default async function Home() {
                               {order.status}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-right text-slate-200 font-medium text-xs py-2.5">
+                          <TableCell className="text-right text-white font-medium text-xs py-2.5">
                             {order.amount}
                           </TableCell>
                         </TableRow>
@@ -370,7 +370,7 @@ export default async function Home() {
                     </TableBody>
                   </Table>
                 ) : (
-                  <div className="text-center py-8 text-slate-500 text-sm">
+                  <div className="text-center py-8 text-white text-sm">
                     No orders yet.
                   </div>
                 )}
@@ -382,27 +382,27 @@ export default async function Home() {
         {/* ACTIVITY FEED */}
         <Card className="mt-4 sm:mt-6 border-[#1a2340] bg-[#0b132b] text-white rounded-xl sm:rounded-2xl">
           <CardContent className="p-4 sm:p-5">
-            <h2 className="mb-4 sm:mb-5 text-sm sm:text-base font-semibold tracking-wide text-slate-200">
+            <h2 className="mb-4 sm:mb-5 text-sm sm:text-base font-semibold tracking-wide text-white">
               ACTIVITY FEED
             </h2>
             <div className="relative ml-2 sm:ml-3 border-l border-[#24304f]">
               {activities.length > 0 ? (
                 activities.map((activity, index) => (
                   <div
-                    key={index}
+                     key={index}
                     className="relative mb-5 sm:mb-6 pl-5 sm:pl-6 last:mb-0"
                   >
                     <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-blue-500 ring-4 ring-[#0b132b]" />
-                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
+                    <p className="text-[10px] sm:text-xs text-white font-medium">
                       {activity.time}
                     </p>
-                    <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-slate-300">
+                    <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-white">
                       {activity.text}
                     </p>
                   </div>
                 ))
               ) : (
-                <div className="pl-5 sm:pl-6 text-slate-500 text-xs sm:text-sm">No recent activity.</div>
+                <div className="pl-5 sm:pl-6 text-white text-xs sm:text-sm">No recent activity.</div>
               )}
             </div>
           </CardContent>

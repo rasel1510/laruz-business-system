@@ -277,7 +277,7 @@ export default function AuthPage() {
               {heading}
             </h1>
             {subHeading && (
-              <p className="mt-2 text-sm text-slate-400">{subHeading}</p>
+              <p className="mt-2 text-sm text-white">{subHeading}</p>
             )}
           </div>
 
@@ -297,7 +297,7 @@ export default function AuthPage() {
           {step === "login" && (
             <form onSubmit={loginForm.handleSubmit(handleSignIn)} className="space-y-6">
               <div className="space-y-2">
-                <Label className="text-slate-300">Email</Label>
+                <Label className="text-white">Email</Label>
                 <Input
                   type="email"
                   placeholder="name@example.com"
@@ -311,7 +311,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Password</Label>
+                <Label className="text-white">Password</Label>
                 <div className="relative">
                   <Input
                     type={showLoginPassword ? "text" : "password"}
@@ -324,7 +324,7 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
                   >
                     {showLoginPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -357,7 +357,7 @@ export default function AuthPage() {
                     forgotEmailForm.setValue("email", emailVal);
                     setStep("forgot");
                   }}
-                  className="text-sm text-slate-400 hover:text-blue-400 transition-colors"
+                  className="text-sm text-white hover:text-blue-400 transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -382,7 +382,7 @@ export default function AuthPage() {
           {step === "signup" && (
             <form onSubmit={signupForm.handleSubmit(handleSignUp)} className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Administrator Name</Label>
+                <Label className="text-white">Administrator Name</Label>
                 <Input
                   type="text"
                   placeholder="Your Name"
@@ -396,7 +396,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Email</Label>
+                <Label className="text-white">Email</Label>
                 <Input
                   type="email"
                   placeholder="name@example.com"
@@ -410,7 +410,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Mobile Number</Label>
+                <Label className="text-white">Mobile Number</Label>
                 <Input
                   type="tel"
                   placeholder="e.g. +88017XXXXXXXX"
@@ -424,7 +424,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Password</Label>
+                <Label className="text-white">Password</Label>
                 <div className="relative">
                   <Input
                     type={showSignupPassword ? "text" : "password"}
@@ -437,7 +437,7 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setShowSignupPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
                   >
                     {showSignupPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -481,7 +481,7 @@ export default function AuthPage() {
           {step === "forgot" && forgotPhase === "email" && (
             <form onSubmit={forgotEmailForm.handleSubmit(handleSendOtp)} className="space-y-6">
               <div className="space-y-2">
-                <Label className="text-slate-300">Email Address</Label>
+                <Label className="text-white">Email Address</Label>
                 <Input
                   type="email"
                   placeholder="name@example.com"
@@ -517,7 +517,7 @@ export default function AuthPage() {
                     setSuccessMsg("");
                     setStep("login");
                   }}
-                  className="text-sm text-slate-400 hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
+                  className="text-sm text-white hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Back to login
@@ -530,7 +530,7 @@ export default function AuthPage() {
           {step === "forgot" && forgotPhase === "reset" && (
             <form onSubmit={forgotResetForm.handleSubmit(handleResetPassword)} className="space-y-5">
               <div className="space-y-2">
-                <Label className="text-slate-300">6-Digit Code</Label>
+                <Label className="text-white">6-Digit Code</Label>
                 <Input
                   type="text"
                   maxLength={6}
@@ -545,7 +545,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">New Password</Label>
+                <Label className="text-white">New Password</Label>
                 <div className="relative">
                   <Input
                     type={showNewPassword ? "text" : "password"}
@@ -558,7 +558,7 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setShowNewPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white hover:text-white transition-colors h-8 w-8 flex items-center justify-center focus:outline-none z-10 cursor-pointer"
                   >
                     {showNewPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -596,7 +596,7 @@ export default function AuthPage() {
                     setForgotPhase("email");
                     setStep("login");
                   }}
-                  className="text-sm text-slate-400 hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
+                  className="text-sm text-white hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Back to login
@@ -607,7 +607,7 @@ export default function AuthPage() {
                   disabled={otpSentCountdown > 0 || loading}
                   className={`text-sm transition-colors ${
                     otpSentCountdown > 0
-                      ? "text-slate-500 cursor-not-allowed"
+                      ? "text-white/60 cursor-not-allowed"
                       : "text-blue-400 hover:text-blue-300 cursor-pointer"
                   }`}
                 >

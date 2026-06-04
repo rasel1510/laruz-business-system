@@ -305,14 +305,14 @@ export default function ActivityLogsPage() {
   };
 
   return (
-    <section className="flex-1 overflow-y-auto bg-[#0b0e14] min-h-screen text-slate-100 pb-16">
+    <section className="flex-1 overflow-y-auto bg-[#0b0e14] min-h-screen text-white pb-16">
       {/* TOPBAR */}
       <div className="flex items-center justify-between border-b border-[#1f2937] px-6 sm:px-8 py-4 sm:py-5">
         <h1 className="text-xl sm:text-2xl font-serif text-white pl-12 lg:pl-0 font-medium">
           Activity Logs
         </h1>
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400 font-mono">
+          <div className="rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white font-mono">
             {new Date().toLocaleString("en-US", {
               weekday: "short",
               month: "short",
@@ -336,7 +336,7 @@ export default function ActivityLogsPage() {
               <ClipboardList className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">Total System Logs</p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white">Total System Logs</p>
               <p className="mt-0.5 text-2xl font-bold font-mono">{stats.total.toLocaleString()}</p>
             </div>
           </div>
@@ -345,7 +345,7 @@ export default function ActivityLogsPage() {
               <ShoppingCart className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">Order System Logs</p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white">Order System Logs</p>
               <p className="mt-0.5 text-2xl font-bold font-mono">{stats.ordersCount.toLocaleString()}</p>
             </div>
           </div>
@@ -354,7 +354,7 @@ export default function ActivityLogsPage() {
               <Wallet className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">Finance System Logs</p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white">Finance System Logs</p>
               <p className="mt-0.5 text-2xl font-bold font-mono">{stats.financeCount.toLocaleString()}</p>
             </div>
           </div>
@@ -365,8 +365,8 @@ export default function ActivityLogsPage() {
           {/* Timeline trend line chart */}
           <div className="rounded-2xl border border-[#1f2937] bg-[#111827]/60 p-6 shadow-lg flex flex-col justify-between">
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-slate-200">Activity Trend</h3>
-              <p className="text-xs text-slate-500">Logs volume tracked in the last 7 days</p>
+              <h3 className="text-sm font-semibold text-white">Activity Trend</h3>
+              <p className="text-xs text-white">Logs volume tracked in the last 7 days</p>
             </div>
             <div className="h-[180px] w-full flex items-center justify-center">
               {trendChartSvg}
@@ -376,8 +376,8 @@ export default function ActivityLogsPage() {
           {/* Category count bar chart */}
           <div className="rounded-2xl border border-[#1f2937] bg-[#111827]/60 p-6 shadow-lg flex flex-col justify-between">
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-slate-200">Category Distribution</h3>
-              <p className="text-xs text-slate-500">Total activities categorized by system area</p>
+              <h3 className="text-sm font-semibold text-white">Category Distribution</h3>
+              <p className="text-xs text-white">Total activities categorized by system area</p>
             </div>
             <div className="h-[180px] w-full flex items-center justify-center">
               {barChartSvg}
@@ -388,7 +388,7 @@ export default function ActivityLogsPage() {
         {/* TIMELINE SEARCH & CONTROLS */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#111827]/40 p-4 border border-[#1f2937] rounded-2xl">
           <div className="relative w-full sm:max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
             <Input
               type="text"
               placeholder="Search logs details..."
@@ -415,7 +415,7 @@ export default function ActivityLogsPage() {
             <button
               onClick={fetchLogs}
               disabled={loading}
-              className="h-11 w-11 rounded-xl bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white shrink-0 transition-colors disabled:opacity-50"
+              className="h-11 w-11 rounded-xl bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white shrink-0 transition-colors disabled:opacity-50"
               title="Refresh Logs"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -426,7 +426,7 @@ export default function ActivityLogsPage() {
         {/* CHRONOLOGICAL TIMELINE */}
         <div className="rounded-2xl border border-[#1f2937] bg-[#111827]/10 p-6 sm:p-8">
           <div className="flex items-center justify-between border-b border-[#1f2937]/50 pb-6 mb-8">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300">All Activity</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white">All Activity</h3>
             <select
               value={actionFilter}
               onChange={(e) => setActionFilter(e.target.value)}
@@ -441,12 +441,12 @@ export default function ActivityLogsPage() {
           </div>
           
           {loading ? (
-            <div className="flex items-center justify-center py-20 text-slate-500">
+            <div className="flex items-center justify-center py-20 text-white">
               <RefreshCw className="h-5 w-5 animate-spin mr-3 text-blue-500" />
               <span className="text-sm">Loading activity logs…</span>
             </div>
           ) : filteredLogs.length === 0 ? (
-            <div className="text-center py-16 text-slate-600 text-sm">
+            <div className="text-center py-16 text-white text-sm">
               No activity logs match your criteria.
             </div>
           ) : (
@@ -488,7 +488,7 @@ export default function ActivityLogsPage() {
                     
                     <div>
                       {/* Top: Date / Time */}
-                      <p className="text-[11px] text-slate-500 font-medium font-sans">
+                      <p className="text-[11px] text-white font-medium font-sans">
                         {logTime}
                       </p>
                       {/* Bottom: Badge + Text Description */}
@@ -496,7 +496,7 @@ export default function ActivityLogsPage() {
                         <span className={`inline-flex items-center rounded px-2 py-0.5 text-[9px] font-bold font-mono tracking-wider ${badgeClass}`}>
                           {badgeLabel}
                         </span>
-                        <p className="text-slate-300 text-sm font-medium leading-relaxed">
+                        <p className="text-white text-sm font-medium leading-relaxed">
                           {renderDetailsText(log.details)}
                         </p>
                       </div>

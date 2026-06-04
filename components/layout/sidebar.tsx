@@ -86,10 +86,10 @@ export function Sidebar() {
         <Button
           variant="ghost"
           className={`w-full justify-start gap-3 rounded-xl py-6 text-base ${
-            isActive
-              ? "bg-blue-600/20 text-blue-400 hover:bg-blue-600/20"
-              : "text-slate-300 hover:bg-white/5 hover:text-white"
-          }`}
+              isActive
+                ? "bg-blue-600/20 text-blue-400 hover:bg-blue-600/20"
+                : "text-white hover:bg-white/5 hover:text-white"
+            }`}
         >
           <Icon className="h-5 w-5" />
           {item.title}
@@ -107,13 +107,13 @@ export function Sidebar() {
         </div>
         <div className="min-w-0">
           <h1 className="text-3xl font-serif tracking-wide">LARUZ</h1>
-          <p className="text-[11px] tracking-[3px] text-slate-400 uppercase">Jewelry Management</p>
+          <p className="text-[11px] tracking-[3px] text-white uppercase">Jewelry Management</p>
         </div>
       </div>
 
       {/* NAVIGATION */}
       <div className="px-4 py-6 flex-1 overflow-y-auto">
-        <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">Main</p>
+        <p className="mb-4 text-xs uppercase tracking-[4px] text-white">Main</p>
         <div className="space-y-2">
           {sidebarItems.map((item) => (
             <NavItem key={item.title} item={item} />
@@ -122,7 +122,7 @@ export function Sidebar() {
 
         {/* FINANCE */}
         <div className="mt-10">
-          <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">Finance</p>
+          <p className="mb-4 text-xs uppercase tracking-[4px] text-white">Finance</p>
           <div className="space-y-2">
             {financeItems.map((item) => (
               <NavItem key={item.title} item={item} />
@@ -132,7 +132,7 @@ export function Sidebar() {
 
         {/* SYSTEM */}
         <div className="mt-10">
-          <p className="mb-4 text-xs uppercase tracking-[4px] text-slate-500">System</p>
+          <p className="mb-4 text-xs uppercase tracking-[4px] text-white">System</p>
           <div className="space-y-2">
             {systemItems.map((item) => (
               <NavItem key={item.title} item={item} />
@@ -162,8 +162,8 @@ export function Sidebar() {
           Log Out
         </Button>
         <div>
-          <p className="text-center text-sm text-slate-400">Trendy & Affordable Jewelry</p>
-          <p className="text-center text-sm text-slate-500">At Your Doorstep</p>
+          <p className="text-center text-sm text-white">Trendy & Affordable Jewelry</p>
+          <p className="text-center text-sm text-white">At Your Doorstep</p>
         </div>
       </div>
     </>
@@ -176,7 +176,7 @@ export function Sidebar() {
       {/* Mobile hamburger button — fixed top-left */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 h-10 w-10 rounded-xl bg-[#0b132b] border border-[#1a2340] flex items-center justify-center text-slate-300 hover:text-white hover:bg-[#131d3a] transition-colors shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 h-10 w-10 rounded-xl bg-[#0b132b] border border-[#1a2340] flex items-center justify-center text-white hover:text-white hover:bg-[#131d3a] transition-colors shadow-lg"
         aria-label="Open navigation"
       >
         <Menu className="h-5 w-5" />
@@ -199,7 +199,7 @@ export function Sidebar() {
         {/* Close button */}
         <button
           onClick={() => setMobileOpen(false)}
-          className="absolute top-4 right-4 h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-white hover:text-white hover:bg-white/10 transition-colors"
           aria-label="Close navigation"
         >
           <X className="h-4 w-4" />

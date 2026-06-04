@@ -102,9 +102,9 @@ function SummaryCard({
         <Icon className="h-5 w-5 text-white" />
       </div>
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">{label}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-white">{label}</p>
         <p className="mt-0.5 text-xl font-bold text-white">{value}</p>
-        {sub && <p className="text-[10px] text-slate-600 mt-0.5">{sub}</p>}
+        {sub && <p className="text-[10px] text-white mt-0.5">{sub}</p>}
       </div>
     </div>
   );
@@ -169,7 +169,7 @@ export default function CustomersPage() {
         <div className="flex items-center justify-between border-b border-[#1f2937] px-4 sm:px-8 py-4 sm:py-5">
           <h1 className="text-xl sm:text-2xl font-serif text-white pl-12 lg:pl-0">Customers</h1>
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400">
+            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white">
               {new Date().toLocaleString("en-US", {
                 weekday: "short",
                 month: "short",
@@ -217,12 +217,12 @@ export default function CustomersPage() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             {/* Search */}
             <div className="relative flex-1 max-w-lg">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
               <Input
                 placeholder="Search by customer name or phone number..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-slate-300 focus-visible:ring-1 focus-visible:ring-blue-500/50"
+                className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-white focus-visible:ring-1 focus-visible:ring-blue-500/50"
               />
             </div>
 
@@ -230,7 +230,7 @@ export default function CustomersPage() {
             <button
               onClick={fetchCustomers}
               disabled={loading}
-              className="h-10 w-10 self-end sm:self-auto rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="h-10 w-10 self-end sm:self-auto rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-colors disabled:opacity-50"
               title="Refresh Customer Data"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -243,25 +243,25 @@ export default function CustomersPage() {
               <Table className="min-w-[750px]">
                 <TableHeader>
                   <TableRow className="border-[#1f2937] hover:bg-transparent">
-                    <TableHead className="text-slate-500 text-xs font-semibold py-3 uppercase">Customer Name</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">Phone</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase text-center">Total Order</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">Total Spent</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">Last Order Date</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase text-center">Action</TableHead>
+                    <TableHead className="text-white text-xs font-semibold py-3 uppercase">Customer Name</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">Phone</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase text-center">Total Order</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">Total Spent</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">Last Order Date</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase text-center">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-16 text-slate-600">
+                      <TableCell colSpan={6} className="text-center py-16 text-white">
                         <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                         Loading customers…
                       </TableCell>
                     </TableRow>
                   ) : filteredCustomers.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-16 text-slate-600 text-sm">
+                      <TableCell colSpan={6} className="text-center py-16 text-white text-sm">
                         No customers found.
                       </TableCell>
                     </TableRow>
@@ -282,13 +282,13 @@ export default function CustomersPage() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <span className="text-slate-400 text-sm font-mono flex items-center gap-1.5">
-                              <Phone className="h-3 w-3 text-slate-600" />
+                            <span className="text-white text-sm font-mono flex items-center gap-1.5">
+                              <Phone className="h-3 w-3 text-white" />
                               {customer.phone}
                             </span>
                           </TableCell>
                           <TableCell className="text-center">
-                            <Badge className="bg-[#1f2937] text-slate-300 border-none font-semibold px-2.5 py-0.5 rounded-full hover:bg-[#1f2937]/80">
+                            <Badge className="bg-[#1f2937] text-white border-none font-semibold px-2.5 py-0.5 rounded-full hover:bg-[#1f2937]/80">
                               {customer.totalOrders}
                             </Badge>
                           </TableCell>
@@ -298,8 +298,8 @@ export default function CustomersPage() {
                             </span>
                           </TableCell>
                           <TableCell>
-                            <span className="text-slate-400 text-xs font-medium flex items-center gap-1.5">
-                              <Calendar className="h-3 w-3 text-slate-600" />
+                            <span className="text-white text-xs font-medium flex items-center gap-1.5">
+                              <Calendar className="h-3 w-3 text-white" />
                               {new Date(customer.lastOrderDate).toLocaleDateString("en-GB", {
                                 day: "2-digit",
                                 month: "short",
@@ -349,14 +349,14 @@ export default function CustomersPage() {
                   <Users className="h-5 w-5 text-blue-400" />
                   {selectedCustomer.name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 flex items-center gap-3">
+                <p className="text-xs text-white mt-1 flex items-center gap-3">
                   <span className="flex items-center gap-1">
-                    <Phone className="h-3.5 w-3.5 text-slate-600" />
+                    <Phone className="h-3.5 w-3.5 text-white" />
                     {selectedCustomer.phone}
                   </span>
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
                   <span>
-                    Total Orders: <strong className="text-slate-300">{selectedCustomer.totalOrders}</strong>
+                    Total Orders: <strong className="text-white">{selectedCustomer.totalOrders}</strong>
                   </span>
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
                   <span>
@@ -366,7 +366,7 @@ export default function CustomersPage() {
               </div>
               <button
                 onClick={() => setSelectedCustomer(null)}
-                className="h-8 w-8 rounded-lg bg-[#1f2937] hover:bg-slate-800 border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-all"
+                className="h-8 w-8 rounded-lg bg-[#1f2937] hover:bg-slate-800 border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-all"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -375,14 +375,14 @@ export default function CustomersPage() {
             {/* Modal Body (Scrollable Order History) */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#0b0e14]">
               <div className="flex items-center justify-between border-b border-[#1f2937] pb-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Order History (Newest First)</p>
-                <span className="text-xs text-slate-400 font-medium">
+                <p className="text-xs font-semibold uppercase tracking-wider text-white">Order History (Newest First)</p>
+                <span className="text-xs text-white font-medium">
                   {selectedCustomer.orders.length} {selectedCustomer.orders.length === 1 ? 'Order' : 'Orders'}
                 </span>
               </div>
               
               {selectedCustomer.orders.length === 0 ? (
-                <div className="text-center py-12 text-slate-600 text-sm">
+                <div className="text-center py-12 text-white text-sm">
                   No orders found for this customer.
                 </div>
               ) : (
@@ -398,9 +398,9 @@ export default function CustomersPage() {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-[#1f2937]/30 border-b border-[#1f2937]">
                           <div className="flex items-center gap-3">
                             <span className="text-blue-400 font-bold text-sm font-mono">{order.orderNumber}</span>
-                            <span className="text-slate-500 text-xs">|</span>
-                            <span className="text-slate-400 text-xs flex items-center gap-1">
-                              <Calendar className="h-3.5 w-3.5 text-slate-600" />
+                            <span className="text-white text-xs">|</span>
+                            <span className="text-white text-xs flex items-center gap-1">
+                              <Calendar className="h-3.5 w-3.5 text-white" />
                               {new Date(order.createdAt).toLocaleDateString("en-GB", {
                                 day: "2-digit",
                                 month: "short",
@@ -423,17 +423,17 @@ export default function CustomersPage() {
                         <div className="p-4 space-y-4">
                           {/* Courier Details */}
                           {(order.courier || order.cnNumber) && (
-                            <div className="flex flex-wrap gap-x-6 gap-y-1.5 text-xs text-slate-400 pb-2.5 border-b border-[#1f2937]">
+                            <div className="flex flex-wrap gap-x-6 gap-y-1.5 text-xs text-white pb-2.5 border-b border-[#1f2937]">
                               {order.courier && (
                                 <span className="flex items-center gap-1.5">
-                                  <Truck className="h-3.5 w-3.5 text-slate-600" />
-                                  Courier: <strong className="text-slate-300">{order.courier}</strong>
+                                  <Truck className="h-3.5 w-3.5 text-white" />
+                                  Courier: <strong className="text-white">{order.courier}</strong>
                                 </span>
                               )}
                               {order.cnNumber && (
                                 <span className="flex items-center gap-1.5">
-                                  <Hash className="h-3.5 w-3.5 text-slate-600" />
-                                  CN Number: <strong className="text-slate-300">{order.cnNumber}</strong>
+                                  <Hash className="h-3.5 w-3.5 text-white" />
+                                  CN Number: <strong className="text-white">{order.cnNumber}</strong>
                                 </span>
                               )}
                             </div>
@@ -441,11 +441,11 @@ export default function CustomersPage() {
 
                           {/* Items Ordered Table */}
                           <div className="space-y-2">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Items Ordered</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-white">Items Ordered</p>
                             <div className="overflow-x-auto">
                               <table className="w-full text-xs text-left">
                                 <thead>
-                                  <tr className="border-b border-[#1f2937] text-slate-500 font-semibold">
+                                  <tr className="border-b border-[#1f2937] text-white font-semibold">
                                     <th className="pb-2">Product</th>
                                     <th className="pb-2 text-right">Unit Price</th>
                                     <th className="pb-2 text-center">Qty</th>
@@ -454,11 +454,11 @@ export default function CustomersPage() {
                                 </thead>
                                 <tbody>
                                   {order.items.map((item) => (
-                                    <tr key={item.id} className="border-b border-[#1f2937]/50 text-slate-300 last:border-none">
+                                    <tr key={item.id} className="border-b border-[#1f2937]/50 text-white last:border-none">
                                       <td className="py-2.5 font-medium text-white">{item.product.name}</td>
                                       <td className="py-2.5 text-right font-mono">৳ {item.price.toLocaleString()}</td>
                                       <td className="py-2.5 text-center font-semibold">{item.quantity}</td>
-                                      <td className="py-2.5 text-right font-mono font-semibold text-slate-200">
+                                      <td className="py-2.5 text-right font-mono font-semibold text-white">
                                         ৳ {(item.price * item.quantity).toLocaleString()}
                                       </td>
                                     </tr>
@@ -478,7 +478,7 @@ export default function CustomersPage() {
             <div className="border-t border-[#1f2937] px-6 py-4 bg-[#111827] flex justify-end">
               <button
                 onClick={() => setSelectedCustomer(null)}
-                className="px-4 py-2 bg-[#1f2937] hover:bg-[#2a3547] text-slate-300 hover:text-white rounded-lg text-sm font-medium transition-all"
+                className="px-4 py-2 bg-[#1f2937] hover:bg-[#2a3547] text-white hover:text-white rounded-lg text-sm font-medium transition-all"
               >
                 Close
               </button>

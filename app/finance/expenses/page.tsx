@@ -45,9 +45,9 @@ function SummaryCard({
         <Icon className="h-5 w-5 text-white" />
       </div>
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">{label}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-white">{label}</p>
         <p className="mt-0.5 text-xl font-bold text-white">{value}</p>
-        {sub && <p className="text-[10px] text-slate-600 mt-0.5">{sub}</p>}
+        {sub && <p className="text-[10px] text-white mt-0.5">{sub}</p>}
       </div>
     </div>
   );
@@ -143,7 +143,7 @@ export default function ExpensesPage() {
       <div className="flex items-center justify-between border-b border-[#1f2937] px-4 sm:px-8 py-4 sm:py-5">
         <h1 className="text-xl sm:text-2xl font-serif text-white pl-12 lg:pl-0">Expenses</h1>
         <div className="flex items-center gap-3">
-          <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400">
+          <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white">
             {new Date().toLocaleString("en-US", {
               weekday: "short",
               month: "short",
@@ -195,12 +195,12 @@ export default function ExpensesPage() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* Search bar */}
           <div className="relative flex-1 max-w-lg">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
             <Input
               placeholder="Search expenses by item name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-slate-300 focus-visible:ring-1 focus-visible:ring-blue-500/50"
+              className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-white focus-visible:ring-1 focus-visible:ring-blue-500/50"
             />
           </div>
 
@@ -209,7 +209,7 @@ export default function ExpensesPage() {
             <button
               onClick={fetchExpenses}
               disabled={loading}
-              className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-colors disabled:opacity-50"
               title="Refresh Expense List"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -226,25 +226,25 @@ export default function ExpensesPage() {
             <Table className="min-w-[750px]">
               <TableHeader>
                 <TableRow className="border-[#1f2937] hover:bg-transparent">
-                  <TableHead className="text-slate-500 text-xs font-semibold py-4 uppercase pl-6">Date</TableHead>
-                  <TableHead className="text-slate-500 text-xs font-semibold uppercase">Item Name</TableHead>
-                  <TableHead className="text-slate-500 text-xs font-semibold uppercase text-center">Quantity</TableHead>
-                  <TableHead className="text-slate-500 text-xs font-semibold uppercase text-right">Unit Price</TableHead>
-                  <TableHead className="text-slate-500 text-xs font-semibold uppercase text-right">Total Price</TableHead>
-                  <TableHead className="text-slate-500 text-xs font-semibold uppercase text-center pr-6">Action</TableHead>
+                  <TableHead className="text-white text-xs font-semibold py-4 uppercase pl-6">Date</TableHead>
+                  <TableHead className="text-white text-xs font-semibold uppercase">Item Name</TableHead>
+                  <TableHead className="text-white text-xs font-semibold uppercase text-center">Quantity</TableHead>
+                  <TableHead className="text-white text-xs font-semibold uppercase text-right">Unit Price</TableHead>
+                  <TableHead className="text-white text-xs font-semibold uppercase text-right">Total Price</TableHead>
+                  <TableHead className="text-white text-xs font-semibold uppercase text-center pr-6">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-16 text-slate-600">
+                    <TableCell colSpan={6} className="text-center py-16 text-white">
                       <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                       Loading expenses…
                     </TableCell>
                   </TableRow>
                 ) : filteredExpenses.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-16 text-slate-500 text-sm">
+                    <TableCell colSpan={6} className="text-center py-16 text-white text-sm">
                       No expense logs found.
                     </TableCell>
                   </TableRow>
@@ -258,8 +258,8 @@ export default function ExpensesPage() {
                       >
                         {/* Date */}
                         <TableCell className="py-3.5 pl-6">
-                          <span className="text-slate-400 text-xs font-semibold flex items-center gap-2 font-mono">
-                            <Calendar className="h-3.5 w-3.5 text-slate-600" />
+                          <span className="text-white text-xs font-semibold flex items-center gap-2 font-mono">
+                            <Calendar className="h-3.5 w-3.5 text-white" />
                             {new Date(exp.date).toLocaleDateString("en-GB", {
                               day: "2-digit",
                               month: "short",
@@ -277,13 +277,13 @@ export default function ExpensesPage() {
 
                         {/* Quantity */}
                         <TableCell className="text-center">
-                          <Badge className="bg-[#1f2937] text-slate-300 border-none font-semibold px-2.5 py-0.5 rounded-full">
+                          <Badge className="bg-[#1f2937] text-white border-none font-semibold px-2.5 py-0.5 rounded-full">
                             {exp.quantity}
                           </Badge>
                         </TableCell>
 
                         {/* Unit Price */}
-                        <TableCell className="text-right font-mono text-slate-300">
+                        <TableCell className="text-right font-mono text-white">
                           ৳ {exp.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </TableCell>
 

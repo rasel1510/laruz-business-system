@@ -86,11 +86,11 @@ function SummaryCard({
         <Icon className="h-5 w-5 text-white" />
       </div>
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-white">
           {label}
         </p>
         <p className="mt-0.5 text-xl font-bold text-white">{value}</p>
-        {sub && <p className="text-[10px] text-slate-600 mt-0.5">{sub}</p>}
+        {sub && <p className="text-[10px] text-white mt-0.5">{sub}</p>}
       </div>
     </div>
   );
@@ -315,7 +315,7 @@ export default function InvestmentsPage() {
             Investments
           </h1>
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400">
+            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white">
               {new Date().toLocaleString("en-US", {
                 weekday: "short",
                 month: "short",
@@ -367,7 +367,7 @@ export default function InvestmentsPage() {
               <button
                 onClick={fetchInvestors}
                 disabled={loading}
-                className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+                className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-colors disabled:opacity-50"
                 title="Refresh"
               >
                 <RefreshCw
@@ -393,7 +393,7 @@ export default function InvestmentsPage() {
                     <DialogTitle className="text-lg sm:text-xl font-semibold">
                       Add Investor
                     </DialogTitle>
-                    <DialogDescription className="text-slate-400 text-xs mt-1">
+                    <DialogDescription className="text-white text-xs mt-1">
                       Enter the details of the new investment partner.
                     </DialogDescription>
                   </DialogHeader>
@@ -402,7 +402,7 @@ export default function InvestmentsPage() {
                     {/* Name + Phone */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-slate-300 text-xs sm:text-sm font-medium">
+                        <Label className="text-white text-xs sm:text-sm font-medium">
                           Name
                         </Label>
                         <Input
@@ -413,7 +413,7 @@ export default function InvestmentsPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-300 text-xs sm:text-sm font-medium">
+                        <Label className="text-white text-xs sm:text-sm font-medium">
                           Phone
                         </Label>
                         <Input
@@ -428,7 +428,7 @@ export default function InvestmentsPage() {
                     {/* Amount + Profit Share */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-slate-300 text-xs sm:text-sm font-medium">
+                        <Label className="text-white text-xs sm:text-sm font-medium">
                           Investment Amount (৳)
                         </Label>
                         <Input
@@ -439,7 +439,7 @@ export default function InvestmentsPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-300 text-xs sm:text-sm font-medium">
+                        <Label className="text-white text-xs sm:text-sm font-medium">
                           Profit Share (%)
                         </Label>
                         <Input
@@ -454,7 +454,7 @@ export default function InvestmentsPage() {
                     {/* Duration + Infinity */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                       <div className="space-y-2">
-                        <Label className="text-slate-300 text-xs sm:text-sm font-medium">
+                        <Label className="text-white text-xs sm:text-sm font-medium">
                           Duration (Months)
                         </Label>
                         <Input
@@ -475,7 +475,7 @@ export default function InvestmentsPage() {
                             }
                             className="w-4.5 h-4.5 rounded border-[#1a2340] bg-[#050816] text-blue-600 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer accent-blue-600"
                           />
-                          <span className="text-slate-300 text-sm font-medium group-hover:text-white transition-colors">
+                          <span className="text-white text-sm font-medium group-hover:text-white transition-colors">
                             Infinity (Share Partner)
                           </span>
                         </label>
@@ -488,7 +488,7 @@ export default function InvestmentsPage() {
                         type="button"
                         variant="ghost"
                         onClick={() => setAddOpen(false)}
-                        className="px-5 rounded-xl text-slate-400 hover:bg-white/5 text-sm"
+                        className="px-5 rounded-xl text-white hover:bg-white/5 text-sm"
                       >
                         Cancel
                       </Button>
@@ -514,15 +514,15 @@ export default function InvestmentsPage() {
 
           {/* ── INVESTOR CARDS GRID ── */}
           {loading ? (
-            <div className="flex items-center justify-center py-20 text-slate-600">
+            <div className="flex items-center justify-center py-20 text-white">
               <RefreshCw className="h-6 w-6 animate-spin mr-3 text-blue-500/50" />
               <span className="text-sm">Loading investors…</span>
             </div>
           ) : investors.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-slate-600">
-              <Users className="h-12 w-12 mb-4 text-slate-700" />
+            <div className="flex flex-col items-center justify-center py-20 text-white">
+              <Users className="h-12 w-12 mb-4 text-white" />
               <p className="text-sm">No investors found.</p>
-              <p className="text-xs text-slate-700 mt-1">
+              <p className="text-xs text-white mt-1">
                 Click &quot;+ Add Investor&quot; to get started.
               </p>
             </div>
@@ -568,7 +568,7 @@ export default function InvestmentsPage() {
                           <p className="text-white font-bold text-sm truncate">
                             {investor.name}
                           </p>
-                          <p className="text-slate-500 text-xs font-mono flex items-center gap-1">
+                          <p className="text-white text-xs font-mono flex items-center gap-1">
                             <Phone className="h-3 w-3" />
                             {investor.phone}
                           </p>
@@ -581,7 +581,7 @@ export default function InvestmentsPage() {
                           handleDeleteInvestor(investor.id, investor.name)
                         }
                         disabled={deletingId === investor.id}
-                        className="h-7 w-7 rounded-lg bg-transparent hover:bg-red-600/10 border border-transparent hover:border-red-500/20 flex items-center justify-center text-slate-600 hover:text-red-400 transition-all duration-200 opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                        className="h-7 w-7 rounded-lg bg-transparent hover:bg-red-600/10 border border-transparent hover:border-red-500/20 flex items-center justify-center text-white hover:text-red-400 transition-all duration-200 opacity-0 group-hover:opacity-100 disabled:opacity-50"
                         title="Remove Investor"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -591,7 +591,7 @@ export default function InvestmentsPage() {
                     {/* Investment info */}
                     <div className="space-y-2">
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-white">
                           Investment
                         </p>
                         <p className="text-lg font-bold text-amber-400 font-mono mt-0.5">
@@ -601,14 +601,14 @@ export default function InvestmentsPage() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <p className="text-xs text-slate-500">Profit Share</p>
+                        <p className="text-xs text-white">Profit Share</p>
                         <span className="inline-flex items-center rounded-full bg-amber-900/30 text-amber-400 border border-amber-700/30 px-2.5 py-0.5 text-xs font-semibold">
                           {investor.profitSharePct}%
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <p className="text-xs text-slate-500">Duration</p>
+                        <p className="text-xs text-white">Duration</p>
                         <span
                           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${investor.isSharePartner || !investor.durationMonths
                             ? "bg-purple-900/30 text-purple-400 border-purple-700/30"
@@ -625,7 +625,7 @@ export default function InvestmentsPage() {
                     {/* Payment History Button */}
                     <button
                       onClick={() => setPaymentInvestor(investor)}
-                      className="mt-auto w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1f2937] bg-[#0b0e14] hover:bg-[#1f2937]/60 hover:border-slate-600/40 text-slate-400 hover:text-white text-xs font-medium transition-all duration-200"
+                      className="mt-auto w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1f2937] bg-[#0b0e14] hover:bg-[#1f2937]/60 hover:border-slate-600/40 text-white hover:text-white text-xs font-medium transition-all duration-200"
                     >
                       <Clock className="h-3.5 w-3.5" />
                       Payment History
@@ -653,13 +653,13 @@ export default function InvestmentsPage() {
             <div className="flex items-center justify-between border-b border-[#1f2937] px-6 py-4 bg-[#111827] shrink-0">
               <h3 className="text-lg font-bold text-white">
                 {paymentInvestor.name}{" "}
-                <span className="text-slate-500 font-normal">
+                <span className="text-white font-normal">
                   — Payment History
                 </span>
               </h3>
               <button
                 onClick={() => setPaymentInvestor(null)}
-                className="h-8 w-8 rounded-lg bg-[#1f2937] hover:bg-slate-800 border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-all"
+                className="h-8 w-8 rounded-lg bg-[#1f2937] hover:bg-slate-800 border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-all"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -668,7 +668,7 @@ export default function InvestmentsPage() {
             {/* Summary strip */}
             <div className="grid grid-cols-3 gap-3 px-6 py-4 bg-[#0b0e14] border-b border-[#1f2937] shrink-0">
               <div className="rounded-xl border border-[#1f2937] bg-[#111827] p-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-400">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-white">
                   Investment
                 </p>
                 <p className="text-base font-bold text-amber-400 font-mono mt-1">
@@ -676,7 +676,7 @@ export default function InvestmentsPage() {
                 </p>
               </div>
               <div className="rounded-xl border border-[#1f2937] bg-[#111827] p-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-green-400">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-white">
                   Approx Monthly
                 </p>
                 <p className="text-base font-bold text-emerald-400 font-mono mt-1">
@@ -684,7 +684,7 @@ export default function InvestmentsPage() {
                 </p>
               </div>
               <div className="rounded-xl border border-[#1f2937] bg-[#111827] p-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-400">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-white">
                   Total Paid
                 </p>
                 <p className="text-base font-bold text-amber-400 font-mono mt-1">
@@ -712,14 +712,14 @@ export default function InvestmentsPage() {
                     <DialogTitle className="text-base font-semibold">
                       Record Payment
                     </DialogTitle>
-                    <DialogDescription className="text-slate-400 text-xs mt-1">
+                    <DialogDescription className="text-white text-xs mt-1">
                       Record a profit-share payment for{" "}
                       {paymentInvestor.name}.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="p-5 space-y-4">
                     <div className="space-y-2">
-                      <Label className="text-slate-300 text-xs font-medium">
+                      <Label className="text-white text-xs font-medium">
                         Amount (৳)
                       </Label>
                       <Input
@@ -731,7 +731,7 @@ export default function InvestmentsPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-slate-300 text-xs font-medium">
+                      <Label className="text-white text-xs font-medium">
                         Date
                       </Label>
                       <Input
@@ -746,7 +746,7 @@ export default function InvestmentsPage() {
                         type="button"
                         variant="ghost"
                         onClick={() => setRecordPaymentOpen(false)}
-                        className="px-4 rounded-xl text-slate-400 hover:bg-white/5 text-sm"
+                        className="px-4 rounded-xl text-white hover:bg-white/5 text-sm"
                       >
                         Cancel
                       </Button>
@@ -772,8 +772,8 @@ export default function InvestmentsPage() {
             {/* Payment Table (scrollable) */}
             <div className="flex-1 overflow-y-auto bg-[#0b0e14]">
               {paymentInvestor.payments.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-slate-600">
-                  <Clock className="h-10 w-10 mb-3 text-slate-700" />
+                <div className="flex flex-col items-center justify-center py-16 text-white">
+                  <Clock className="h-10 w-10 mb-3 text-white" />
                   <p className="text-sm">No payments recorded yet.</p>
                 </div>
               ) : (
@@ -781,16 +781,16 @@ export default function InvestmentsPage() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-[#1f2937] hover:bg-transparent">
-                        <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider py-3">
+                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider py-3">
                           Month
                         </TableHead>
-                        <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider">
                           Amount
                         </TableHead>
-                        <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider">
                           Date
                         </TableHead>
-                        <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider text-center w-16">
+                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider text-center w-16">
                           Action
                         </TableHead>
                       </TableRow>
@@ -812,7 +812,7 @@ export default function InvestmentsPage() {
                             <TableCell className="text-emerald-400 font-bold text-sm font-mono">
                               ৳ {payment.amount.toLocaleString()}
                             </TableCell>
-                            <TableCell className="text-slate-400 text-sm">
+                            <TableCell className="text-white text-sm">
                               {payDate.toLocaleDateString("en-GB", {
                                 day: "2-digit",
                                 month: "short",
@@ -844,7 +844,7 @@ export default function InvestmentsPage() {
             <div className="border-t border-[#1f2937] px-6 py-4 bg-[#111827] flex justify-end shrink-0">
               <button
                 onClick={() => setPaymentInvestor(null)}
-                className="px-5 py-2 bg-[#1f2937] hover:bg-[#2a3547] text-slate-300 hover:text-white rounded-lg text-sm font-medium transition-all"
+                className="px-5 py-2 bg-[#1f2937] hover:bg-[#2a3547] text-white hover:text-white rounded-lg text-sm font-medium transition-all"
               >
                 Close
               </button>

@@ -71,10 +71,10 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 const CourierBadge = ({ courier }: { courier?: string | null }) => {
-  if (!courier || courier === "—") return <span className="text-slate-600">—</span>;
+  if (!courier || courier === "—") return <span className="text-white">—</span>;
   const key = courier.toLowerCase();
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${COURIER_STYLES[key] ?? "bg-slate-800 text-slate-400 border-slate-700/30"}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${COURIER_STYLES[key] ?? "bg-slate-800 text-white border-slate-700/30"}`}>
       {courier}
     </span>
   );
@@ -92,12 +92,12 @@ function OptionGroup<T extends string>({
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-white">{label}</p>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => {
           const active = value === opt;
           const key = opt.toLowerCase();
-          const colorClass = styleMap?.[key] ?? "bg-slate-800 text-slate-300 border-slate-700";
+          const colorClass = styleMap?.[key] ?? "bg-slate-800 text-white border-slate-700";
           return (
             <button
               key={opt}
@@ -106,7 +106,7 @@ function OptionGroup<T extends string>({
               className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                 active
                   ? `${colorClass} ring-2 ring-white/20 scale-105`
-                  : "bg-transparent border-[#2a3547] text-slate-500 hover:text-slate-300 hover:border-slate-500"
+                  : "bg-transparent border-[#2a3547] text-white hover:text-white hover:border-slate-500"
               }`}
             >
               {active && <Check className="inline h-3 w-3 mr-1 -mt-0.5" />}
@@ -173,7 +173,7 @@ function EditOrderModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-slate-500 hover:text-white hover:border-slate-500 transition-colors"
+            className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-white hover:text-white hover:border-slate-500 transition-colors"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -202,13 +202,13 @@ function EditOrderModal({
 
           {/* CN Number */}
           <div className="space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">CN Number</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-white">CN Number</p>
             <input
               type="text"
               value={cnNumber}
               onChange={(e) => setCnNumber(e.target.value)}
               placeholder="e.g. SS-2847391"
-              className="w-full bg-[#0d1117] border border-[#2a3547] rounded-lg px-3 h-9 text-sm text-slate-200 placeholder:text-slate-700 focus:outline-none focus:border-blue-500/70 hover:border-[#3a4557] transition-colors"
+              className="w-full bg-[#0d1117] border border-[#2a3547] rounded-lg px-3 h-9 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/70 hover:border-[#3a4557] transition-colors"
             />
           </div>
 
@@ -222,7 +222,7 @@ function EditOrderModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-slate-400 hover:text-white hover:border-slate-500 transition-colors"
+            className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-white hover:text-white hover:border-slate-500 transition-colors"
           >
             Cancel
           </button>
@@ -322,7 +322,7 @@ function InvoiceModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-slate-500 hover:text-white hover:border-slate-500 transition-colors"
+            className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-white hover:text-white hover:border-slate-500 transition-colors"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -460,7 +460,7 @@ function InvoiceModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-slate-400 hover:text-white hover:border-slate-500 transition-colors"
+            className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-white hover:text-white hover:border-slate-500 transition-colors"
           >
             Close
           </button>
@@ -519,7 +519,7 @@ export default function OrdersPage() {
         <div className="flex items-center justify-between border-b border-[#1f2937] px-4 sm:px-8 py-4 sm:py-5">
           <h1 className="text-xl sm:text-2xl font-serif text-white pl-12 lg:pl-0">Orders</h1>
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400">
+            <div className="hidden sm:block rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white">
               {new Date().toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
             </div>
             <Avatar className="h-9 w-9 bg-blue-600">
@@ -533,12 +533,12 @@ export default function OrdersPage() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-5">
             {/* Search */}
             <div className="relative flex-1 max-w-lg">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
               <Input
                 placeholder="Search by name, number, CN…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-slate-300 focus-visible:ring-1 focus-visible:ring-blue-500/50"
+                className="bg-[#1f2937] border-none pl-10 h-10 rounded-lg text-white focus-visible:ring-1 focus-visible:ring-blue-500/50"
               />
             </div>
 
@@ -547,7 +547,7 @@ export default function OrdersPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="h-10 px-3 rounded-lg bg-[#1f2937] border-none text-slate-300 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 cursor-pointer"
+                className="h-10 px-3 rounded-lg bg-[#1f2937] border-none text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 cursor-pointer"
               >
                 <option>All Status</option>
                 {STATUSES.map((s) => <option key={s}>{s}</option>)}
@@ -557,7 +557,7 @@ export default function OrdersPage() {
               <button
                 onClick={fetchOrders}
                 disabled={loading}
-                className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+                className="h-10 w-10 rounded-lg bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               </button>
@@ -577,28 +577,28 @@ export default function OrdersPage() {
               <Table className="min-w-[750px]">
                 <TableHeader>
                   <TableRow className="border-[#1f2937] hover:bg-transparent">
-                    <TableHead className="text-slate-500 text-xs font-semibold py-3 uppercase">ORDER ID</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">CUSTOMER</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">PHONE</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">CN NUMBER</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">COURIER</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">TOTAL</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">DATE</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">STATUS</TableHead>
-                    <TableHead className="text-slate-500 text-xs font-semibold uppercase">ACTIONS</TableHead>
+                    <TableHead className="text-white text-xs font-semibold py-3 uppercase">ORDER ID</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">CUSTOMER</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">PHONE</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">CN NUMBER</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">COURIER</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">TOTAL</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">DATE</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">STATUS</TableHead>
+                    <TableHead className="text-white text-xs font-semibold uppercase">ACTIONS</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center py-16 text-slate-600">
+                      <TableCell colSpan={9} className="text-center py-16 text-white">
                         <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                         Loading orders…
                       </TableCell>
                     </TableRow>
                   ) : filtered.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center py-16 text-slate-600 text-sm">
+                      <TableCell colSpan={9} className="text-center py-16 text-white text-sm">
                         No orders found.{" "}
                         <Link href="/orders/create" className="text-blue-400 hover:underline">Create one?</Link>
                       </TableCell>
@@ -619,10 +619,10 @@ export default function OrdersPage() {
                             <span className="text-white text-sm font-medium">{name}</span>
                           </TableCell>
                           <TableCell>
-                            <span className="text-slate-400 text-sm">{phone}</span>
+                            <span className="text-white text-sm">{phone}</span>
                           </TableCell>
                           <TableCell>
-                            <span className="text-slate-400 text-sm">{order.cnNumber || "—"}</span>
+                            <span className="text-white text-sm">{order.cnNumber || "—"}</span>
                           </TableCell>
                           <TableCell>
                             <CourierBadge courier={order.courier} />
@@ -631,7 +631,7 @@ export default function OrdersPage() {
                             <span className="text-white font-semibold text-sm">৳ {order.totalAmount.toLocaleString()}</span>
                           </TableCell>
                           <TableCell>
-                            <span className="text-slate-400 text-xs">
+                            <span className="text-white text-xs">
                               {new Date(order.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
                             </span>
                           </TableCell>
@@ -643,7 +643,7 @@ export default function OrdersPage() {
                               {/* ── Edit Button ── */}
                               <button
                                 onClick={() => setEditingOrder(order)}
-                                className="h-7 w-7 rounded-md bg-[#1f2937] hover:bg-blue-600/20 border border-[#2a3547] hover:border-blue-500/40 flex items-center justify-center text-slate-400 hover:text-blue-400 transition-all"
+                                className="h-7 w-7 rounded-md bg-[#1f2937] hover:bg-blue-600/20 border border-[#2a3547] hover:border-blue-500/40 flex items-center justify-center text-white hover:text-blue-400 transition-all"
                                 title="Edit order"
                               >
                                 <Edit2 className="h-3.5 w-3.5" />
@@ -651,7 +651,7 @@ export default function OrdersPage() {
                               {/* ── Receipt Button ── */}
                               <button
                                 onClick={() => setViewingInvoice(order)}
-                                className="h-7 w-7 rounded-md bg-[#1f2937] hover:bg-slate-700 border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-slate-200 transition-all"
+                                className="h-7 w-7 rounded-md bg-[#1f2937] hover:bg-slate-700 border border-[#2a3547] flex items-center justify-center text-white hover:text-slate-200 transition-all"
                                 title="View receipt"
                               >
                                 <FileText className="h-3.5 w-3.5" />

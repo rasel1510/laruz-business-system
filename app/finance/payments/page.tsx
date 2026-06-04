@@ -53,7 +53,7 @@ function StatsCard({
 }) {
   return (
     <div className="rounded-2xl border border-[#1f2937] bg-[#111827] p-6 shadow-lg hover:border-slate-700/60 transition-all duration-300 flex-1 min-w-[240px]">
-      <p className="text-xs font-semibold text-slate-500">
+      <p className="text-xs font-semibold text-white">
         {label}
       </p>
       <div className="mt-2 flex items-baseline gap-1">
@@ -182,14 +182,14 @@ export default function PaymentsPage() {
   };
 
   return (
-    <section className="flex-1 overflow-y-auto bg-[#0b0e14] min-h-screen text-slate-100 pb-12">
+    <section className="flex-1 overflow-y-auto bg-[#0b0e14] min-h-screen text-white pb-12">
       {/* TOPBAR */}
       <div className="flex items-center justify-between border-b border-[#1f2937] px-6 sm:px-8 py-4 sm:py-5">
         <h1 className="text-xl sm:text-2xl font-serif text-white pl-12 lg:pl-0 font-medium">
           Payments
         </h1>
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-slate-400 font-mono">
+          <div className="rounded-lg bg-[#1f2937] px-3 py-2 text-xs text-white font-mono">
             {new Date().toLocaleString("en-US", {
               weekday: "short",
               month: "short",
@@ -229,11 +229,11 @@ export default function PaymentsPage() {
             />
           </div>
 
-          <div className="flex items-center gap-2 self-end lg:self-center">
+          <div className="flex items-center gap-2 self-end lg:set-center">
             <button
               onClick={fetchPayments}
               disabled={loading}
-              className="h-11 w-11 rounded-xl bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="h-11 w-11 rounded-xl bg-[#1f2937] border border-[#2a3547] flex items-center justify-center text-white hover:text-white transition-colors disabled:opacity-50"
               title="Refresh"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -254,10 +254,10 @@ export default function PaymentsPage() {
               </DialogTrigger>
               <DialogContent className="w-[calc(100%-2rem)] max-w-[460px] bg-[#111827] border border-[#1f2937] text-white p-0 overflow-hidden rounded-2xl shadow-2xl">
                 <DialogHeader className="px-6 py-5 border-b border-[#1f2937] flex flex-col justify-center">
-                  <DialogTitle className="text-xl font-serif text-slate-100 font-medium">
+                  <DialogTitle className="text-xl font-serif text-white font-medium">
                     Add Payment Received
                   </DialogTitle>
-                  <DialogDescription className="text-slate-400 text-xs mt-1">
+                  <DialogDescription className="text-white text-xs mt-1">
                     Log a payment received from a courier service.
                   </DialogDescription>
                 </DialogHeader>
@@ -265,7 +265,7 @@ export default function PaymentsPage() {
                 <div className="p-6 space-y-4">
                   {/* Amount Field */}
                   <div className="space-y-2">
-                    <Label className="text-slate-400 text-xs sm:text-sm font-medium">
+                    <Label className="text-white text-xs sm:text-sm font-medium">
                       Amount (৳)
                     </Label>
                     <Input
@@ -280,7 +280,7 @@ export default function PaymentsPage() {
                   {/* Payment Method + Courier Source */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-slate-400 text-xs sm:text-sm font-medium">
+                      <Label className="text-white text-xs sm:text-sm font-medium">
                         Payment Method
                       </Label>
                       <select
@@ -297,7 +297,7 @@ export default function PaymentsPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-slate-400 text-xs sm:text-sm font-medium">
+                      <Label className="text-white text-xs sm:text-sm font-medium">
                         Courier Source
                       </Label>
                       <select
@@ -316,7 +316,7 @@ export default function PaymentsPage() {
 
                   {/* Date Field */}
                   <div className="space-y-2">
-                    <Label className="text-slate-400 text-xs sm:text-sm font-medium">
+                    <Label className="text-white text-xs sm:text-sm font-medium">
                       Date (Optional)
                     </Label>
                     <Input
@@ -329,7 +329,7 @@ export default function PaymentsPage() {
 
                   {/* Note Field */}
                   <div className="space-y-2">
-                    <Label className="text-slate-400 text-xs sm:text-sm font-medium">
+                    <Label className="text-white text-xs sm:text-sm font-medium">
                       Note (optional)
                     </Label>
                     <Input
@@ -346,7 +346,7 @@ export default function PaymentsPage() {
                       type="button"
                       variant="ghost"
                       onClick={() => setAddOpen(false)}
-                      className="px-5 h-11 rounded-xl text-slate-400 hover:bg-white/5 text-sm"
+                      className="px-5 h-11 rounded-xl text-white hover:bg-white/5 text-sm"
                     >
                       Cancel
                     </Button>
@@ -369,22 +369,22 @@ export default function PaymentsPage() {
           <Table>
             <TableHeader className="bg-[#111827]">
               <TableRow className="border-[#1f2937] hover:bg-transparent">
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider py-4 pl-6">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider py-4 pl-6">
                   Date
                 </TableHead>
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
                   Amount
                 </TableHead>
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
                   Method
                 </TableHead>
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
                   Courier
                 </TableHead>
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
                   Note
                 </TableHead>
-                <TableHead className="text-slate-500 text-xs font-semibold uppercase tracking-wider text-right pr-6 w-20">
+                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider text-right pr-6 w-20">
                   Actions
                 </TableHead>
               </TableRow>
@@ -392,7 +392,7 @@ export default function PaymentsPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-16 text-slate-500 border-[#1f2937]">
+                  <TableCell colSpan={6} className="text-center py-16 text-white border-[#1f2937]">
                     <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
                       <span>Loading payments…</span>
@@ -401,7 +401,7 @@ export default function PaymentsPage() {
                 </TableRow>
               ) : payments.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-16 text-slate-500 border-[#1f2937]">
+                  <TableCell colSpan={6} className="text-center py-16 text-white border-[#1f2937]">
                     No payments found. Click &quot;+ Add Payment&quot; to log your first transaction.
                   </TableCell>
                 </TableRow>
@@ -426,7 +426,7 @@ export default function PaymentsPage() {
 
                   return (
                     <TableRow key={p.id} className="border-[#1f2937] hover:bg-[#111827]/30 transition-colors">
-                      <TableCell className="py-4 pl-6 text-slate-400 font-medium">
+                      <TableCell className="py-4 pl-6 text-white font-medium">
                         {formattedDate}
                       </TableCell>
                       <TableCell className="font-bold text-emerald-500 font-mono">
@@ -437,17 +437,17 @@ export default function PaymentsPage() {
                           {p.method}
                         </span>
                       </TableCell>
-                      <TableCell className="text-slate-300 font-medium">
+                      <TableCell className="text-white font-medium">
                         {p.courier}
                       </TableCell>
-                      <TableCell className="text-slate-500 italic max-w-xs truncate">
+                      <TableCell className="text-white italic max-w-xs truncate">
                         {p.note || "—"}
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <button
                           onClick={() => handleDeletePayment(p.id)}
                           disabled={deletingId === p.id}
-                          className="h-8 w-8 rounded-lg bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 flex items-center justify-center text-slate-500 hover:text-red-400 transition-all disabled:opacity-50"
+                          className="h-8 w-8 rounded-lg bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 flex items-center justify-center text-white hover:text-red-400 transition-all disabled:opacity-50"
                           title="Delete Payment"
                         >
                           <Trash2 className="h-4 w-4" />

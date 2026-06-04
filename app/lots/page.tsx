@@ -101,13 +101,13 @@ export default function LotsPage() {
   const latestLotCode = lots[0]?.lotCode || "—";
 
   return (
-    <section className="flex-1 overflow-y-auto bg-[#040b1f] text-slate-100">
+    <section className="flex-1 overflow-y-auto bg-[#040b1f] text-white">
       {/* TOPBAR */}
       <div className="flex items-center justify-between border-b border-[#1a2340] px-4 py-3 sm:px-6 md:px-8">
         <h1 className="text-xl sm:text-2xl font-serif pl-12 lg:pl-0">Lots</h1>
         <div className="flex items-center gap-2 sm:gap-4">
           {formattedDate && (
-            <div className="hidden sm:block rounded-xl border border-[#1a2340] bg-[#0b132b] px-3 py-1.5 md:px-4 text-xs text-slate-300">
+            <div className="hidden sm:block rounded-xl border border-[#1a2340] bg-[#0b132b] px-3 py-1.5 md:px-4 text-xs text-white">
               {formattedDate}
             </div>
           )}
@@ -118,7 +118,7 @@ export default function LotsPage() {
       </div>
 
       <div className="p-4 sm:p-5 md:p-6">
-        <p className="text-slate-400 text-xs sm:text-sm mb-4">
+        <p className="text-white text-xs sm:text-sm mb-4">
           Track your product lot purchases
         </p>
 
@@ -126,7 +126,7 @@ export default function LotsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4">
           {/* Card 1: TOTAL LOTS */}
           <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b]/80 py-2 px-4 sm:py-2.5 sm:px-5 shadow-xl transition-all hover:border-blue-500/30">
-            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-slate-500 font-bold mb-0.5">
+            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-white font-bold mb-0.5">
               Total Lots
             </p>
             <p className="text-xl sm:text-2xl font-semibold text-blue-500">
@@ -136,7 +136,7 @@ export default function LotsPage() {
 
           {/* Card 2: TOTAL INVESTED */}
           <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b]/80 py-2 px-4 sm:py-2.5 sm:px-5 shadow-xl transition-all hover:border-yellow-500/30">
-            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-slate-500 font-bold mb-0.5">
+            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-white font-bold mb-0.5">
               Total Invested
             </p>
             <p className="text-xl sm:text-2xl font-serif text-yellow-500 font-medium">
@@ -146,10 +146,10 @@ export default function LotsPage() {
 
           {/* Card 3: LATEST LOT */}
           <div className="rounded-2xl border border-[#1a2340] bg-[#0b132b]/80 py-2 px-4 sm:py-2.5 sm:px-5 shadow-xl transition-all hover:border-slate-500/30 col-span-1 sm:col-span-2 md:col-span-1">
-            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-slate-500 font-bold mb-0.5">
+            <p className="text-[9px] sm:text-xs uppercase tracking-[2px] text-white font-bold mb-0.5">
               Latest Lot
             </p>
-            <p className="text-xl sm:text-2xl font-serif text-slate-200">
+            <p className="text-xl sm:text-2xl font-serif text-white">
               {latestLotCode}
             </p>
           </div>
@@ -159,12 +159,12 @@ export default function LotsPage() {
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 mb-4">
           {/* Search Input */}
           <div className="relative flex-1 min-w-0 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
             <Input
               placeholder="Search lots by code or note..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#0b132b] border-[#1a2340] pl-10 h-10 sm:h-11 rounded-xl text-slate-300 placeholder:text-slate-600 focus:ring-blue-500 w-full text-sm"
+              className="bg-[#0b132b] border-[#1a2340] pl-10 h-10 sm:h-11 rounded-xl text-white placeholder:text-white/40 focus:ring-blue-500 w-full text-sm"
             />
           </div>
 
@@ -175,7 +175,7 @@ export default function LotsPage() {
               size="icon"
               onClick={fetchData}
               disabled={loading}
-              className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl border-[#1a2340] bg-transparent text-slate-300 hover:bg-white/5 shrink-0"
+              className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl border-[#1a2340] bg-transparent text-white hover:bg-white/5 shrink-0"
               title="Refresh data"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -191,22 +191,22 @@ export default function LotsPage() {
             <Table className="min-w-[800px] sm:min-w-full">
               <TableHeader className="bg-white/5">
                 <TableRow className="border-[#1a2340] hover:bg-transparent">
-                  <TableHead className="text-slate-400 text-xs py-3.5 uppercase tracking-wider pl-6">
+                  <TableHead className="text-white text-xs py-3.5 uppercase tracking-wider pl-6">
                     Lot Code
                   </TableHead>
-                  <TableHead className="text-slate-400 text-xs uppercase tracking-wider">
+                  <TableHead className="text-white text-xs uppercase tracking-wider">
                     Date
                   </TableHead>
-                  <TableHead className="text-slate-400 text-xs uppercase tracking-wider">
+                  <TableHead className="text-white text-xs uppercase tracking-wider">
                     Products
                   </TableHead>
-                  <TableHead className="text-slate-400 text-xs uppercase tracking-wider">
+                  <TableHead className="text-white text-xs uppercase tracking-wider">
                     Total Qty
                   </TableHead>
-                  <TableHead className="text-slate-400 text-xs uppercase tracking-wider">
+                  <TableHead className="text-white text-xs uppercase tracking-wider">
                     Total Value
                   </TableHead>
-                  <TableHead className="text-slate-400 text-xs uppercase tracking-wider text-center pr-6">
+                  <TableHead className="text-white text-xs uppercase tracking-wider text-center pr-6">
                     Action
                   </TableHead>
                 </TableRow>
@@ -214,15 +214,15 @@ export default function LotsPage() {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-20 text-slate-500">
+                    <TableCell colSpan={6} className="text-center py-20 text-white">
                       <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
                       Loading lot history...
                     </TableCell>
                   </TableRow>
                 ) : filteredLots.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-20 text-slate-500 text-sm">
-                      <Boxes className="h-8 w-8 mx-auto mb-3 text-slate-600" />
+                    <TableCell colSpan={6} className="text-center py-20 text-white text-sm">
+                      <Boxes className="h-8 w-8 mx-auto mb-3 text-white" />
                       No lots found. Record your first lot purchase to get started!
                     </TableCell>
                   </TableRow>
@@ -243,15 +243,15 @@ export default function LotsPage() {
                         <TableCell className="font-bold text-blue-400 font-mono py-3.5 pl-6 font-semibold">
                           <ViewLotModal lot={lot}>{lot.lotCode}</ViewLotModal>
                         </TableCell>
-                        <TableCell className="text-slate-300 text-sm">
+                        <TableCell className="text-white text-sm">
                           {formattedLotDate}
                         </TableCell>
-                        <TableCell className="text-slate-200 font-medium text-sm">
+                        <TableCell className="text-white font-medium text-sm">
                           {lot.items.length === 1
                             ? "1 product"
                             : `${lot.items.length} products`}
                         </TableCell>
-                        <TableCell className="text-slate-300 text-sm">
+                        <TableCell className="text-white text-sm">
                           {lot.totalQuantity} pcs
                         </TableCell>
                         <TableCell className="text-yellow-500 font-medium text-sm">
