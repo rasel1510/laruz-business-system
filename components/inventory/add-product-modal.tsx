@@ -45,6 +45,10 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nextCode, setNextCode] = useState("#PRD-XXXX");
+  const [customInput, setCustomInput] = useState("");
+  const [selectOpen, setSelectOpen] = useState(false);
+  const [customSubInput, setCustomSubInput] = useState("");
+  const [subSelectOpen, setSubSelectOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -93,7 +97,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
           <Plus className="h-4 w-4 sm:h-5 sm:w-5" /> <span className="hidden xs:inline">Add</span> Product
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-[600px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[600px] md:max-w-[750px] lg:max-w-[700px] bg-[#0b132b] border-[#1a2340] text-white p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col">
         <DialogHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#1a2340] flex flex-row items-center justify-between shrink-0">
           <DialogTitle className="text-lg sm:text-xl font-semibold">Add New Product</DialogTitle>
           <DialogDescription className="sr-only">
@@ -110,7 +114,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-400 text-xs sm:text-sm">Product Name</Label>
+              <Label className="text-white text-xs sm:text-sm">Product Name</Label>
               <Input
                 {...form.register("name")}
                 placeholder="e.g. Gold Hoop Earrings"
@@ -121,43 +125,163 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
               )}
             </div>
 
+            {/* Category and Sub-category side by side on all screen sizes */}
+            <div className="grid grid-cols-2 gap-4 col-span-1 sm:col-span-2">
+              <div className="space-y-2">
+                <Label className="text-white text-xs sm:text-sm">Category</Label>
+                <Select 
+                  open={selectOpen} 
+                  onOpenChange={setSelectOpen} 
+                  value={form.watch("category")} 
+                  onValueChange={(v) => form.setValue("category", v)}
+                >
+                  <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
+                    <SelectValue placeholder="Select Category">
+                      {form.watch("category") || undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white min-w-[200px] md:min-w-[320px]">
+                    {["Earrings", "Necklaces", "Rings", "Bracelets"].map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                    
+                    <div 
+                      className="p-2 border-t border-[#1a2340] mt-1 flex gap-2"
+                      onKeyDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onPointerDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Input
+                        placeholder="Custom Category..."
+                        value={customInput}
+                        onChange={(e) => setCustomInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const val = customInput.trim();
+                            if (val) {
+                              form.setValue("category", val);
+                              setCustomInput("");
+                              setSelectOpen(false);
+                            }
+                          }
+                        }}
+                        className="flex-1 h-8 text-xs bg-[#050816] border-[#1a2340] text-white rounded-lg focus-visible:ring-1 focus-visible:ring-blue-500"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => {
+                          const val = customInput.trim();
+                          if (val) {
+                            form.setValue("category", val);
+                            setCustomInput("");
+                            setSelectOpen(false);
+                          }
+                        }}
+                        className="h-8 text-xs px-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-white text-xs sm:text-sm">Sub-Category</Label>
+                <Select 
+                  open={subSelectOpen}
+                  onOpenChange={setSubSelectOpen}
+                  value={form.watch("subCategory")}
+                  onValueChange={(v) => form.setValue("subCategory", v)}
+                >
+                  <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
+                    <SelectValue placeholder="Select Sub-Cat">
+                      {form.watch("subCategory") || undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white min-w-[200px] md:min-w-[320px]">
+                    {["Gold", "Silver", "Stone", "Pearl"].map((subCat) => (
+                      <SelectItem key={subCat} value={subCat}>
+                        {subCat}
+                      </SelectItem>
+                    ))}
+                    
+                    <div 
+                      className="p-2 border-t border-[#1a2340] mt-1 flex gap-2"
+                      onKeyDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onPointerDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Input
+                        placeholder="Custom Sub-Cat..."
+                        value={customSubInput}
+                        onChange={(e) => setCustomSubInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const val = customSubInput.trim();
+                            if (val) {
+                              form.setValue("subCategory", val);
+                              setCustomSubInput("");
+                              setSubSelectOpen(false);
+                            }
+                          }
+                        }}
+                        className="flex-1 h-8 text-xs bg-[#050816] border-[#1a2340] text-white rounded-lg focus-visible:ring-1 focus-visible:ring-blue-500"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => {
+                          const val = customSubInput.trim();
+                          if (val) {
+                            form.setValue("subCategory", val);
+                            setCustomSubInput("");
+                            setSubSelectOpen(false);
+                          }
+                        }}
+                        className="h-8 text-xs px-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+
+          {/* Initial Stock and Product Picture side by side */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-400 text-xs sm:text-sm">Category</Label>
-              <Select onValueChange={(v) => form.setValue("category", v)}>
-                <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto">
-                  <SelectValue placeholder="Select Category" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
-                  <SelectItem value="Earrings">Earrings</SelectItem>
-                  <SelectItem value="Necklaces">Necklaces</SelectItem>
-                  <SelectItem value="Rings">Rings</SelectItem>
-                  <SelectItem value="Bracelets">Bracelets</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-white text-xs sm:text-sm">Initial Stock</Label>
+              <Input
+                type="number"
+                {...form.register("stock", { valueAsNumber: true })}
+                className="bg-[#050816] border-[#1a2340] text-white rounded-xl h-10 sm:h-auto w-full"
+              />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-400 text-xs sm:text-sm">Sub-Category</Label>
-              <Select onValueChange={(v) => form.setValue("subCategory", v)}>
-                <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto">
-                  <SelectValue placeholder="Select Sub-Cat" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
-                  <SelectItem value="Gold">Gold</SelectItem>
-                  <SelectItem value="Silver">Silver</SelectItem>
-                  <SelectItem value="Stone">Stone</SelectItem>
-                  <SelectItem value="Pearl">Pearl</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-slate-400 text-xs sm:text-sm">Product Picture</Label>
+              <Label className="text-white text-xs sm:text-sm">Product Picture</Label>
               <div className="flex items-center gap-4">
                 {imageUrl ? (
                   <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-lg overflow-hidden border border-[#1a2340]">
                     <Image src={imageUrl} alt="Preview" fill className="object-cover" />
-                    <button 
+                    <button
                       type="button"
                       onClick={() => form.setValue("image", "")}
                       className="absolute top-0 right-0 bg-red-500 text-white p-0.5 rounded-bl-md"
@@ -186,7 +310,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
 
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-400 text-[10px] sm:text-sm">Buying (৳)</Label>
+              <Label className="text-white text-[10px] sm:text-sm">Buying (৳)</Label>
               <Input
                 type="number"
                 {...form.register("buyingPrice", { valueAsNumber: true })}
@@ -194,7 +318,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-400 text-[10px] sm:text-sm">Wholesale (৳)</Label>
+              <Label className="text-white text-[10px] sm:text-sm">Wholesale (৳)</Label>
               <Input
                 type="number"
                 {...form.register("wholesalePrice", { valueAsNumber: true })}
@@ -202,7 +326,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-400 text-[10px] sm:text-sm">Retail (৳)</Label>
+              <Label className="text-white text-[10px] sm:text-sm">Retail (৳)</Label>
               <Input
                 type="number"
                 {...form.register("retailPrice", { valueAsNumber: true })}
@@ -211,14 +335,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label className="text-slate-400 text-xs sm:text-sm">Initial Stock</Label>
-            <Input
-              type="number"
-              {...form.register("stock", { valueAsNumber: true })}
-              className="bg-[#050816] border-[#1a2340] text-white rounded-xl h-10 sm:h-auto"
-            />
-          </div>
+
 
           <div className="flex justify-end gap-3 pt-3 sm:pt-4 border-t border-[#1a2340]">
             <Button
