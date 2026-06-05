@@ -252,25 +252,25 @@ export default function InvoicePage() {
               <TableHeader>
                 <TableRow className="border-[#1f2937] hover:bg-transparent bg-[#0d1117]">
                   {/* Column 1 */}
-                  <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider py-3 pl-5 w-40">
+                  <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider py-3 pl-5 w-40">
                     <div>Order ID</div>
                     <div className="text-[10px] text-slate-600 font-normal normal-case tracking-normal mt-0.5">
                       CN ID
                     </div>
                   </TableHead>
                   {/* Column 2 */}
-                  <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+                  <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">
                     Customer Name
                   </TableHead>
                   {/* Column 3 */}
-                  <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider w-36">
+                  <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider w-36">
                     <div>Status</div>
                     <div className="text-[10px] text-slate-600 font-normal normal-case tracking-normal mt-0.5">
                       Order Date
                     </div>
                   </TableHead>
                   {/* Column 4 */}
-                  <TableHead className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider text-right pr-5">
+                  <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider text-right pr-5">
                     <div>COD Amount</div>
                     <div className="text-[10px] text-slate-600 font-normal normal-case tracking-normal mt-0.5 text-right">
                       Fes = COD − (Del. + 1%)

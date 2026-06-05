@@ -85,7 +85,7 @@ export function Sidebar() {
       <Link href={item.href} key={item.title}>
         <Button
           variant="ghost"
-          className={`w-full justify-start gap-3 rounded-xl py-6 text-base ${
+          className={`w-full justify-start gap-3 rounded-xl py-3.5 text-base ${
               isActive
                 ? "bg-blue-600/20 text-blue-400 hover:bg-blue-600/20"
                 : "text-white hover:bg-white/5 hover:text-white"
@@ -101,7 +101,7 @@ export function Sidebar() {
   const SidebarContent = () => (
     <>
       {/* LOGO */}
-      <div className="flex items-center gap-4 px-6 py-8 border-b border-[#1a2340]">
+      <div className="flex items-center gap-4 px-6 py-5 border-b border-[#1a2340]">
         <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-lg font-bold shrink-0">
           La
         </div>
@@ -112,18 +112,18 @@ export function Sidebar() {
       </div>
 
       {/* NAVIGATION */}
-      <div className="px-4 py-6 flex-1 overflow-y-auto">
-        <p className="mb-4 text-xs uppercase tracking-[4px] text-white">Main</p>
-        <div className="space-y-2">
+      <div className="px-4 py-4 flex-1 overflow-y-auto">
+        <p className="mb-2 text-xs uppercase tracking-[4px] text-white">Main</p>
+        <div className="space-y-1">
           {sidebarItems.map((item) => (
             <NavItem key={item.title} item={item} />
           ))}
         </div>
 
         {/* FINANCE */}
-        <div className="mt-10">
-          <p className="mb-4 text-xs uppercase tracking-[4px] text-white">Finance</p>
-          <div className="space-y-2">
+        <div className="mt-6">
+          <p className="mb-2 text-xs uppercase tracking-[4px] text-white">Finance</p>
+          <div className="space-y-1">
             {financeItems.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
@@ -131,9 +131,9 @@ export function Sidebar() {
         </div>
 
         {/* SYSTEM */}
-        <div className="mt-10">
-          <p className="mb-4 text-xs uppercase tracking-[4px] text-white">System</p>
-          <div className="space-y-2">
+        <div className="mt-6">
+          <p className="mb-2 text-xs uppercase tracking-[4px] text-white">System</p>
+          <div className="space-y-1">
             {systemItems.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
@@ -141,7 +141,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <div className="border-t border-[#1a2340] p-6 bg-[#040b1f] space-y-4">
+      <div className="border-t border-[#1a2340] p-4 bg-[#040b1f] space-y-2">
         <Button
           variant="ghost"
           onClick={async () => {
@@ -156,14 +156,14 @@ export function Sidebar() {
               }
             });
           }}
-          className="w-full justify-start gap-3 rounded-xl py-6 text-base text-red-400 hover:bg-red-500/10 hover:text-red-300"
+          className="w-full justify-start gap-3 rounded-xl py-3.5 text-base text-red-400 hover:bg-red-500/10 hover:text-red-300"
         >
           <LogOut className="h-5 w-5" />
           Log Out
         </Button>
         <div>
-          <p className="text-center text-sm text-white">Trendy & Affordable Jewelry</p>
-          <p className="text-center text-sm text-white">At Your Doorstep</p>
+          <p className="text-center text-xs text-white">Trendy & Affordable Jewelry</p>
+          <p className="text-center text-xs text-white">At Your Doorstep</p>
         </div>
       </div>
     </>

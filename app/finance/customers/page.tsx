@@ -243,12 +243,12 @@ export default function CustomersPage() {
               <Table className="min-w-[750px]">
                 <TableHeader>
                   <TableRow className="border-[#1f2937] hover:bg-transparent">
-                    <TableHead className="text-white text-xs font-semibold py-3 uppercase">Customer Name</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">Phone</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase text-center">Total Order</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">Total Spent</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">Last Order Date</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase text-center">Action</TableHead>
+                    <TableHead className="text-white text-xs font-bold py-3 uppercase">Customer Name</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">Phone</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase text-center">Total Order</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">Total Spent</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">Last Order Date</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase text-center">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -445,7 +445,7 @@ export default function CustomersPage() {
                             <div className="overflow-x-auto">
                               <table className="w-full text-xs text-left">
                                 <thead>
-                                  <tr className="border-b border-[#1f2937] text-white font-semibold">
+                                  <tr className="border-b border-[#1f2937] text-white font-bold">
                                     <th className="pb-2">Product</th>
                                     <th className="pb-2 text-right">Unit Price</th>
                                     <th className="pb-2 text-center">Qty</th>

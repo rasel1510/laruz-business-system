@@ -30,7 +30,7 @@ export function SessionGuard({ children }: { children: React.ReactNode }) {
 
   if (isPending) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#050816] text-slate-400">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#050816] text-white">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent mb-4"></div>
         <p>Loading session...</p>
       </div>
@@ -39,7 +39,7 @@ export function SessionGuard({ children }: { children: React.ReactNode }) {
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050816] text-slate-400">
+      <div className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
         <p>Redirecting to login...</p>
       </div>
     );

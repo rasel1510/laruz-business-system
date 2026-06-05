@@ -118,9 +118,7 @@ export default function LotsPage() {
       </div>
 
       <div className="p-4 sm:p-5 md:p-6">
-        <p className="text-white text-xs sm:text-sm mb-4">
-          Track your product lot purchases
-        </p>
+
 
         {/* SUMMARY CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4">

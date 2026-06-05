@@ -369,22 +369,22 @@ export default function PaymentsPage() {
           <Table>
             <TableHeader className="bg-[#111827]">
               <TableRow className="border-[#1f2937] hover:bg-transparent">
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider py-4 pl-6">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider py-4 pl-6">
                   Date
                 </TableHead>
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider">
                   Amount
                 </TableHead>
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider">
                   Method
                 </TableHead>
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider">
                   Courier
                 </TableHead>
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider">
                   Note
                 </TableHead>
-                <TableHead className="text-white text-xs font-semibold uppercase tracking-wider text-right pr-6 w-20">
+                <TableHead className="text-white text-xs font-bold uppercase tracking-wider text-right pr-6 w-20">
                   Actions
                 </TableHead>
               </TableRow>

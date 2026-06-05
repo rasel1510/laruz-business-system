@@ -226,12 +226,12 @@ export default function ExpensesPage() {
             <Table className="min-w-[750px]">
               <TableHeader>
                 <TableRow className="border-[#1f2937] hover:bg-transparent">
-                  <TableHead className="text-white text-xs font-semibold py-4 uppercase pl-6">Date</TableHead>
-                  <TableHead className="text-white text-xs font-semibold uppercase">Item Name</TableHead>
-                  <TableHead className="text-white text-xs font-semibold uppercase text-center">Quantity</TableHead>
-                  <TableHead className="text-white text-xs font-semibold uppercase text-right">Unit Price</TableHead>
-                  <TableHead className="text-white text-xs font-semibold uppercase text-right">Total Price</TableHead>
-                  <TableHead className="text-white text-xs font-semibold uppercase text-center pr-6">Action</TableHead>
+                  <TableHead className="text-white text-xs font-bold py-4 uppercase pl-6">Date</TableHead>
+                  <TableHead className="text-white text-xs font-bold uppercase">Item Name</TableHead>
+                  <TableHead className="text-white text-xs font-bold uppercase text-center">Quantity</TableHead>
+                  <TableHead className="text-white text-xs font-bold uppercase text-right">Unit Price</TableHead>
+                  <TableHead className="text-white text-xs font-bold uppercase text-right">Total Price</TableHead>
+                  <TableHead className="text-white text-xs font-bold uppercase text-center pr-6">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

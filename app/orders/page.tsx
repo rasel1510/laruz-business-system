@@ -370,10 +370,10 @@ function InvoiceModal({
                 <table className="w-full text-xs text-left border-collapse">
                   <thead>
                     <tr className="bg-[#1e88e5] text-white print-bg-blue print-text-white">
-                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px]">ITEM NAME</th>
-                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-right">PRICE</th>
-                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-center">QTY</th>
-                      <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[10px] text-right">TOTAL</th>
+                      <th className="py-2 px-3 font-bold uppercase tracking-wider text-[10px]">ITEM NAME</th>
+                      <th className="py-2 px-3 font-bold uppercase tracking-wider text-[10px] text-right">PRICE</th>
+                      <th className="py-2 px-3 font-bold uppercase tracking-wider text-[10px] text-center">QTY</th>
+                      <th className="py-2 px-3 font-bold uppercase tracking-wider text-[10px] text-right">TOTAL</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-150">
@@ -577,15 +577,15 @@ export default function OrdersPage() {
               <Table className="min-w-[750px]">
                 <TableHeader>
                   <TableRow className="border-[#1f2937] hover:bg-transparent">
-                    <TableHead className="text-white text-xs font-semibold py-3 uppercase">ORDER ID</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">CUSTOMER</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">PHONE</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">CN NUMBER</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">COURIER</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">TOTAL</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">DATE</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">STATUS</TableHead>
-                    <TableHead className="text-white text-xs font-semibold uppercase">ACTIONS</TableHead>
+                    <TableHead className="text-white text-xs font-bold py-3 uppercase">ORDER ID</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">CUSTOMER</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">PHONE</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">CN NUMBER</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">COURIER</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">TOTAL</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">DATE</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">STATUS</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">ACTIONS</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

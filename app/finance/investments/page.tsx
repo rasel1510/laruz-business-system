@@ -781,16 +781,16 @@ export default function InvestmentsPage() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-[#1f2937] hover:bg-transparent">
-                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider py-3">
+                        <TableHead className="text-white text-[11px] font-bold uppercase tracking-wider py-3">
                           Month
                         </TableHead>
-                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider">
+                        <TableHead className="text-white text-[11px] font-bold uppercase tracking-wider">
                           Amount
                         </TableHead>
-                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider">
+                        <TableHead className="text-white text-[11px] font-bold uppercase tracking-wider">
                           Date
                         </TableHead>
-                        <TableHead className="text-white text-[11px] font-semibold uppercase tracking-wider text-center w-16">
+                        <TableHead className="text-white text-[11px] font-bold uppercase tracking-wider text-center w-16">
                           Action
                         </TableHead>
                       </TableRow>
