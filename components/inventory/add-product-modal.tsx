@@ -45,10 +45,9 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nextCode, setNextCode] = useState("#PRD-XXXX");
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
   const [customInput, setCustomInput] = useState("");
   const [selectOpen, setSelectOpen] = useState(false);
-  const [customSubInput, setCustomSubInput] = useState("");
-  const [subSelectOpen, setSubSelectOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -129,25 +128,23 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
             <div className="grid grid-cols-2 gap-4 col-span-1 sm:col-span-2">
               <div className="space-y-2">
                 <Label className="text-white text-xs sm:text-sm">Category</Label>
-                <Select 
-                  open={selectOpen} 
-                  onOpenChange={setSelectOpen} 
-                  value={form.watch("category")} 
+                <Select
+                  open={selectOpen}
+                  onOpenChange={setSelectOpen}
+                  value={form.watch("category")}
                   onValueChange={(v) => form.setValue("category", v)}
                 >
                   <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
-                    <SelectValue placeholder="Select Category">
-                      {form.watch("category") || undefined}
-                    </SelectValue>
+                    <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white min-w-[200px] md:min-w-[320px]">
-                    {["Earrings", "Necklaces", "Rings", "Bracelets"].map((cat) => (
+                    {["Earrings", "Necklaces", "Rings", "Bracelets", ...customCategories].map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
                       </SelectItem>
                     ))}
-                    
-                    <div 
+
+                    <div
                       className="p-2 border-t border-[#1a2340] mt-1 flex gap-2"
                       onKeyDown={(e) => {
                         e.stopPropagation();
@@ -166,6 +163,9 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                             e.stopPropagation();
                             const val = customInput.trim();
                             if (val) {
+                              if (!customCategories.includes(val)) {
+                                setCustomCategories(prev => [...prev, val]);
+                              }
                               form.setValue("category", val);
                               setCustomInput("");
                               setSelectOpen(false);
@@ -180,6 +180,9 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                         onClick={() => {
                           const val = customInput.trim();
                           if (val) {
+                            if (!customCategories.includes(val)) {
+                              setCustomCategories(prev => [...prev, val]);
+                            }
                             form.setValue("category", val);
                             setCustomInput("");
                             setSelectOpen(false);
@@ -196,67 +199,15 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="space-y-2">
                 <Label className="text-white text-xs sm:text-sm">Sub-Category</Label>
-                <Select 
-                  open={subSelectOpen}
-                  onOpenChange={setSubSelectOpen}
-                  value={form.watch("subCategory")}
-                  onValueChange={(v) => form.setValue("subCategory", v)}
-                >
+                <Select onValueChange={(v) => form.setValue("subCategory", v)}>
                   <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
-                    <SelectValue placeholder="Select Sub-Cat">
-                      {form.watch("subCategory") || undefined}
-                    </SelectValue>
+                    <SelectValue placeholder="Select Sub-Cat" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white min-w-[200px] md:min-w-[320px]">
-                    {["Gold", "Silver", "Stone", "Pearl"].map((subCat) => (
-                      <SelectItem key={subCat} value={subCat}>
-                        {subCat}
-                      </SelectItem>
-                    ))}
-                    
-                    <div 
-                      className="p-2 border-t border-[#1a2340] mt-1 flex gap-2"
-                      onKeyDown={(e) => {
-                        e.stopPropagation();
-                      }}
-                      onPointerDown={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <Input
-                        placeholder="Custom Sub-Cat..."
-                        value={customSubInput}
-                        onChange={(e) => setCustomSubInput(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            const val = customSubInput.trim();
-                            if (val) {
-                              form.setValue("subCategory", val);
-                              setCustomSubInput("");
-                              setSubSelectOpen(false);
-                            }
-                          }
-                        }}
-                        className="flex-1 h-8 text-xs bg-[#050816] border-[#1a2340] text-white rounded-lg focus-visible:ring-1 focus-visible:ring-blue-500"
-                      />
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={() => {
-                          const val = customSubInput.trim();
-                          if (val) {
-                            form.setValue("subCategory", val);
-                            setCustomSubInput("");
-                            setSubSelectOpen(false);
-                          }
-                        }}
-                        className="h-8 text-xs px-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
-                      >
-                        Add
-                      </Button>
-                    </div>
+                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
+                    <SelectItem value="Gold">Gold</SelectItem>
+                    <SelectItem value="Silver">Silver</SelectItem>
+                    <SelectItem value="Stone">Stone</SelectItem>
+                    <SelectItem value="Pearl">Pearl</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
