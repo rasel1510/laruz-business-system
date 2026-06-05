@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Plus, Check } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Check, ChevronDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,14 +46,38 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nextCode, setNextCode] = useState("#PRD-XXXX");
   const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [customInput, setCustomInput] = useState("");
-  const [selectOpen, setSelectOpen] = useState(false);
+  const categoryRef = useRef<HTMLDivElement>(null);
+
+  const [customSubCategories, setCustomSubCategories] = useState<string[]>([]);
+  const [subDropdownOpen, setSubDropdownOpen] = useState(false);
+  const [customSubInput, setCustomSubInput] = useState("");
+  const subCategoryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open) {
       getNextProductCode().then(setNextCode);
+    } else {
+      setDropdownOpen(false);
+      setSubDropdownOpen(false);
     }
   }, [open]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+      if (subCategoryRef.current && !subCategoryRef.current.contains(event.target as Node)) {
+        setSubDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -76,6 +100,20 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
     try {
       const result = await addProduct(data);
       if (result.success) {
+        // Keep track of custom-written categories locally so they appear in dropdown next time
+        const submittedCategory = data.category.trim();
+        const defaultCats = ["Earrings", "Necklaces", "Rings", "Bracelets"];
+        if (submittedCategory && !defaultCats.includes(submittedCategory) && !customCategories.includes(submittedCategory)) {
+          setCustomCategories(prev => [...prev, submittedCategory]);
+        }
+
+        // Keep track of custom-written sub-categories locally so they appear in dropdown next time
+        const submittedSubCategory = data.subCategory.trim();
+        const defaultSubCats = ["Gold", "Silver", "Stone", "Pearl"];
+        if (submittedSubCategory && !defaultSubCats.includes(submittedSubCategory) && !customSubCategories.includes(submittedSubCategory)) {
+          setCustomSubCategories(prev => [...prev, submittedSubCategory]);
+        }
+
         setOpen(false);
         form.reset();
         onSuccess();
@@ -126,26 +164,62 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
 
             {/* Category and Sub-category side by side on all screen sizes */}
             <div className="grid grid-cols-2 gap-4 col-span-1 sm:col-span-2">
-              <div className="space-y-2">
+              <div className="space-y-2 relative" ref={categoryRef}>
                 <Label className="text-white text-xs sm:text-sm">Category</Label>
-                <Select
-                  open={selectOpen}
-                  onOpenChange={setSelectOpen}
-                  value={form.watch("category")}
-                  onValueChange={(v) => form.setValue("category", v)}
-                >
-                  <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white min-w-[200px] md:min-w-[320px]">
-                    {["Earrings", "Necklaces", "Rings", "Bracelets", ...customCategories].map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
-                    ))}
+                <div className="relative">
+                  <Input
+                    placeholder="Type or select category"
+                    value={form.watch("category")}
+                    onChange={(e) => form.setValue("category", e.target.value)}
+                    onFocus={() => setDropdownOpen(true)}
+                    className="bg-[#050816] border-[#1a2340] text-white rounded-xl h-10 sm:h-auto w-full pr-10 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setDropdownOpen((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
 
-                    <div
-                      className="p-2 border-t border-[#1a2340] mt-1 flex gap-2"
+                {dropdownOpen && (
+                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-[#1a2340] rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
+                    <div className="overflow-y-auto flex-1">
+                      {(() => {
+                        const defaultCats = ["Earrings", "Necklaces", "Rings", "Bracelets"];
+                        const categoryValue = form.watch("category") || "";
+                        const allCats = Array.from(new Set([...defaultCats, ...customCategories]));
+                        const filtered = allCats.filter(cat => 
+                          cat.toLowerCase().includes(categoryValue.toLowerCase())
+                        );
+
+                        if (filtered.length > 0) {
+                          return filtered.map((cat) => (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => {
+                                form.setValue("category", cat);
+                                setDropdownOpen(false);
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm text-white hover:bg-blue-600/20 hover:text-blue-400 transition-colors cursor-pointer"
+                            >
+                              {cat}
+                            </button>
+                          ));
+                        }
+                        return (
+                          <div className="px-4 py-2 text-sm text-slate-500 italic">
+                            No categories match.
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {/* Bottom custom category input */}
+                    <div 
+                      className="p-2 border-t border-[#1a2340] bg-[#0d1633] flex gap-2"
                       onKeyDown={(e) => {
                         e.stopPropagation();
                       }}
@@ -154,7 +228,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                       }}
                     >
                       <Input
-                        placeholder="Custom Category..."
+                        placeholder="Add new custom category..."
                         value={customInput}
                         onChange={(e) => setCustomInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -162,13 +236,14 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                             e.preventDefault();
                             e.stopPropagation();
                             const val = customInput.trim();
+                            const defaultCats = ["Earrings", "Necklaces", "Rings", "Bracelets"];
                             if (val) {
-                              if (!customCategories.includes(val)) {
+                              if (!customCategories.includes(val) && !defaultCats.includes(val)) {
                                 setCustomCategories(prev => [...prev, val]);
                               }
                               form.setValue("category", val);
                               setCustomInput("");
-                              setSelectOpen(false);
+                              setDropdownOpen(false);
                             }
                           }
                         }}
@@ -179,37 +254,138 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                         size="sm"
                         onClick={() => {
                           const val = customInput.trim();
+                          const defaultCats = ["Earrings", "Necklaces", "Rings", "Bracelets"];
                           if (val) {
-                            if (!customCategories.includes(val)) {
+                            if (!customCategories.includes(val) && !defaultCats.includes(val)) {
                               setCustomCategories(prev => [...prev, val]);
                             }
                             form.setValue("category", val);
                             setCustomInput("");
-                            setSelectOpen(false);
+                            setDropdownOpen(false);
                           }
                         }}
-                        className="h-8 text-xs px-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
+                        className="h-8 text-xs px-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
                       >
                         Add
                       </Button>
                     </div>
-                  </SelectContent>
-                </Select>
+                  </div>
+                )}
+                {form.formState.errors.category && (
+                  <p className="text-red-500 text-xs mt-1">{form.formState.errors.category.message}</p>
+                )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 relative" ref={subCategoryRef}>
                 <Label className="text-white text-xs sm:text-sm">Sub-Category</Label>
-                <Select onValueChange={(v) => form.setValue("subCategory", v)}>
-                  <SelectTrigger className="bg-[#050816] border-[#1a2340] rounded-xl h-10 sm:h-auto w-full">
-                    <SelectValue placeholder="Select Sub-Cat" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#0b132b] border-[#1a2340] text-white">
-                    <SelectItem value="Gold">Gold</SelectItem>
-                    <SelectItem value="Silver">Silver</SelectItem>
-                    <SelectItem value="Stone">Stone</SelectItem>
-                    <SelectItem value="Pearl">Pearl</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Input
+                    placeholder="Type or select sub-cat"
+                    value={form.watch("subCategory")}
+                    onChange={(e) => form.setValue("subCategory", e.target.value)}
+                    onFocus={() => setSubDropdownOpen(true)}
+                    className="bg-[#050816] border-[#1a2340] text-white rounded-xl h-10 sm:h-auto w-full pr-10 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSubDropdownOpen((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {subDropdownOpen && (
+                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-[#1a2340] rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
+                    <div className="overflow-y-auto flex-1">
+                      {(() => {
+                        const defaultSubCats = ["Gold", "Silver", "Stone", "Pearl"];
+                        const subCategoryValue = form.watch("subCategory") || "";
+                        const allSubCats = Array.from(new Set([...defaultSubCats, ...customSubCategories]));
+                        const filtered = allSubCats.filter(subCat => 
+                          subCat.toLowerCase().includes(subCategoryValue.toLowerCase())
+                        );
+
+                        if (filtered.length > 0) {
+                          return filtered.map((subCat) => (
+                            <button
+                              key={subCat}
+                              type="button"
+                              onClick={() => {
+                                form.setValue("subCategory", subCat);
+                                setSubDropdownOpen(false);
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm text-white hover:bg-blue-600/20 hover:text-blue-400 transition-colors cursor-pointer"
+                            >
+                              {subCat}
+                            </button>
+                          ));
+                        }
+                        return (
+                          <div className="px-4 py-2 text-sm text-slate-500 italic">
+                            No sub-categories match.
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {/* Bottom custom sub-category input */}
+                    <div 
+                      className="p-2 border-t border-[#1a2340] bg-[#0d1633] flex gap-2"
+                      onKeyDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onPointerDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Input
+                        placeholder="Add new custom sub-cat..."
+                        value={customSubInput}
+                        onChange={(e) => setCustomSubInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const val = customSubInput.trim();
+                            const defaultSubCats = ["Gold", "Silver", "Stone", "Pearl"];
+                            if (val) {
+                              if (!customSubCategories.includes(val) && !defaultSubCats.includes(val)) {
+                                setCustomSubCategories(prev => [...prev, val]);
+                              }
+                              form.setValue("subCategory", val);
+                              setCustomSubInput("");
+                              setSubDropdownOpen(false);
+                            }
+                          }
+                        }}
+                        className="flex-1 h-8 text-xs bg-[#050816] border-[#1a2340] text-white rounded-lg focus-visible:ring-1 focus-visible:ring-blue-500"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => {
+                          const val = customSubInput.trim();
+                          const defaultSubCats = ["Gold", "Silver", "Stone", "Pearl"];
+                          if (val) {
+                            if (!customSubCategories.includes(val) && !defaultSubCats.includes(val)) {
+                              setCustomSubCategories(prev => [...prev, val]);
+                            }
+                            form.setValue("subCategory", val);
+                            setCustomSubInput("");
+                            setSubDropdownOpen(false);
+                          }
+                        }}
+                        className="h-8 text-xs px-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer shrink-0"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                {form.formState.errors.subCategory && (
+                  <p className="text-red-500 text-xs mt-1">{form.formState.errors.subCategory.message}</p>
+                )}
               </div>
             </div>
           </div>
