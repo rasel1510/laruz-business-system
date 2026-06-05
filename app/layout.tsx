@@ -40,9 +40,9 @@ export default function RootLayout({
       <body className="min-h-full bg-[#050816]">
         {/* Temporarily disabled SessionGuard to prevent blank screen / redirect loops */}
         {/* <SessionGuard> */}
-          <div className="flex min-h-screen">
+          <div className="flex h-screen overflow-hidden">
             <Sidebar />
-            <main className="flex-1 min-h-screen min-w-0">
+            <main className="flex-1 min-w-0 overflow-y-auto">
               {children}
             </main>
           </div>

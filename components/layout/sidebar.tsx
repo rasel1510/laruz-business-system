@@ -207,8 +207,8 @@ export function Sidebar() {
         <SidebarContent />
       </aside>
 
-      {/* Desktop sidebar — unchanged */}
-      <aside className="hidden lg:flex w-64 min-h-screen border-r border-[#1a2340] bg-[#040b1f] sticky top-0 flex-col">
+      {/* Desktop sidebar — fixed viewport height */}
+      <aside className="hidden lg:flex w-64 h-screen border-r border-[#1a2340] bg-[#040b1f] flex-col">
         <SidebarContent />
       </aside>
     </>

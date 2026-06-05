@@ -75,28 +75,24 @@ export default async function Home() {
     {
       title: "Delivered",
       value: delivered.toString(),
-      subtitle: "Orders completed",
       color: "bg-green-500",
       icon: CheckCircle2,
     },
     {
       title: "Pending",
       value: pending.toString(),
-      subtitle: "Awaiting delivery",
       color: "bg-yellow-500",
       icon: Clock3,
     },
     {
       title: "Cancelled",
       value: cancelled.toString(),
-      subtitle: "This month",
       color: "bg-red-500",
       icon: X,
     },
     {
       title: "On Hold",
       value: onHold.toString(),
-      subtitle: "Processing",
       color: "bg-blue-500",
       icon: null,
     },
@@ -167,9 +163,6 @@ export default async function Home() {
                       <h2 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-bold">
                         {stat.value}
                       </h2>
-                      <p className="mt-1 text-[10px] sm:text-xs text-white">
-                        {stat.subtitle}
-                      </p>
                     </div>
                     {Icon && (
                       <div className="rounded-lg bg-white/5 p-2">
