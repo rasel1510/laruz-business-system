@@ -15,6 +15,8 @@ import {
   RefreshCw,
   Plus,
   Edit2,
+  Copy,
+  Check,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -70,6 +72,18 @@ const getBadgeStyle = (category: string) => {
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (code: string, id: string) => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopiedId(id);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -182,7 +196,23 @@ export default function InventoryPage() {
                 ) : (
                   products.map((item) => (
                     <TableRow key={item.id} className="border-[#1a2340] hover:bg-white/5 transition-colors">
-                      <TableCell className="font-medium text-blue-400 py-5">{item.code}</TableCell>
+                      <TableCell className="font-medium text-blue-400 py-5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono">{item.code}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(item.code, item.id)}
+                            className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                            title="Copy Code"
+                          >
+                            {copiedId === item.id ? (
+                              <Check className="h-3 w-3 text-green-500" />
+                            ) : (
+                              <Copy className="h-3.5 w-3.5" />
+                            )}
+                          </button>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-semibold text-slate-200">
                         <div className="flex items-center gap-3">
                           {item.image ? (

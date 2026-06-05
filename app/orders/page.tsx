@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Search, Plus, Edit2, FileText, Check, X, ChevronDown, RefreshCw, Download } from "lucide-react";
+import { Search, Plus, Edit2, FileText, Check, X, ChevronDown, RefreshCw, Download, Copy } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -485,6 +485,18 @@ export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [viewingInvoice, setViewingInvoice] = useState<Order | null>(null);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => {
+        setCopiedKey(null);
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -613,7 +625,21 @@ export default function OrdersPage() {
                           className="border-[#1f2937] hover:bg-[#1f2937]/40 transition-colors"
                         >
                           <TableCell className="py-3.5">
-                            <span className="text-blue-400 font-medium text-sm">{order.orderNumber}</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-400 font-medium text-sm font-mono">{order.orderNumber}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(order.orderNumber, `${order.id}-order`)}
+                                className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                                title="Copy Order ID"
+                              >
+                                {copiedKey === `${order.id}-order` ? (
+                                  <Check className="h-3 w-3 text-green-500" />
+                                ) : (
+                                  <Copy className="h-3.5 w-3.5" />
+                                )}
+                              </button>
+                            </div>
                           </TableCell>
                           <TableCell>
                             <span className="text-white text-sm font-medium">{name}</span>
@@ -622,7 +648,25 @@ export default function OrdersPage() {
                             <span className="text-white text-sm">{phone}</span>
                           </TableCell>
                           <TableCell>
-                            <span className="text-white text-sm">{order.cnNumber || "—"}</span>
+                            {order.cnNumber && order.cnNumber !== "—" ? (
+                              <div className="flex items-center gap-2">
+                                <span className="text-white text-sm font-mono">{order.cnNumber}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(order.cnNumber!, `${order.id}-cn`)}
+                                  className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                                  title="Copy CN Number"
+                                >
+                                  {copiedKey === `${order.id}-cn` ? (
+                                    <Check className="h-3 w-3 text-green-500" />
+                                  ) : (
+                                    <Copy className="h-3 w-3" />
+                                  )}
+                                </button>
+                              </div>
+                            ) : (
+                              <span className="text-white text-sm">—</span>
+                            )}
                           </TableCell>
                           <TableCell>
                             <CourierBadge courier={order.courier} />

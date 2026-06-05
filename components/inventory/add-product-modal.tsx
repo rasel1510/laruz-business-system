@@ -184,13 +184,13 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                 </div>
 
                 {dropdownOpen && (
-                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-[#1a2340] rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
+                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-white rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
                     <div className="overflow-y-auto flex-1">
                       {(() => {
                         const defaultCats = ["Earrings", "Necklaces", "Rings", "Bracelets"];
                         const categoryValue = form.watch("category") || "";
                         const allCats = Array.from(new Set([...defaultCats, ...customCategories]));
-                        const filtered = allCats.filter(cat => 
+                        const filtered = allCats.filter(cat =>
                           cat.toLowerCase().includes(categoryValue.toLowerCase())
                         );
 
@@ -218,7 +218,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                     </div>
 
                     {/* Bottom custom category input */}
-                    <div 
+                    <div
                       className="p-2 border-t border-[#1a2340] bg-[#0d1633] flex gap-2"
                       onKeyDown={(e) => {
                         e.stopPropagation();
@@ -230,6 +230,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                       <Input
                         placeholder="Add new custom category..."
                         value={customInput}
+
                         onChange={(e) => setCustomInput(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
@@ -296,13 +297,13 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                 </div>
 
                 {subDropdownOpen && (
-                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-[#1a2340] rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
+                  <div className="absolute top-full left-0 z-50 w-full mt-1 bg-[#0b132b] border border-white rounded-xl overflow-hidden shadow-lg max-h-64 flex flex-col">
                     <div className="overflow-y-auto flex-1">
                       {(() => {
                         const defaultSubCats = ["Gold", "Silver", "Stone", "Pearl"];
                         const subCategoryValue = form.watch("subCategory") || "";
                         const allSubCats = Array.from(new Set([...defaultSubCats, ...customSubCategories]));
-                        const filtered = allSubCats.filter(subCat => 
+                        const filtered = allSubCats.filter(subCat =>
                           subCat.toLowerCase().includes(subCategoryValue.toLowerCase())
                         );
 
@@ -330,7 +331,7 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
                     </div>
 
                     {/* Bottom custom sub-category input */}
-                    <div 
+                    <div
                       className="p-2 border-t border-[#1a2340] bg-[#0d1633] flex gap-2"
                       onKeyDown={(e) => {
                         e.stopPropagation();

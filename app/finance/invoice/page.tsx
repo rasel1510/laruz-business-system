@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, RefreshCw, FileText, TrendingDown, Wallet } from "lucide-react";
+import { Search, RefreshCw, FileText, TrendingDown, Wallet, Copy, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -53,9 +53,9 @@ function calcFes(cod: number, deliveryCharge: number): number {
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 const STATUS_STYLES: Record<string, string> = {
-  pending:   "bg-yellow-900/30 text-yellow-400 border-yellow-700/30",
+  pending: "bg-yellow-900/30 text-yellow-400 border-yellow-700/30",
   delivered: "bg-green-900/30  text-green-400  border-green-700/30",
-  hold:      "bg-purple-900/30 text-purple-400 border-purple-700/30",
+  hold: "bg-purple-900/30 text-purple-400 border-purple-700/30",
   cancelled: "bg-red-900/30    text-red-400    border-red-700/30",
 };
 
@@ -63,9 +63,8 @@ function StatusBadge({ status }: { status: string }) {
   const key = (status || "").toLowerCase();
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
-        STATUS_STYLES[key] ?? "bg-slate-800 text-slate-400 border-slate-700/30"
-      }`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[key] ?? "bg-slate-800 text-slate-400 border-slate-700/30"
+        }`}
     >
       {status}
     </span>
@@ -106,6 +105,18 @@ export default function InvoicePage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => {
+        setCopiedKey(null);
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -223,11 +234,10 @@ export default function InvoicePage() {
                 <button
                   key={s}
                   onClick={() => setStatusFilter(s)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    statusFilter === s
-                      ? "bg-blue-600 text-white shadow"
-                      : "text-slate-400 hover:text-slate-200"
-                  }`}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${statusFilter === s
+                    ? "bg-blue-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                    }`}
                 >
                   {s}
                 </button>
@@ -316,14 +326,43 @@ export default function InvoicePage() {
                       >
                         {/* Column 1: Ord ID + CN ID */}
                         <TableCell className="py-2.5 pl-5">
-                          <p className="text-blue-400 font-semibold text-sm font-mono">
-                            {order.orderNumber}
-                          </p>
-                          <p className="text-slate-600 text-xs mt-0.5 font-mono">
-                            {order.cnNumber || (
-                              <span className="text-slate-700 italic">No CN yet</span>
-                            )}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <span className="text-blue-400 font-semibold text-sm font-mono">
+                              {order.orderNumber}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(order.orderNumber, `${order.id}-order`)}
+                              className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-500 transition-colors cursor-pointer"
+                              title="Copy Order ID"
+                            >
+                              {copiedKey === `${order.id}-order` ? (
+                                <Check className="h-3 w-3 text-green-500" />
+                              ) : (
+                                <Copy className="h-3 w-3" />
+                              )}
+                            </button>
+                          </div>
+
+                          {order.cnNumber && order.cnNumber !== "—" ? (
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-slate-300 text-xs font-mono">{order.cnNumber}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(order.cnNumber!, `${order.id}-cn`)}
+                                className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-500 transition-colors cursor-pointer"
+                                title="Copy CN Number"
+                              >
+                                {copiedKey === `${order.id}-cn` ? (
+                                  <Check className="h-2.5 w-2.5 text-green-500" />
+                                ) : (
+                                  <Copy className="h-2.5 w-2.5" />
+                                )}
+                              </button>
+                            </div>
+                          ) : (
+                            <p className="text-slate-700 italic text-xs mt-0.5">No CN yet</p>
+                          )}
                         </TableCell>
 
                         {/* Column 2: Customer Name */}
@@ -357,12 +396,11 @@ export default function InvoicePage() {
                             })}
                           </p>
                           <p className="text-[10px] text-slate-500 mt-0.5">
-                             Adv: ৳{advance.toLocaleString()} · Del: ৳{deliveryCharge.toLocaleString()}
+                            Adv: ৳{advance.toLocaleString()} · Del: ৳{deliveryCharge.toLocaleString()}
                           </p>
                           <p
-                            className={`text-xs font-semibold font-mono mt-0.5 ${
-                              fes >= 0 ? "text-emerald-400" : "text-red-400"
-                            }`}
+                            className={`text-xs font-semibold font-mono mt-0.5 ${fes >= 0 ? "text-emerald-400" : "text-red-400"
+                              }`}
                           >
                             Fes ৳{" "}
                             {fes.toLocaleString("en-IN", {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { RefreshCw, Search, Boxes } from "lucide-react";
+import { RefreshCw, Search, Boxes, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -52,6 +52,19 @@ export default function LotsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (e: React.MouseEvent, code: string, id: string) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(code).then(() => {
+      setCopiedId(id);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
   const [formattedDate, setFormattedDate] = useState("");
 
   // Set formatted date on mount to prevent hydration mismatch
@@ -239,7 +252,21 @@ export default function LotsPage() {
                         className="border-[#1a2340] hover:bg-white/5 transition-colors"
                       >
                         <TableCell className="font-bold text-blue-400 font-mono py-3.5 pl-6 font-semibold">
-                          <ViewLotModal lot={lot}>{lot.lotCode}</ViewLotModal>
+                          <div className="flex items-center gap-2">
+                            <ViewLotModal lot={lot}>{lot.lotCode}</ViewLotModal>
+                            <button
+                              type="button"
+                              onClick={(e) => handleCopy(e, lot.lotCode, lot.id)}
+                              className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                              title="Copy Lot Code"
+                            >
+                              {copiedId === lot.id ? (
+                                <Check className="h-3 w-3 text-green-500" />
+                              ) : (
+                                <Copy className="h-3.5 w-3.5" />
+                              )}
+                            </button>
+                          </div>
                         </TableCell>
                         <TableCell className="text-white text-sm">
                           {formattedLotDate}
