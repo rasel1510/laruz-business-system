@@ -100,6 +100,7 @@ model Order {
   customer      Customer?   @relation(fields: [customerId], references: [id])
   customerName  String?     // Denormalized for walk-ins or quick orders
   phone         String?
+  address       String?     // Shipping/delivery address
   cnNumber      String?
   courier       String?
   totalAmount   Float

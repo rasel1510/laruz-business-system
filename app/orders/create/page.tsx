@@ -24,7 +24,7 @@ interface OrderItem {
   quantity: number;
 }
 
-const SOURCES = ["Page (Facebook)", "Page (Instagram)", "WhatsApp", "Walk-in", "Referral", "Other"];
+const SOURCES = ["Facebook", "Instagram", "WhatsApp", "Tiktok", "Wholesale", "Offline", "Re-sell"];
 const COURIERS = ["Self Delivered", "Steadfast", "Carrybee", "Pathao", "RedX", "Sundarban", "Other"];
 
 // Reusable styled input
@@ -203,7 +203,8 @@ export default function CreateOrderPage() {
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
-  const [source, setSource] = useState("Page (Facebook)");
+  const [address, setAddress] = useState("");
+  const [source, setSource] = useState("Facebook)");
   const [courier, setCourier] = useState("Self Delivered");
   const [cnNumber, setCnNumber] = useState("");
   const [advance, setAdvance] = useState(0);
@@ -251,7 +252,7 @@ export default function CreateOrderPage() {
 
     setIsSubmitting(true);
     const result = await createOrder({
-      customerName, phone, source, courier, cnNumber,
+      customerName, phone, address, source, courier, cnNumber,
       advance, packaging, deliveryCharge, discount, resell,
       paymentMethod: "COD",
       items: items.map((i) => ({ productId: i.productId, quantity: i.quantity, price: i.unitPrice })),
@@ -299,6 +300,17 @@ export default function CreateOrderPage() {
                   placeholder="01XXXXXXXXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  className={baseInput}
+                />
+              </Field>
+            </div>
+            <div className="mt-3">
+              <Field label="Address">
+                <input
+                  type="text"
+                  placeholder="Street, area, city…"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   className={baseInput}
                 />
               </Field>

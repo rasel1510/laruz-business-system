@@ -39,6 +39,7 @@ const orderItemSchema = z.object({
 const createOrderSchema = z.object({
   customerName: z.string().min(1, "Customer name is required"),
   phone: z.string().min(1, "Phone number is required"),
+  address: z.string().optional(),
   source: z.string().optional(),
   courier: z.string().optional(),
   cnNumber: z.string().optional(),
@@ -88,6 +89,7 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
           orderNumber,
           customerName: validated.customerName,
           phone: validated.phone,
+          address: validated.address,
           courier: validated.courier,
           cnNumber: validated.cnNumber,
           totalAmount,
@@ -228,12 +230,12 @@ export async function getCustomersWithOrders() {
       const customer = customerMap[phone];
       customer.totalOrders += 1;
       customer.totalSpent += order.totalAmount;
-      
+
       const orderDate = new Date(order.createdAt);
       if (orderDate > customer.lastOrderDate) {
         customer.lastOrderDate = orderDate;
       }
-      
+
       customer.orders.push(order);
     }
 
