@@ -43,21 +43,21 @@ interface Order {
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const STATUSES = ["Pending", "Hold", "Delivered", "Cancelled"];
+const STATUSES = ["Pending", "Delivered", "On the way", "Returned", "Cancelled"];
 const COURIERS = ["Self Delivered", "Steadfast", "Carrybee", "Pathao", "RedX", "Sundarban", "Other"];
 
 const STATUS_STYLES: Record<string, string> = {
-  pending:   "bg-yellow-900/30 text-yellow-400 border-yellow-700/30",
+  pending: "bg-yellow-900/30 text-yellow-400 border-yellow-700/30",
   delivered: "bg-green-900/30  text-green-400  border-green-700/30",
-  hold:      "bg-purple-900/30 text-purple-400 border-purple-700/30",
+  hold: "bg-purple-900/30 text-purple-400 border-purple-700/30",
   cancelled: "bg-red-900/30    text-red-400    border-red-700/30",
   completed: "bg-green-900/30  text-green-400  border-green-700/30",
 };
 
 const COURIER_STYLES: Record<string, string> = {
-  steadfast:       "bg-blue-900/30   text-blue-400   border-blue-700/30",
-  carrybee:        "bg-purple-900/30 text-purple-400 border-purple-700/30",
-  pathao:          "bg-orange-900/30 text-orange-400 border-orange-700/30",
+  steadfast: "bg-blue-900/30   text-blue-400   border-blue-700/30",
+  carrybee: "bg-purple-900/30 text-purple-400 border-purple-700/30",
+  pathao: "bg-orange-900/30 text-orange-400 border-orange-700/30",
   "self delivered": "bg-slate-800    text-slate-400  border-slate-700/30",
 };
 
@@ -103,11 +103,10 @@ function OptionGroup<T extends string>({
               key={opt}
               type="button"
               onClick={() => onChange(opt as T)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                active
-                  ? `${colorClass} ring-2 ring-white/20 scale-105`
-                  : "bg-transparent border-[#2a3547] text-white hover:text-white hover:border-slate-500"
-              }`}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${active
+                ? `${colorClass} ring-2 ring-white/20 scale-105`
+                : "bg-transparent border-[#2a3547] text-white hover:text-white hover:border-slate-500"
+                }`}
             >
               {active && <Check className="inline h-3 w-3 mr-1 -mt-0.5" />}
               {opt}
@@ -258,7 +257,7 @@ function InvoiceModal({
 
   // Calculate items subtotal
   const subtotal = order.items?.reduce((sum, item) => sum + (item.price * item.quantity), 0) ?? 0;
-  
+
   // Format dates
   const formattedDate = new Date(order.createdAt).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -401,7 +400,7 @@ function InvoiceModal({
                   <span>Subtotal</span>
                   <span className="font-mono font-medium">৳ {subtotal.toLocaleString()}</span>
                 </div>
-                
+
                 {order.packaging !== undefined && order.packaging > 0 && (
                   <div className="flex justify-between w-full text-slate-600">
                     <span>Packaging</span>

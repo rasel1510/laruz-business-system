@@ -204,7 +204,7 @@ export default function CreateOrderPage() {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [source, setSource] = useState("Facebook)");
+  const [source, setSource] = useState("Facebook");
   const [courier, setCourier] = useState("Self Delivered");
   const [cnNumber, setCnNumber] = useState("");
   const [advance, setAdvance] = useState(0);
