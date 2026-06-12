@@ -248,3 +248,40 @@ export async function getCustomersWithOrders() {
   }
 }
 
+export async function addCustomerPhone(orderIds: string[], newPhone: string) {
+  try {
+    const trimmedPhone = newPhone.trim();
+    if (!trimmedPhone) {
+      return { success: false, error: "Phone number cannot be empty" };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      // Fetch all orders to get their current phone numbers
+      const orders = await tx.order.findMany({
+        where: { id: { in: orderIds } },
+        select: { id: true, phone: true },
+      });
+
+      for (const order of orders) {
+        const currentPhone = order.phone?.trim();
+        const updatedPhone = currentPhone 
+          ? `${currentPhone}, ${trimmedPhone}` 
+          : trimmedPhone;
+
+        await tx.order.update({
+          where: { id: order.id },
+          data: { phone: updatedPhone },
+        });
+      }
+    });
+
+    revalidatePath("/finance/customers");
+    revalidatePath("/orders");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to add customer phone number:", error);
+    return { success: false, error: error.message || "Internal Server Error" };
+  }
+}
+
+

@@ -13,7 +13,10 @@ import {
   Phone, 
   Calendar,
   Truck,
-  Hash
+  Hash,
+  Copy,
+  Check,
+  Plus
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +29,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { getCustomersWithOrders } from "@/lib/actions/orders";
+import { getCustomersWithOrders, addCustomerPhone } from "@/lib/actions/orders";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface OrderItem {
@@ -116,6 +119,64 @@ export default function CustomersPage() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerStats | null>(null);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  // Add phone number modal states
+  const [addPhoneCustomer, setAddPhoneCustomer] = useState<CustomerStats | null>(null);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [isSubmittingPhone, setIsSubmittingPhone] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+
+  const handleAddPhoneSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!addPhoneCustomer) return;
+    const num = newPhoneNumber.trim();
+    if (!num) {
+      setPhoneError("Phone number is required");
+      return;
+    }
+    if (num.length < 5) {
+      setPhoneError("Please enter a valid phone number");
+      return;
+    }
+
+    setIsSubmittingPhone(true);
+    setPhoneError("");
+
+    const orderIds = addPhoneCustomer.orders.map(o => o.id);
+    const res = await addCustomerPhone(orderIds, num);
+    setIsSubmittingPhone(false);
+
+    if (res.success) {
+      const updatedData = await getCustomersWithOrders();
+      setCustomers(updatedData as any);
+
+      if (selectedCustomer) {
+        const updated = updatedData.find((c: any) =>
+          c.orders.some((o: any) => selectedCustomer.orders.some((so) => so.id === o.id))
+        );
+        if (updated) {
+          setSelectedCustomer(updated as any);
+        }
+      }
+
+      setAddPhoneCustomer(null);
+      setNewPhoneNumber("");
+    } else {
+      setPhoneError(res.error || "Failed to add phone number");
+    }
+  };
+
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => {
+        setCopiedKey(null);
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -282,10 +343,36 @@ export default function CustomersPage() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <span className="text-white text-sm font-mono flex items-center gap-1.5">
-                              <Phone className="h-3 w-3 text-white" />
-                              {customer.phone}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-white text-sm font-mono flex items-center gap-1.5">
+                                <Phone className="h-3 w-3 text-white" />
+                                {customer.phone}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(customer.phone, `${customer.phone}-${index}`)}
+                                className="p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                                title="Copy Phone Number"
+                              >
+                                {copiedKey === `${customer.phone}-${index}` ? (
+                                  <Check className="h-3 w-3 text-green-500" />
+                                ) : (
+                                  <Copy className="h-3 w-3" />
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setAddPhoneCustomer(customer);
+                                  setNewPhoneNumber("");
+                                  setPhoneError("");
+                                }}
+                                className="p-1 rounded-lg bg-white/5 hover:bg-blue-600/20 hover:text-blue-400 text-slate-400 transition-colors cursor-pointer"
+                                title="Add Phone Number"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </button>
+                            </div>
                           </TableCell>
                           <TableCell className="text-center">
                             <Badge className="bg-[#1f2937] text-white border-none font-semibold px-2.5 py-0.5 rounded-full hover:bg-[#1f2937]/80">
@@ -350,9 +437,33 @@ export default function CustomersPage() {
                   {selectedCustomer.name}
                 </h3>
                 <p className="text-xs text-white mt-1 flex items-center gap-3">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1.5">
                     <Phone className="h-3.5 w-3.5 text-white" />
                     {selectedCustomer.phone}
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(selectedCustomer.phone, `${selectedCustomer.phone}-modal`)}
+                      className="ml-1 p-1 rounded-lg bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 transition-colors cursor-pointer"
+                      title="Copy Phone Number"
+                    >
+                      {copiedKey === `${selectedCustomer.phone}-modal` ? (
+                        <Check className="h-3 w-3 text-green-500" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAddPhoneCustomer(selectedCustomer);
+                        setNewPhoneNumber("");
+                        setPhoneError("");
+                      }}
+                      className="p-1 rounded-lg bg-white/5 hover:bg-blue-600/20 hover:text-blue-400 text-slate-400 transition-colors cursor-pointer"
+                      title="Add Phone Number"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </button>
                   </span>
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
                   <span>
@@ -483,10 +594,90 @@ export default function CustomersPage() {
                 Close
               </button>
             </div>
+ 
+           </div>
+         </div>
+       )}
 
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
+       {/* ADD PHONE NUMBER DIALOG */}
+       {addPhoneCustomer && (
+         <div
+           className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+           onClick={(e) => {
+             if (e.target === e.currentTarget) setAddPhoneCustomer(null);
+           }}
+         >
+           <form
+             onSubmit={handleAddPhoneSubmit}
+             className="w-full max-w-sm bg-[#111827] border border-[#1f2937] rounded-2xl shadow-2xl overflow-hidden"
+           >
+             {/* Header */}
+             <div className="flex items-center justify-between px-5 py-4 border-b border-[#1f2937]">
+               <div>
+                 <h3 className="text-sm font-semibold text-white">Add Phone Number</h3>
+                 <p className="text-xs text-slate-400 mt-0.5">{addPhoneCustomer.name}</p>
+               </div>
+               <button
+                 type="button"
+                 onClick={() => setAddPhoneCustomer(null)}
+                 className="h-7 w-7 rounded-lg border border-[#2a3547] flex items-center justify-center text-white hover:text-white hover:border-slate-500 transition-colors"
+               >
+                 <X className="h-3.5 w-3.5" />
+               </button>
+             </div>
+
+             {/* Body */}
+             <div className="px-5 py-4 space-y-4">
+               <div className="space-y-1">
+                 <label className="text-[11px] font-semibold uppercase tracking-wider text-white">
+                   New Phone Number
+                 </label>
+                 <Input
+                   type="tel"
+                   placeholder="e.g. 01XXXXXXXXX"
+                   value={newPhoneNumber}
+                   onChange={(e) => setNewPhoneNumber(e.target.value)}
+                   className="bg-[#0d1117] border-[#2a3547] text-white rounded-lg h-10 text-sm focus-visible:ring-blue-500/50"
+                   autoFocus
+                 />
+               </div>
+
+               {phoneError && (
+                 <p className="text-xs text-red-400 bg-red-900/20 border border-red-700/30 rounded-lg px-3 py-2">
+                   {phoneError}
+                 </p>
+               )}
+             </div>
+
+             {/* Footer */}
+             <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-[#1f2937] bg-[#0d1117]">
+               <button
+                 type="button"
+                 onClick={() => setAddPhoneCustomer(null)}
+                 className="h-8 px-4 text-sm rounded-lg border border-[#2a3547] text-white hover:text-white hover:border-slate-500 transition-colors"
+               >
+                 Cancel
+               </button>
+               <button
+                 type="submit"
+                 disabled={isSubmittingPhone || !newPhoneNumber.trim()}
+                 className="h-8 px-5 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium flex items-center gap-2 disabled:opacity-60 transition-colors"
+               >
+                 {isSubmittingPhone ? (
+                   <>
+                     <span className="h-3 w-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                     Adding…
+                   </>
+                 ) : (
+                   <>
+                     <Check className="h-3.5 w-3.5" /> Add
+                   </>
+                 )}
+               </button>
+             </div>
+           </form>
+         </div>
+       )}
+     </>
+   );
+ }
