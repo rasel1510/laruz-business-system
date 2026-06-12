@@ -101,6 +101,7 @@ model Order {
   customerName  String?     // Denormalized for walk-ins or quick orders
   phone         String?
   address       String?     // Shipping/delivery address
+  source        String?     // Source of the order (e.g. Facebook, Instagram, etc.)
   cnNumber      String?
   courier       String?
   totalAmount   Float

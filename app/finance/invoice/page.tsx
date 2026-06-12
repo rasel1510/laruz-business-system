@@ -28,6 +28,7 @@ interface Order {
   customer?: { name: string; phone?: string | null } | null;
   advance?: number;
   deliveryCharge?: number;
+  source?: string | null;
 }
 
 // ─── Delivery charge per courier (BDT) ───────────────────────────────────────
@@ -67,6 +68,31 @@ function StatusBadge({ status }: { status: string }) {
         }`}
     >
       {status}
+    </span>
+  );
+}
+
+// ─── Source Badge ─────────────────────────────────────────────────────────────
+const SOURCE_STYLES: Record<string, string> = {
+  facebook: "bg-blue-900/30 text-blue-400 border-blue-700/30",
+  instagram: "bg-pink-900/30 text-pink-400 border-pink-700/30",
+  whatsapp: "bg-emerald-900/30 text-emerald-400 border-emerald-700/30",
+  tiktok: "bg-red-900/30 text-red-400 border-red-700/30",
+  wholesale: "bg-amber-900/30 text-amber-400 border-amber-700/30",
+  offline: "bg-slate-800 text-slate-400 border-slate-700/30",
+  "re-sell": "bg-indigo-900/30 text-indigo-400 border-indigo-700/30",
+};
+
+function SourceBadge({ source }: { source?: string | null }) {
+  if (!source) return <span className="text-slate-600 italic text-xs">—</span>;
+  const key = source.toLowerCase();
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
+        SOURCE_STYLES[key] ?? "bg-slate-800 text-slate-400 border-slate-700/30"
+      }`}
+    >
+      {source}
     </span>
   );
 }
@@ -272,6 +298,10 @@ export default function InvoicePage() {
                   <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">
                     Customer Name
                   </TableHead>
+                  {/* Source Column */}
+                  <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+                    Source
+                  </TableHead>
                   {/* Column 3 */}
                   <TableHead className="text-slate-500 text-[11px] font-bold uppercase tracking-wider w-36">
                     <div>Status</div>
@@ -293,7 +323,7 @@ export default function InvoicePage() {
                 {loading ? (
                   <TableRow>
                     <TableCell
-                      colSpan={4}
+                      colSpan={5}
                       className="text-center py-20 text-slate-600"
                     >
                       <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-3 text-blue-500/50" />
@@ -303,7 +333,7 @@ export default function InvoicePage() {
                 ) : filtered.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={4}
+                      colSpan={5}
                       className="text-center py-20 text-slate-600 text-sm"
                     >
                       <FileText className="h-10 w-10 mx-auto mb-3 text-slate-700" />
@@ -373,6 +403,11 @@ export default function InvoicePage() {
                               {order.phone || order.customer?.phone}
                             </p>
                           ) : null}
+                        </TableCell>
+
+                        {/* Source Column */}
+                        <TableCell className="py-2.5">
+                          <SourceBadge source={order.source} />
                         </TableCell>
 
                         {/* Column 3: Status + Date */}

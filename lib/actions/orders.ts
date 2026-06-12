@@ -90,6 +90,7 @@ export async function createOrder(data: z.infer<typeof createOrderSchema>) {
           customerName: validated.customerName,
           phone: validated.phone,
           address: validated.address,
+          source: validated.source,
           courier: validated.courier,
           cnNumber: validated.cnNumber,
           totalAmount,
@@ -160,7 +161,7 @@ export async function getOrders() {
 
 export async function updateOrder(
   id: string,
-  data: { status?: string; courier?: string; cnNumber?: string }
+  data: { status?: string; courier?: string; cnNumber?: string; source?: string }
 ) {
   try {
     const order = await prisma.order.update({
@@ -169,6 +170,7 @@ export async function updateOrder(
         ...(data.status !== undefined && { status: data.status }),
         ...(data.courier !== undefined && { courier: data.courier }),
         ...(data.cnNumber !== undefined && { cnNumber: data.cnNumber }),
+        ...(data.source !== undefined && { source: data.source }),
       },
     });
     revalidatePath("/orders");
