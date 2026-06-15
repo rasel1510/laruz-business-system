@@ -16,7 +16,8 @@ import {
   Hash,
   Copy,
   Check,
-  Plus
+  Plus,
+  MapPin
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -57,6 +58,7 @@ interface Order {
 interface CustomerStats {
   name: string;
   phone: string;
+  address?: string;
   totalOrders: number;
   totalSpent: number;
   lastOrderDate: Date | string;
@@ -194,7 +196,8 @@ export default function CustomersPage() {
       const term = search.toLowerCase();
       return (
         c.name.toLowerCase().includes(term) ||
-        c.phone.toLowerCase().includes(term)
+        c.phone.toLowerCase().includes(term) ||
+        (c.address && c.address.toLowerCase().includes(term))
       );
     });
   }, [customers, search]);
@@ -305,6 +308,7 @@ export default function CustomersPage() {
                   <TableRow className="border-[#1f2937] hover:bg-transparent">
                     <TableHead className="text-white text-xs font-bold py-3 uppercase">Customer Name</TableHead>
                     <TableHead className="text-white text-xs font-bold uppercase">Phone</TableHead>
+                    <TableHead className="text-white text-xs font-bold uppercase">Address</TableHead>
                     <TableHead className="text-white text-xs font-bold uppercase text-center">Total Order</TableHead>
                     <TableHead className="text-white text-xs font-bold uppercase">Total Spent</TableHead>
                     <TableHead className="text-white text-xs font-bold uppercase">Last Order Date</TableHead>
@@ -314,14 +318,14 @@ export default function CustomersPage() {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-16 text-white">
+                      <TableCell colSpan={7} className="text-center py-16 text-white">
                         <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                         Loading customers…
                       </TableCell>
                     </TableRow>
                   ) : filteredCustomers.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-16 text-white text-sm">
+                      <TableCell colSpan={7} className="text-center py-16 text-white text-sm">
                         No customers found.
                       </TableCell>
                     </TableRow>
@@ -381,6 +385,18 @@ export default function CustomersPage() {
                                   <Plus className="h-2.5 w-2.5" /> Add Number
                                 </button>
                               </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="max-w-[220px] break-words">
+                              {customer.address ? (
+                                <span className="text-white text-xs font-medium flex items-start gap-1.5">
+                                  <MapPin className="h-3.5 w-3.5 text-blue-400 shrink-0 mt-0.5" />
+                                  <span>{customer.address}</span>
+                                </span>
+                              ) : (
+                                <span className="text-slate-500 italic text-xs">—</span>
+                              )}
                             </div>
                           </TableCell>
                           <TableCell className="text-center">
@@ -486,6 +502,15 @@ export default function CustomersPage() {
                       <Plus className="h-2.5 w-2.5" /> Add Number
                     </button>
                     <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
+                    {selectedCustomer.address && (
+                      <>
+                        <span className="flex items-center gap-1.5 text-xs text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700 max-w-[250px] break-words">
+                          <MapPin className="h-3 w-3 text-blue-400 shrink-0" />
+                          <span>{selectedCustomer.address}</span>
+                        </span>
+                        <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
+                      </>
+                    )}
                     <span>
                       Total Orders: <strong className="text-white">{selectedCustomer.totalOrders}</strong>
                     </span>

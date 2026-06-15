@@ -207,6 +207,7 @@ export async function getCustomersWithOrders() {
     const customerMap: Record<string, {
       name: string;
       phone: string;
+      address: string;
       totalOrders: number;
       totalSpent: number;
       lastOrderDate: Date;
@@ -217,11 +218,13 @@ export async function getCustomersWithOrders() {
       const rawPhone = order.phone || order.customer?.phone || "";
       const phone = rawPhone.replace(/\s+/g, "").trim() || "—";
       const name = (order.customerName || order.customer?.name || "Walk-in").trim();
+      const address = (order.address || order.customer?.address || "").trim();
 
       if (!customerMap[phone]) {
         customerMap[phone] = {
           name,
           phone,
+          address,
           totalOrders: 0,
           totalSpent: 0,
           lastOrderDate: new Date(order.createdAt),
@@ -236,6 +239,10 @@ export async function getCustomersWithOrders() {
       const orderDate = new Date(order.createdAt);
       if (orderDate > customer.lastOrderDate) {
         customer.lastOrderDate = orderDate;
+      }
+
+      if (!customer.address && address) {
+        customer.address = address;
       }
 
       customer.orders.push(order);
