@@ -23,7 +23,7 @@ export function SessionGuard({ children }: { children: React.ReactNode }) {
     }
   }, [isPending, session, pathname]);
 
-  // If we are on the login page, always render children so they can login
+  // If we are on the login page, always render children so they can login easily
   if (pathname === "/login") {
     return <>{children}</>;
   }
