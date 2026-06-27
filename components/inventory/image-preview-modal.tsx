@@ -26,7 +26,7 @@ export function ImagePreviewModal({ image, name, children }: ImagePreviewModalPr
   const [startY, setStartY] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.25, 4));
@@ -53,6 +53,7 @@ export function ImagePreviewModal({ image, name, children }: ImagePreviewModalPr
     setScrollLeft(containerRef.current?.scrollLeft || 0);
     setScrollTop(containerRef.current?.scrollTop || 0);
   };
+
 
   const onMouseUp = () => setIsDragging(false);
   const onMouseLeave = () => setIsDragging(false);
@@ -118,7 +119,7 @@ export function ImagePreviewModal({ image, name, children }: ImagePreviewModalPr
             </DialogDescription>
           </DialogHeader>
 
-          <div 
+          <div
             ref={containerRef}
             onWheel={handleWheel}
             onMouseDown={onMouseDown}
@@ -128,13 +129,12 @@ export function ImagePreviewModal({ image, name, children }: ImagePreviewModalPr
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
             onTouchMove={onTouchMove}
-            className={`relative w-full bg-[#050816] overflow-hidden flex items-center justify-center p-2 sm:p-4 flex-1 min-h-[200px] sm:min-h-[300px] aspect-auto sm:aspect-video ${
-              scale > 1 ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'
-            }`}
+            className={`relative w-full bg-[#050816] overflow-hidden flex items-center justify-center p-2 sm:p-4 flex-1 min-h-[200px] sm:min-h-[300px] aspect-auto sm:aspect-video ${scale > 1 ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'
+              }`}
           >
-            <div 
+            <div
               className="relative transition-transform duration-100 ease-out pointer-events-none"
-              style={{ 
+              style={{
                 transform: `scale(${scale})`,
                 minWidth: "100%",
                 minHeight: "100%"
