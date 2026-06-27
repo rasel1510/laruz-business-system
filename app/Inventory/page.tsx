@@ -217,12 +217,12 @@ export default function InventoryPage() {
                         <div className="flex items-center gap-3">
                           {item.image ? (
                             <ImagePreviewModal image={item.image} name={item.name}>
-                              <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
+                              <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30 shrink-0">
                                 <Image src={item.image} alt={item.name} fill className="object-cover" />
                               </div>
                             </ImagePreviewModal>
                           ) : (
-                            <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30">
+                            <div className="relative h-10 w-10 rounded-lg overflow-hidden border border-[#1a2340] bg-[#1a2340]/30 shrink-0">
                               <div className="flex h-full w-full items-center justify-center text-slate-500">
                                 <Package className="h-5 w-5" />
                               </div>

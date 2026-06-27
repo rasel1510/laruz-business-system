@@ -98,7 +98,7 @@ export function ImagePreviewModal({ image, name, children }: ImagePreviewModalPr
     <>
       <div
         onClick={() => setOpen(true)}
-        className="cursor-pointer group relative"
+        className="cursor-pointer group relative shrink-0"
       >
         {children}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
