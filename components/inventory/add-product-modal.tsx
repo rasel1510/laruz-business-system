@@ -44,7 +44,7 @@ type ProductFormValues = z.infer<typeof productSchema>;
 export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [nextCode, setNextCode] = useState("#PRD-XXXX");
+  const [nextCode, setNextCode] = useState("Select a category first");
   const [customCategories, setCustomCategories] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [customInput, setCustomInput] = useState("");
@@ -55,14 +55,15 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   const [customSubInput, setCustomSubInput] = useState("");
   const subCategoryRef = useRef<HTMLDivElement>(null);
 
+  // Reset state when modal closes
   useEffect(() => {
-    if (open) {
-      getNextProductCode().then(setNextCode);
-    } else {
+    if (!open) {
       setDropdownOpen(false);
       setSubDropdownOpen(false);
+      setNextCode("Select a category first");
     }
   }, [open]);
+
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -94,6 +95,22 @@ export function AddProductModal({ onSuccess }: { onSuccess: () => void }) {
   });
 
   const imageUrl = form.watch("image");
+
+  // Fetch the next product code whenever the category changes
+  const watchedCategory = form.watch("category");
+  useEffect(() => {
+    if (!open) return;
+    const cat = watchedCategory?.trim();
+    if (!cat) {
+      setNextCode("Select a category first");
+      return;
+    }
+    // Debounce to avoid excessive server calls while typing
+    const timer = setTimeout(() => {
+      getNextProductCode(cat).then(setNextCode);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [watchedCategory, open]);
 
   const onSubmit = async (data: ProductFormValues) => {
     setIsSubmitting(true);

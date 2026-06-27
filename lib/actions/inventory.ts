@@ -19,20 +19,31 @@ export async function addProduct(data: z.infer<typeof productSchema>) {
   try {
     const validated = productSchema.parse(data);
 
-    // Auto-generate product code
-    const lastProduct = await prisma.product.findFirst({
-      orderBy: { createdAt: "desc" },
+    // Auto-generate category-based product code (e.g., "Rings 00001", "Earrings 00002")
+    const categoryPrefix = validated.category.trim();
+
+    // Find the highest existing code number for this category
+    const existingProducts = await prisma.product.findMany({
+      where: {
+        code: {
+          startsWith: `${categoryPrefix} `,
+        },
+      },
+      select: { code: true },
     });
 
     let nextNumber = 1;
-    if (lastProduct) {
-      const match = lastProduct.code.match(/PRD-(\d+)/);
+    for (const p of existingProducts) {
+      const match = p.code.match(new RegExp(`^${categoryPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} (\\d+)$`));
       if (match) {
-        nextNumber = parseInt(match[1]) + 1;
+        const num = parseInt(match[1]);
+        if (num >= nextNumber) {
+          nextNumber = num + 1;
+        }
       }
     }
 
-    const code = `#PRD-${nextNumber.toString().padStart(4, "0")}`;
+    const code = `${categoryPrefix} ${nextNumber.toString().padStart(5, "0")}`;
 
     const product = await prisma.product.create({
       data: {
@@ -63,24 +74,39 @@ export async function getProducts() {
   }
 }
 
-export async function getNextProductCode() {
+export async function getNextProductCode(category?: string) {
   try {
-    const lastProduct = await prisma.product.findFirst({
-      orderBy: { createdAt: "desc" },
+    if (!category || !category.trim()) {
+      return "Select a category first";
+    }
+
+    const categoryPrefix = category.trim();
+
+    // Find the highest existing code number for this category
+    const existingProducts = await prisma.product.findMany({
+      where: {
+        code: {
+          startsWith: `${categoryPrefix} `,
+        },
+      },
+      select: { code: true },
     });
 
     let nextNumber = 1;
-    if (lastProduct) {
-      const match = lastProduct.code.match(/PRD-(\d+)/);
+    for (const p of existingProducts) {
+      const match = p.code.match(new RegExp(`^${categoryPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} (\\d+)$`));
       if (match) {
-        nextNumber = parseInt(match[1]) + 1;
+        const num = parseInt(match[1]);
+        if (num >= nextNumber) {
+          nextNumber = num + 1;
+        }
       }
     }
 
-    return `#PRD-${nextNumber.toString().padStart(4, "0")}`;
+    return `${categoryPrefix} ${nextNumber.toString().padStart(5, "0")}`;
   } catch (error) {
     console.error("Failed to get next product code:", error);
-    return "#PRD-0001";
+    return "Error generating code";
   }
 }
 export async function updateProduct(id: string, data: Partial<z.infer<typeof productSchema>> & { stockAdjustment?: number }) {
